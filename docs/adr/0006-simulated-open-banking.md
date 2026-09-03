@@ -13,7 +13,7 @@ As a third-party financial aggregator, Bankmate requires access to customer data
 ## Decision
 
 We will design the system architecture *as if* we are using Plaid, but we will mock the network boundary. 
-The application will expect data in a standardized JSON schema (mimicking the Plaid Transactions API). Instead of making an external HTTP request to Plaid, the app will read this JSON from our local `Persona` files. 
+The application will expect data in a standardized JSON schema (mimicking the Plaid Transactions API). Instead of making an external HTTP request to Plaid, the app will read this JSON from our local `mock Customer profile` files. 
 
 ## Consequences
 

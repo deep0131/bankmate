@@ -1,4 +1,4 @@
-# 2. Generative UI for Chat Visualizations
+# 2. Interactive Widget for Chat Visualizations
 
 Date: 2026-09-02
 
@@ -12,7 +12,7 @@ Bankmate is a chat-based alternative to traditional net banking. When a customer
 
 ## Decision
 
-We will use the **Vercel AI SDK** to power the chat state and its **Tool Calling (Generative UI)** capabilities to render interface elements. 
+We will use the **Vercel AI SDK** to power the chat state and its **Tool Calling (Interactive Widget)** capabilities to render interface elements. 
 Instead of the AI Model attempting to format data visually, it will output structured JSON triggering specific tools (e.g., `render_transaction_table`). The Next.js frontend will intercept these tool calls and dynamically render the corresponding React components.
 
 ## Consequences

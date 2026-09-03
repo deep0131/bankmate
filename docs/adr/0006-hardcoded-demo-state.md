@@ -16,6 +16,6 @@ We will bypass authentication entirely. The application will boot directly into 
 
 ## Consequences
 
-*   **Good:** Saves significant development effort, allowing focus to remain entirely on the Generative UI and AI integration.
+*   **Good:** Saves significant development effort, allowing focus to remain entirely on the Interactive Widget and AI integration.
 *   **Good:** Ensures a frictionless, zero-setup demonstration experience for the judging panel. 
 *   **Bad:** The application is not production-ready from a security standpoint (which is fully acceptable given the project's scope and dummy data).

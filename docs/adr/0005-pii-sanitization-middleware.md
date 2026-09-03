@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-Bankmate provides a chat interface to a bank's internal data. To parse natural language queries, the application must send parts of this internal data (like transaction histories) to an external, third-party AI Model API. Sending raw banking data introduces severe privacy and security risks, potentially exposing Personally Identifiable Information (PII) such as account numbers, real names, or exact locations.
+Bankmate provides a chat interface to a bank's internal data. To parse natural language queries, the application must send parts of this internal data (like transaction histories) to an external, third-party AI Model API. Sending raw banking data introduces severe privacy and security risks, potentially exposing mock Customer profilelly Identifiable Information (PII) such as account numbers, real names, or exact locations.
 
 ## Decision
 
@@ -17,5 +17,5 @@ We will implement a strict **Sanitization Layer** middleware. Before any interna
 ## Consequences
 
 *   **Good:** Demonstrates strong architectural maturity and ethical considerations regarding data privacy in AI.
-*   **Good:** Protects the hypothetical customers from data leaks to third-party LLM providers.
+*   **Good:** Protects the hypothetical customers from data leaks to third-party AI model providers.
 *   **Bad:** Requires writing and maintaining rigorous unit tests for the sanitization utility to ensure the data model does not accidentally leak new sensitive fields over time.

@@ -12,12 +12,12 @@ The application requires interactive financial widgets, such as an Interest Calc
 
 ## Decision
 
-We establish a strict compute boundary: **The LLM extracts parameters, the Client calculates and renders.**
-When rendering a widget, the LLM will only pass initial starting parameters (e.g., `principal: 10000`, `rate: 5.5`) via the tool call. The React Component injected into the chat stream will execute the actual financial math using standard JavaScript. Furthermore, interacting with the widget (dragging a slider, sorting a table column) will rely entirely on client-side React state and will *never* trigger a new prompt to the LLM.
+We establish a strict compute boundary: **The AI model extracts parameters, the Client calculates and renders.**
+When rendering a widget, the AI model will only pass initial starting parameters (e.g., `principal: 10000`, `rate: 5.5`) via the tool call. The React Component injected into the chat stream will execute the actual financial math using standard JavaScript. Furthermore, interacting with the widget (dragging a slider, sorting a table column) will rely entirely on client-side React state and will *never* trigger a new prompt to the AI model.
 
 ## Consequences
 
 *   **Good:** Financial calculations are 100% accurate and deterministic.
 *   **Good:** UI interactions (sorting, filtering, dragging sliders) are instant and feel like a native app.
-*   **Good:** Saves API costs and latency by not polling the LLM for simple UI state changes.
-*   **Bad:** Requires building slightly thicker, smarter React components rather than relying on the LLM to format every output.
+*   **Good:** Saves API costs and latency by not polling the AI model for simple UI state changes.
+*   **Bad:** Requires building slightly thicker, smarter React components rather than relying on the AI model to format every output.

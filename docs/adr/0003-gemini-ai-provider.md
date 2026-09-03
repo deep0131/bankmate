@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-We need an LLM provider to power the generative UI tool calling. As this is a final year university project, budget constraints are a primary concern. Furthermore, analyzing transaction histories requires a model capable of handling moderately large context windows efficiently.
+We need an AI model provider to power the interactive widget tool calling. As this is a final year university project, budget constraints are a primary concern. Furthermore, analyzing transaction histories requires a model capable of handling moderately large context windows efficiently.
 
 ## Decision
 

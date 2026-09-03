@@ -1,4 +1,4 @@
-# 2. Use Static JSON Personas for Data Storage
+# 2. Use Static JSON mock Customer profiles for Data Storage
 
 Date: 2026-08-05
 
@@ -12,7 +12,7 @@ This is a final year university project intended to demonstrate AI capabilities 
 
 ## Decision
 
-We will use static JSON files to mock `Personas` and their `Transactions`. We will pre-generate 3-4 distinct financial profiles (e.g., "High Spender", "Frugal Student"). The Next.js application will read directly from these JSON files on the server side.
+We will use static JSON files to mock `mock Customer profiles` and their `Transactions`. We will pre-generate 3-4 distinct financial profiles (e.g., "High Spender", "Frugal Student"). The Next.js application will read directly from these JSON files on the server side.
 
 ## Consequences
 

@@ -8,12 +8,12 @@ Accepted
 
 ## Context
 
-Using external Generative AI models (like Google Gemini) introduces significant privacy risks. Passing raw banking data to a third-party API could expose Personally Identifiable Information (PII) and violate financial data regulations.
+Using external AI models (like Google Gemini) introduces significant privacy risks. Passing raw banking data to a third-party API could expose mock Customer profilelly Identifiable Information (PII) and violate financial data regulations.
 
 ## Decision
 
 We will implement a two-pronged privacy architecture:
-1.  **Sanitization Layer (Data Masking):** Before any transaction data is serialized into the LLM prompt, it passes through a sanitization utility. This utility strips account numbers, physical addresses, and masks exact names. Only the *semantic* data required for analysis (Category, Amount, Date, Vendor Name) is sent to the AI.
+1.  **Sanitization Layer (Data Masking):** Before any transaction data is serialized into the AI model prompt, it passes through a sanitization utility. This utility strips account numbers, physical addresses, and masks exact names. Only the *semantic* data required for analysis (Category, Amount, Date, Vendor Name) is sent to the AI model.
 2.  **Enterprise API Usage:** We stipulate the use of enterprise-tier API endpoints (e.g., Google Cloud Vertex AI / Gemini API) which are governed by Zero Data Retention policies, meaning the provider legally cannot use the payload to train their public models.
 
 ## Consequences

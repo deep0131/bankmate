@@ -12,7 +12,7 @@ The application requires a highly customized, modern "Gen-Z Neobank" aesthetic (
 
 ## Decision
 
-We will use **shadcn/ui** as the foundational component library. We will heavily customize its CSS variable design tokens to achieve the desired brand identity. For the Generative UI visualizations, we will utilize the `Chart` component provided by shadcn (which is a wrapper around **Recharts**).
+We will use **shadcn/ui** as the foundational component library. We will heavily customize its CSS variable design tokens to achieve the desired brand identity. For the Interactive Widget visualizations, we will utilize the `Chart` component provided by shadcn (which is a wrapper around **Recharts**).
 
 ## Consequences
 
