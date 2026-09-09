@@ -1,0 +1,160 @@
+[
+  {
+    "id": "prod_hl_001",
+    "name": "HomeFlex Home Loan",
+    "category": "home_loan",
+    "interestRate": 8.35,
+    "minAmount": 500000,
+    "maxAmount": 50000000,
+    "termMonths": [60, 120, 180, 240, 300, 360],
+    "features": [
+      "No prepayment charges",
+      "Top-up loan facility",
+      "Balance transfer option",
+      "Online account management",
+      "Flexible EMI options"
+    ],
+    "eligibility": "Salaried individuals with minimum 2 years of employment and annual income above ₹5,00,000",
+    "annualFee": 0,
+    "processingFee": 0.5,
+    "description": "Affordable home financing with flexible repayment options up to 30 years. Ideal for first-time homebuyers."
+  },
+  {
+    "id": "prod_hl_002",
+    "name": "PrimeHome Premium Loan",
+    "category": "home_loan",
+    "interestRate": 7.95,
+    "minAmount": 2500000,
+    "maxAmount": 100000000,
+    "termMonths": [60, 120, 180, 240, 300, 360],
+    "features": [
+      "Lowest interest rate tier",
+      "Zero processing fee for premium customers",
+      "Doorstep document collection",
+      "Dedicated relationship manager",
+      "Property insurance bundled",
+      "Tax benefit assistance"
+    ],
+    "eligibility": "Salaried or self-employed individuals with annual income above ₹15,00,000 and credit score 750+",
+    "annualFee": 0,
+    "processingFee": 0.25,
+    "description": "Premium home loan with the best-in-class rates. Designed for high-value properties with concierge-level service."
+  },
+  {
+    "id": "prod_pl_001",
+    "name": "QuickCash Personal Loan",
+    "category": "personal_loan",
+    "interestRate": 10.49,
+    "minAmount": 50000,
+    "maxAmount": 2500000,
+    "termMonths": [12, 24, 36, 48, 60],
+    "features": [
+      "Instant approval in 2 minutes",
+      "No collateral required",
+      "Minimal documentation",
+      "Disbursal within 24 hours",
+      "Flexible tenure options"
+    ],
+    "eligibility": "Salaried individuals aged 21-60 with minimum monthly income of ₹25,000",
+    "annualFee": 0,
+    "processingFee": 1.5,
+    "description": "Get instant personal loans with minimal documentation. Perfect for emergencies, travel, or consolidating expenses."
+  },
+  {
+    "id": "prod_pl_002",
+    "name": "FlexiPay Personal Loan",
+    "category": "personal_loan",
+    "interestRate": 11.99,
+    "minAmount": 25000,
+    "maxAmount": 1000000,
+    "termMonths": [6, 12, 18, 24, 36],
+    "features": [
+      "Step-up EMI option",
+      "Part-payment allowed after 6 months",
+      "No foreclosure charges after 12 months",
+      "Online application",
+      "SMS-based approval"
+    ],
+    "eligibility": "Any individual aged 21-58 with regular income source and credit score above 650",
+    "annualFee": 0,
+    "processingFee": 2.0,
+    "description": "Flexible personal loan with step-up EMI option. Start with lower payments and increase as your income grows."
+  },
+  {
+    "id": "prod_cc_001",
+    "name": "CashRewards Credit Card",
+    "category": "credit_card",
+    "interestRate": 36.0,
+    "minAmount": 50000,
+    "maxAmount": 500000,
+    "features": [
+      "5% cashback on groceries and dining",
+      "2% cashback on all other spends",
+      "No annual fee for first year",
+      "Complimentary airport lounge access (2x/year)",
+      "Zero liability on fraudulent transactions",
+      "EMI conversion on large purchases"
+    ],
+    "eligibility": "Salaried individuals with minimum monthly income of ₹30,000",
+    "annualFee": 999,
+    "description": "Maximize your everyday savings with industry-leading cashback rates on groceries and dining."
+  },
+  {
+    "id": "prod_cc_002",
+    "name": "TravelElite Credit Card",
+    "category": "credit_card",
+    "interestRate": 36.0,
+    "minAmount": 200000,
+    "maxAmount": 2000000,
+    "features": [
+      "10x reward points on travel bookings",
+      "Unlimited airport lounge access worldwide",
+      "Complimentary travel insurance up to ₹50 lakh",
+      "Foreign currency markup at 1.5% (lowest in class)",
+      "Concierge service 24/7",
+      "Golf privileges at 100+ courses",
+      "Priority Pass membership included"
+    ],
+    "eligibility": "Individuals with annual income above ₹12,00,000 and credit score above 750",
+    "annualFee": 4999,
+    "description": "The ultimate travel companion. Earn accelerated rewards and enjoy premium travel privileges worldwide."
+  },
+  {
+    "id": "prod_sav_001",
+    "name": "SmartSaver Account",
+    "category": "savings",
+    "interestRate": 4.5,
+    "minAmount": 1000,
+    "features": [
+      "Zero minimum balance (digital)",
+      "Free unlimited ATM withdrawals",
+      "Free debit card",
+      "Auto-sweep to fixed deposit",
+      "Instant money transfers (UPI/IMPS)",
+      "Spend analytics in app"
+    ],
+    "eligibility": "Any Indian resident aged 18+ with valid KYC documents",
+    "annualFee": 0,
+    "description": "A modern savings account with zero minimum balance and smart features. Your money works harder with auto-sweep FD."
+  },
+  {
+    "id": "prod_fd_001",
+    "name": "SecureDeposit Fixed Deposit",
+    "category": "fixed_deposit",
+    "interestRate": 7.1,
+    "minAmount": 10000,
+    "maxAmount": 100000000,
+    "termMonths": [3, 6, 12, 24, 36, 60],
+    "features": [
+      "Premature withdrawal allowed (with penalty)",
+      "Loan against FD up to 90%",
+      "Auto-renewal option",
+      "Senior citizen bonus rate (+0.5%)",
+      "Tax-saver FD option (5-year lock-in)",
+      "Monthly/quarterly interest payout option"
+    ],
+    "eligibility": "Any individual or entity with a savings/current account at our bank",
+    "annualFee": 0,
+    "description": "Lock in attractive rates with our fixed deposit. Choose flexible tenures from 3 months to 5 years."
+  }
+]

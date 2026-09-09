@@ -1,0 +1,211 @@
+[
+  {
+    "id": "cust_001",
+    "name": "Priya Sharma",
+    "email": "priya.sharma@email.com",
+    "phone": "+91-98765-43210",
+    "dateOfBirth": "1995-03-15",
+    "address": {
+      "street": "42, Lotus Apartments, Bandra West",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "postalCode": "400050",
+      "country": "India"
+    },
+    "createdAt": "2022-01-10T10:00:00Z",
+    "accounts": [
+      {
+        "id": "acc_001_chk",
+        "customerId": "cust_001",
+        "type": "checking",
+        "name": "Primary Checking",
+        "accountNumber": "1234567890123456",
+        "balance": 87542.30,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_001", "accountId": "acc_001_chk", "date": "2026-09-08", "description": "Salary Credit - TechCorp Solutions", "merchant": "TechCorp Solutions", "category": "Salary", "amount": 125000.00, "type": "credit", "location": "Mumbai" },
+          { "id": "txn_002", "accountId": "acc_001_chk", "date": "2026-09-07", "description": "Grocery purchase at DMart", "merchant": "DMart", "category": "Groceries", "amount": -3245.50, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_003", "accountId": "acc_001_chk", "date": "2026-09-07", "description": "Uber ride to office", "merchant": "Uber", "category": "Transportation", "amount": -342.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_004", "accountId": "acc_001_chk", "date": "2026-09-06", "description": "Netflix monthly subscription", "merchant": "Netflix", "category": "Subscription", "amount": -649.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_005", "accountId": "acc_001_chk", "date": "2026-09-06", "description": "Dinner at Bombay Canteen", "merchant": "Bombay Canteen", "category": "Dining", "amount": -2840.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_006", "accountId": "acc_001_chk", "date": "2026-09-05", "description": "Amazon online purchase", "merchant": "Amazon India", "category": "Shopping", "amount": -4599.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_007", "accountId": "acc_001_chk", "date": "2026-09-05", "description": "Electricity bill payment", "merchant": "Adani Electricity", "category": "Utilities", "amount": -2180.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_008", "accountId": "acc_001_chk", "date": "2026-09-04", "description": "Fuel at HP Petrol Pump", "merchant": "HP Petrol Pump", "category": "Transportation", "amount": -1800.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_009", "accountId": "acc_001_chk", "date": "2026-09-04", "description": "Transfer to savings", "merchant": "Self Transfer", "category": "Transfer", "amount": -15000.00, "type": "debit" },
+          { "id": "txn_010", "accountId": "acc_001_chk", "date": "2026-09-03", "description": "Spotify Premium", "merchant": "Spotify", "category": "Subscription", "amount": -119.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_011", "accountId": "acc_001_chk", "date": "2026-09-03", "description": "Zomato order", "merchant": "Zomato", "category": "Dining", "amount": -560.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_012", "accountId": "acc_001_chk", "date": "2026-09-02", "description": "Medical consultation at Apollo", "merchant": "Apollo Clinic", "category": "Healthcare", "amount": -1500.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_013", "accountId": "acc_001_chk", "date": "2026-09-02", "description": "Gym membership renewal", "merchant": "Cult Fitness", "category": "Healthcare", "amount": -2999.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_014", "accountId": "acc_001_chk", "date": "2026-09-01", "description": "Rent payment", "merchant": "Landlord Transfer", "category": "Rent", "amount": -28000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_015", "accountId": "acc_001_chk", "date": "2026-09-01", "description": "Mobile recharge - Jio", "merchant": "Jio", "category": "Utilities", "amount": -399.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_016", "accountId": "acc_001_chk", "date": "2026-08-31", "description": "Freelance income - Design project", "merchant": "DesignHub Agency", "category": "Salary", "amount": 35000.00, "type": "credit", "location": "Mumbai" },
+          { "id": "txn_017", "accountId": "acc_001_chk", "date": "2026-08-30", "description": "Swiggy food order", "merchant": "Swiggy", "category": "Dining", "amount": -780.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_018", "accountId": "acc_001_chk", "date": "2026-08-29", "description": "Myntra fashion purchase", "merchant": "Myntra", "category": "Shopping", "amount": -3299.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_019", "accountId": "acc_001_chk", "date": "2026-08-28", "description": "HDFC Mutual Fund SIP", "merchant": "HDFC AMC", "category": "Investment", "amount": -10000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_020", "accountId": "acc_001_chk", "date": "2026-08-27", "description": "Parking fee at Phoenix Mall", "merchant": "Phoenix Marketcity", "category": "Entertainment", "amount": -100.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_021", "accountId": "acc_001_chk", "date": "2026-08-27", "description": "Movie tickets - PVR", "merchant": "PVR Cinemas", "category": "Entertainment", "amount": -840.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_022", "accountId": "acc_001_chk", "date": "2026-08-26", "description": "Grocery purchase at Nature's Basket", "merchant": "Nature's Basket", "category": "Groceries", "amount": -2150.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_023", "accountId": "acc_001_chk", "date": "2026-08-25", "description": "Uber Pool ride", "merchant": "Uber", "category": "Transportation", "amount": -189.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_024", "accountId": "acc_001_chk", "date": "2026-08-24", "description": "Internet bill - Airtel", "merchant": "Airtel", "category": "Utilities", "amount": -999.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_025", "accountId": "acc_001_chk", "date": "2026-08-23", "description": "Health insurance premium", "merchant": "Star Health Insurance", "category": "Insurance", "amount": -4500.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_026", "accountId": "acc_001_chk", "date": "2026-08-22", "description": "Starbucks coffee", "merchant": "Starbucks", "category": "Dining", "amount": -520.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_027", "accountId": "acc_001_chk", "date": "2026-08-21", "description": "Flipkart electronics", "merchant": "Flipkart", "category": "Shopping", "amount": -7999.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_028", "accountId": "acc_001_chk", "date": "2026-08-20", "description": "BigBasket groceries", "merchant": "BigBasket", "category": "Groceries", "amount": -1875.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_029", "accountId": "acc_001_chk", "date": "2026-08-19", "description": "Coursera subscription", "merchant": "Coursera", "category": "Education", "amount": -3299.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_030", "accountId": "acc_001_chk", "date": "2026-08-18", "description": "Ola ride", "merchant": "Ola", "category": "Transportation", "amount": -275.00, "type": "debit", "location": "Mumbai" }
+        ]
+      },
+      {
+        "id": "acc_001_sav",
+        "customerId": "cust_001",
+        "type": "savings",
+        "name": "High-Yield Savings",
+        "accountNumber": "9876543210987654",
+        "balance": 345000.00,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_s001", "accountId": "acc_001_sav", "date": "2026-09-04", "description": "Transfer from checking", "merchant": "Self Transfer", "category": "Transfer", "amount": 15000.00, "type": "credit" },
+          { "id": "txn_s002", "accountId": "acc_001_sav", "date": "2026-08-31", "description": "Interest credit", "merchant": "Bank Interest", "category": "Other", "amount": 1425.00, "type": "credit" },
+          { "id": "txn_s003", "accountId": "acc_001_sav", "date": "2026-08-04", "description": "Transfer from checking", "merchant": "Self Transfer", "category": "Transfer", "amount": 15000.00, "type": "credit" },
+          { "id": "txn_s004", "accountId": "acc_001_sav", "date": "2026-07-31", "description": "Interest credit", "merchant": "Bank Interest", "category": "Other", "amount": 1380.00, "type": "credit" },
+          { "id": "txn_s005", "accountId": "acc_001_sav", "date": "2026-07-04", "description": "Transfer from checking", "merchant": "Self Transfer", "category": "Transfer", "amount": 15000.00, "type": "credit" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cust_002",
+    "name": "Arjun Patel",
+    "email": "arjun.patel@university.edu",
+    "phone": "+91-87654-32109",
+    "dateOfBirth": "2003-11-22",
+    "address": {
+      "street": "Room 305, Boys Hostel, IIT Campus",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "postalCode": "560012",
+      "country": "India"
+    },
+    "createdAt": "2024-06-15T10:00:00Z",
+    "accounts": [
+      {
+        "id": "acc_002_chk",
+        "customerId": "cust_002",
+        "type": "checking",
+        "name": "Student Checking",
+        "accountNumber": "2345678901234567",
+        "balance": 12340.75,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_a001", "accountId": "acc_002_chk", "date": "2026-09-07", "description": "Monthly allowance from parents", "merchant": "Family Transfer", "category": "Transfer", "amount": 15000.00, "type": "credit" },
+          { "id": "txn_a002", "accountId": "acc_002_chk", "date": "2026-09-06", "description": "College canteen lunch", "merchant": "IIT Canteen", "category": "Dining", "amount": -120.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a003", "accountId": "acc_002_chk", "date": "2026-09-06", "description": "Bus pass renewal", "merchant": "BMTC", "category": "Transportation", "amount": -1250.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a004", "accountId": "acc_002_chk", "date": "2026-09-05", "description": "Textbooks from Amazon", "merchant": "Amazon India", "category": "Education", "amount": -1450.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a005", "accountId": "acc_002_chk", "date": "2026-09-05", "description": "Domino's pizza with friends", "merchant": "Domino's Pizza", "category": "Dining", "amount": -560.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a006", "accountId": "acc_002_chk", "date": "2026-09-04", "description": "Mobile recharge", "merchant": "Airtel", "category": "Utilities", "amount": -239.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a007", "accountId": "acc_002_chk", "date": "2026-09-03", "description": "GitHub Student Pack donation", "merchant": "GitHub", "category": "Education", "amount": -0.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a008", "accountId": "acc_002_chk", "date": "2026-09-03", "description": "Chai at campus cafe", "merchant": "Campus Cafe", "category": "Dining", "amount": -40.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a009", "accountId": "acc_002_chk", "date": "2026-09-02", "description": "Freelance web dev payment", "merchant": "Fiverr", "category": "Salary", "amount": 8500.00, "type": "credit", "location": "Bangalore" },
+          { "id": "txn_a010", "accountId": "acc_002_chk", "date": "2026-09-01", "description": "Hostel mess fee", "merchant": "IIT Hostel", "category": "Dining", "amount": -3500.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a011", "accountId": "acc_002_chk", "date": "2026-08-30", "description": "Spotify Student Plan", "merchant": "Spotify", "category": "Subscription", "amount": -59.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a012", "accountId": "acc_002_chk", "date": "2026-08-29", "description": "Stationery from local shop", "merchant": "Campus Store", "category": "Education", "amount": -280.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a013", "accountId": "acc_002_chk", "date": "2026-08-28", "description": "Auto rickshaw to city", "merchant": "Auto Rickshaw", "category": "Transportation", "amount": -150.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a014", "accountId": "acc_002_chk", "date": "2026-08-27", "description": "Movie at Inox", "merchant": "Inox Cinemas", "category": "Entertainment", "amount": -350.00, "type": "debit", "location": "Bangalore" },
+          { "id": "txn_a015", "accountId": "acc_002_chk", "date": "2026-08-25", "description": "Groceries - fruits and snacks", "merchant": "Reliance Fresh", "category": "Groceries", "amount": -450.00, "type": "debit", "location": "Bangalore" }
+        ]
+      },
+      {
+        "id": "acc_002_sav",
+        "customerId": "cust_002",
+        "type": "savings",
+        "name": "Student Savings",
+        "accountNumber": "3456789012345678",
+        "balance": 28750.00,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_as001", "accountId": "acc_002_sav", "date": "2026-08-31", "description": "Interest credit", "merchant": "Bank Interest", "category": "Other", "amount": 95.00, "type": "credit" },
+          { "id": "txn_as002", "accountId": "acc_002_sav", "date": "2026-07-31", "description": "Interest credit", "merchant": "Bank Interest", "category": "Other", "amount": 92.00, "type": "credit" },
+          { "id": "txn_as003", "accountId": "acc_002_sav", "date": "2026-07-15", "description": "Birthday gift from grandparents", "merchant": "Family Transfer", "category": "Transfer", "amount": 10000.00, "type": "credit" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cust_003",
+    "name": "Meera Kapoor",
+    "email": "meera.kapoor@luxecorp.com",
+    "phone": "+91-99887-76655",
+    "dateOfBirth": "1988-07-08",
+    "address": {
+      "street": "Penthouse 12A, Lodha World Towers",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "postalCode": "400013",
+      "country": "India"
+    },
+    "createdAt": "2019-03-20T10:00:00Z",
+    "accounts": [
+      {
+        "id": "acc_003_chk",
+        "customerId": "cust_003",
+        "type": "checking",
+        "name": "Premium Checking",
+        "accountNumber": "4567890123456789",
+        "balance": 524890.45,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_m001", "accountId": "acc_003_chk", "date": "2026-09-08", "description": "Salary Credit - LuxeCorp Ltd", "merchant": "LuxeCorp Ltd", "category": "Salary", "amount": 450000.00, "type": "credit", "location": "Mumbai" },
+          { "id": "txn_m002", "accountId": "acc_003_chk", "date": "2026-09-07", "description": "Louis Vuitton purchase", "merchant": "Louis Vuitton", "category": "Shopping", "amount": -85000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m003", "accountId": "acc_003_chk", "date": "2026-09-07", "description": "Wasabi by Morimoto dinner", "merchant": "Wasabi by Morimoto", "category": "Dining", "amount": -12500.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m004", "accountId": "acc_003_chk", "date": "2026-09-06", "description": "Chauffeur service", "merchant": "DriveU Premium", "category": "Transportation", "amount": -3500.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m005", "accountId": "acc_003_chk", "date": "2026-09-06", "description": "Spa treatment at Four Seasons", "merchant": "Four Seasons Hotel", "category": "Healthcare", "amount": -18000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m006", "accountId": "acc_003_chk", "date": "2026-09-05", "description": "Home insurance premium", "merchant": "ICICI Lombard", "category": "Insurance", "amount": -25000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m007", "accountId": "acc_003_chk", "date": "2026-09-05", "description": "Organic groceries - Foodhall", "merchant": "Foodhall", "category": "Groceries", "amount": -8750.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m008", "accountId": "acc_003_chk", "date": "2026-09-04", "description": "Transfer to investment account", "merchant": "Self Transfer", "category": "Investment", "amount": -100000.00, "type": "debit" },
+          { "id": "txn_m009", "accountId": "acc_003_chk", "date": "2026-09-04", "description": "Rent payment - luxury apartment", "merchant": "Lodha Properties", "category": "Rent", "amount": -150000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m010", "accountId": "acc_003_chk", "date": "2026-09-03", "description": "Apple Premium subscription", "merchant": "Apple", "category": "Subscription", "amount": -1199.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m011", "accountId": "acc_003_chk", "date": "2026-09-03", "description": "Flight booking - Mumbai to Goa", "merchant": "MakeMyTrip", "category": "Travel", "amount": -15800.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m012", "accountId": "acc_003_chk", "date": "2026-09-02", "description": "Personal trainer session", "merchant": "Gold's Gym", "category": "Healthcare", "amount": -5000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m013", "accountId": "acc_003_chk", "date": "2026-09-02", "description": "Wine delivery", "merchant": "Living Liquidz", "category": "Dining", "amount": -4200.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m014", "accountId": "acc_003_chk", "date": "2026-09-01", "description": "Interior designer consultation", "merchant": "Studio Ashwith", "category": "Other", "amount": -35000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m015", "accountId": "acc_003_chk", "date": "2026-09-01", "description": "Electricity bill", "merchant": "Adani Electricity", "category": "Utilities", "amount": -5800.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m016", "accountId": "acc_003_chk", "date": "2026-08-31", "description": "Consulting bonus", "merchant": "LuxeCorp Ltd", "category": "Salary", "amount": 150000.00, "type": "credit", "location": "Mumbai" },
+          { "id": "txn_m017", "accountId": "acc_003_chk", "date": "2026-08-30", "description": "Zara shopping", "merchant": "Zara", "category": "Shopping", "amount": -12400.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m018", "accountId": "acc_003_chk", "date": "2026-08-29", "description": "Fine dining at Tresind Studio", "merchant": "Tresind Studio", "category": "Dining", "amount": -9800.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m019", "accountId": "acc_003_chk", "date": "2026-08-28", "description": "Premium car wash", "merchant": "Prestige Auto Spa", "category": "Transportation", "amount": -2500.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_m020", "accountId": "acc_003_chk", "date": "2026-08-27", "description": "Art gallery purchase", "merchant": "Gallery Chemould", "category": "Entertainment", "amount": -45000.00, "type": "debit", "location": "Mumbai" }
+        ]
+      },
+      {
+        "id": "acc_003_sav",
+        "customerId": "cust_003",
+        "type": "savings",
+        "name": "Premium Savings",
+        "accountNumber": "5678901234567890",
+        "balance": 2150000.00,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_ms001", "accountId": "acc_003_sav", "date": "2026-08-31", "description": "Interest credit", "merchant": "Bank Interest", "category": "Other", "amount": 8950.00, "type": "credit" },
+          { "id": "txn_ms002", "accountId": "acc_003_sav", "date": "2026-07-31", "description": "Interest credit", "merchant": "Bank Interest", "category": "Other", "amount": 8875.00, "type": "credit" },
+          { "id": "txn_ms003", "accountId": "acc_003_sav", "date": "2026-07-15", "description": "Fixed deposit maturity", "merchant": "Bank FD", "category": "Investment", "amount": 500000.00, "type": "credit" }
+        ]
+      },
+      {
+        "id": "acc_003_cc",
+        "customerId": "cust_003",
+        "type": "credit_card",
+        "name": "Platinum Rewards Card",
+        "accountNumber": "6789012345678901",
+        "balance": -42350.00,
+        "currency": "INR",
+        "transactions": [
+          { "id": "txn_mc001", "accountId": "acc_003_cc", "date": "2026-09-07", "description": "Sephora beauty products", "merchant": "Sephora", "category": "Shopping", "amount": -8500.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_mc002", "accountId": "acc_003_cc", "date": "2026-09-05", "description": "Hotel booking - Taj Lands End", "merchant": "Taj Hotels", "category": "Travel", "amount": -22000.00, "type": "debit", "location": "Mumbai" },
+          { "id": "txn_mc003", "accountId": "acc_003_cc", "date": "2026-09-03", "description": "Credit card reward cashback", "merchant": "Bank Rewards", "category": "Other", "amount": 1500.00, "type": "credit" },
+          { "id": "txn_mc004", "accountId": "acc_003_cc", "date": "2026-09-01", "description": "Annual card fee reversal", "merchant": "Bank Fee", "category": "Other", "amount": 5000.00, "type": "credit" },
+          { "id": "txn_mc005", "accountId": "acc_003_cc", "date": "2026-08-28", "description": "International online purchase", "merchant": "Net-A-Porter", "category": "Shopping", "amount": -18350.00, "type": "debit", "location": "London" }
+        ]
+      }
+    ]
+  }
+]
