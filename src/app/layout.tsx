@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 
-import "./globals.css";
-import { cn } from "@/lib/utils";
+import "@/styles/globals.css";
+import { cn } from "cn";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   description: "Conversational Net Banking",
 };
 
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 export default function RootLayout({
   children,
 }: {
@@ -28,21 +30,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(
-        geist.variable,
-        geistMono.variable,
-        "h-full antialiased typeset-chat",
-      )}
+      className={cn(geist.variable, geistMono.variable, "h-full antialiased")}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col typeset typeset-chat">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
