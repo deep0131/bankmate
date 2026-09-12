@@ -63,29 +63,29 @@ export const transactionTableTool = tool({
 
 export const loanCalculatorTool = tool({
   description:
-    "Calculate monthly loan payments (EMI), total interest, and compare loan terms/rates (e.g., mortgages, auto loans, personal loans).",
+    "Calculate monthly loan payments (EMI), total interest, and compare loan terms/rates (e.g., home loans, auto loans, personal loans, education loans in INR / Rupees).",
   inputSchema: z.object({
     loanAmount: z
       .number()
-      .default(350000)
-      .describe("Principal loan amount in USD (e.g. 350000)."),
+      .default(2500000)
+      .describe("Principal loan amount in INR / Rupees (e.g. 2500000)."),
     interestRate: z
       .number()
-      .default(6.5)
-      .describe("Annual interest rate percentage / APR (e.g. 6.5)."),
+      .default(8.5)
+      .describe("Annual interest rate percentage / APR (e.g. 8.5)."),
     loanTermYears: z
       .number()
-      .default(30)
-      .describe("Duration of the loan in years (e.g. 15 or 30)."),
+      .default(20)
+      .describe("Duration of the loan in years (e.g. 15, 20, or 30)."),
     loanType: z
       .enum(["mortgage", "auto", "personal", "student"])
       .optional()
       .describe("Type of loan product."),
   }),
   execute: async ({
-    loanAmount = 350000,
-    interestRate = 6.5,
-    loanTermYears = 30,
+    loanAmount = 2500000,
+    interestRate = 8.5,
+    loanTermYears = 20,
     loanType = "mortgage",
   }) => {
     const monthly = calculateEmi(loanAmount, interestRate, loanTermYears);

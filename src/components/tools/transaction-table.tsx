@@ -82,7 +82,7 @@ const columns = columnHelper.columns([
       const dateStr = row.original.date;
       const date = new Date(dateStr);
       const formatted = !Number.isNaN(date.getTime())
-        ? date.toLocaleDateString("en-US", {
+        ? date.toLocaleDateString("en-IN", {
             month: "short",
             day: "numeric",
           })
@@ -140,9 +140,10 @@ const columns = columnHelper.columns([
     cell: ({ row }) => {
       const tx = row.original;
       const isCredit = tx.type === "credit";
-      const formatted = new Intl.NumberFormat("en-US", {
+      const formatted = new Intl.NumberFormat("en-IN", {
         style: "currency",
-        currency: "USD",
+        currency: "INR",
+        maximumFractionDigits: 2,
       }).format(tx.amount);
 
       return (

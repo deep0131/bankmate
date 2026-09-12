@@ -44,15 +44,15 @@ function calculateLoan(amount: number, ratePercent: number, years: number) {
   };
 }
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
+const currencyFormatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
-  currency: "USD",
+  currency: "INR",
   maximumFractionDigits: 0,
 });
 
-const detailedCurrencyFormatter = new Intl.NumberFormat("en-US", {
+const detailedCurrencyFormatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
-  currency: "USD",
+  currency: "INR",
   maximumFractionDigits: 2,
 });
 
@@ -61,9 +61,9 @@ export function LoanCalculator(props: LoanCalculatorProps) {
   const state = props.state;
   const errorText = "errorText" in props ? props.errorText : undefined;
 
-  const initialAmount = output?.loanAmount ?? 350000;
-  const initialRate = output?.interestRate ?? 6.5;
-  const initialYears = output?.loanTermYears ?? 30;
+  const initialAmount = output?.loanAmount ?? 2500000;
+  const initialRate = output?.interestRate ?? 8.5;
+  const initialYears = output?.loanTermYears ?? 20;
 
   const [principal, setPrincipal] = React.useState<number>(initialAmount);
   const [interestRate, setInterestRate] = React.useState<number>(initialRate);
@@ -139,9 +139,9 @@ export function LoanCalculator(props: LoanCalculatorProps) {
             </div>
             <Slider
               value={[principal]}
-              min={10000}
-              max={1000000}
-              step={5000}
+              min={100000}
+              max={10000000}
+              step={50000}
               onValueChange={(val) => {
                 const nextVal = Array.isArray(val) ? val[0] : val;
                 if (typeof nextVal === "number") setPrincipal(nextVal);
@@ -158,8 +158,8 @@ export function LoanCalculator(props: LoanCalculatorProps) {
             </div>
             <Slider
               value={[Math.round(interestRate * 10)]}
-              min={10}
-              max={150}
+              min={50}
+              max={200}
               step={1}
               onValueChange={(val) => {
                 const nextVal = Array.isArray(val) ? val[0] : val;
