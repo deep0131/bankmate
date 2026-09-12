@@ -1,7 +1,9 @@
 "use client";
 
+import { mermaid } from "@streamdown/mermaid";
 import { UserIcon } from "lucide-react";
 import { Streamdown } from "streamdown";
+import { FinancialChart } from "@/components/tools/financial-chart";
 import { LoanCalculator } from "@/components/tools/loan-calculator";
 import { TransactionTable } from "@/components/tools/transaction-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -42,7 +44,10 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
                 switch (part.type) {
                   case "text":
                     return (
-                      <Streamdown key={`${message.id}-${i}`}>
+                      <Streamdown
+                        key={`${message.id}-${i}`}
+                        plugins={{ mermaid }}
+                      >
                         {part.text}
                       </Streamdown>
                     );
@@ -53,6 +58,10 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
                   case "tool-loan-calculator":
                     return (
                       <LoanCalculator key={`${message.id}-${i}`} {...part} />
+                    );
+                  case "tool-financial-chart":
+                    return (
+                      <FinancialChart key={`${message.id}-${i}`} {...part} />
                     );
                   default:
                     return null;

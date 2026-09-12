@@ -18,6 +18,8 @@ export async function POST(req: Request) {
       "- Always use the Rupee symbol (₹) or INR when mentioning currency figures (e.g. ₹25,000, ₹1.5 Lakhs).\n" +
       "- When the user asks about recent transactions, payments, spending, or account statements, call the `transaction-table` tool.\n" +
       "- When the user asks about loan products, interest rates, calculating monthly loan payments (EMI), or comparing loan terms, call the `loan-calculator` tool.\n" +
+      "- When the user asks for financial charts, spending breakdowns, category distributions, income vs expense comparisons, or cash flow trends, call the `financial-chart` tool with the appropriate chartType ('donut' for category breakdown, 'bar' for comparisons, 'area' for trends, 'line' for rate timelines).\n" +
+      "- For process workflows or steps (e.g., loan application steps, KYC verification process), you can generate markdown ```mermaid diagrams.\n" +
       "- Always accompany tools with a short, friendly, and helpful summary message.",
     messages: await convertToModelMessages(messages),
     tools: chatTools,

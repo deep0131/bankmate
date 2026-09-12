@@ -104,9 +104,78 @@ export const loanCalculatorTool = tool({
   },
 });
 
+export const financialChartTool = tool({
+  description:
+    "Display an interactive financial chart (such as spending breakdown donut, income vs expenses bar chart, cash flow area chart, or loan comparison) using shadcn charts.",
+  inputSchema: z.object({
+    title: z
+      .string()
+      .describe(
+        "Title of the chart (e.g. 'Monthly Spending Breakdown', 'Cash Flow Analysis').",
+      ),
+    description: z
+      .string()
+      .optional()
+      .describe(
+        "Subtitle or time range (e.g. 'September 2026', 'Last 3 Months').",
+      ),
+    chartType: z
+      .enum(["donut", "bar", "area", "line"])
+      .default("donut")
+      .describe(
+        "Chart visualization type: 'donut' for category breakdown, 'bar' for comparisons, 'area' for trends, 'line' for rate/timeline.",
+      ),
+    data: z
+      .array(
+        z.object({
+          label: z
+            .string()
+            .describe(
+              "Category, Month, or Label (e.g. 'Groceries', 'Dining', 'Aug 2026').",
+            ),
+          value: z
+            .number()
+            .describe("Primary value in Rupees / INR or number."),
+          secondaryValue: z
+            .number()
+            .optional()
+            .describe(
+              "Optional secondary value for comparison (e.g. Income vs Expense).",
+            ),
+        }),
+      )
+      .describe("Data points to plot in the chart."),
+    primaryKeyLabel: z
+      .string()
+      .optional()
+      .default("Amount")
+      .describe(
+        "Label for the primary series (e.g. 'Expense', 'Spend', 'Balance').",
+      ),
+    secondaryKeyLabel: z
+      .string()
+      .optional()
+      .describe(
+        "Label for secondary series if comparing two series (e.g. 'Income').",
+      ),
+    totalLabel: z
+      .string()
+      .optional()
+      .describe("Summary label (e.g. 'Total Spend', 'Net Savings')."),
+  }),
+  execute: async (params) => {
+    const total = params.data.reduce((acc, curr) => acc + curr.value, 0);
+    return {
+      ...params,
+      calculatedTotal: total,
+    };
+  },
+});
+
 export const chatTools = {
   "transaction-table": transactionTableTool,
   "loan-calculator": loanCalculatorTool,
+  "financial-chart": financialChartTool,
 };
 
 export type ChatTools = typeof chatTools;
@@ -115,3 +184,4 @@ export type ChatUIMessage = UIMessage<unknown, UIDataTypes, ChatUITools>;
 
 export type TransactionTableUITool = InferUITool<typeof transactionTableTool>;
 export type LoanCalculatorUITool = InferUITool<typeof loanCalculatorTool>;
+export type FinancialChartUITool = InferUITool<typeof financialChartTool>;

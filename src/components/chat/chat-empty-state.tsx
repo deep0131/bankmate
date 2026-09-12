@@ -24,8 +24,12 @@ const SUGGESTIONS = [
     prompt: "Show me my recent transactions for this month",
   },
   {
-    label: "Compare Loan Products",
-    prompt: "What home loan rates are available?",
+    label: "Spending Breakdown",
+    prompt: "Show me a visual pie chart breakdown of my spending this month",
+  },
+  {
+    label: "Home Loan EMI",
+    prompt: "Calculate EMI for a ₹35 Lakh home loan at 8.5% for 20 years",
   },
 ];
 
