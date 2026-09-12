@@ -1,26 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 import "@/styles/globals.css";
 import { cn } from "cn";
 
-const geist = Geist({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-geist",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Bankmate",
-  description: "Conversational Net Banking",
+  title: "BankMate — AI Banking Assistant",
+  description:
+    "Conversational Net Banking powered by AI. Check balances, view transactions, calculate EMIs, and more.",
 };
-
-import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function RootLayout({
   children,
@@ -30,13 +27,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(geist.variable, geistMono.variable, "h-full antialiased")}
+      className={cn(poppins.variable, "h-full antialiased")}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col typeset typeset-chat">
+      <body className="min-h-full flex flex-col typeset typeset-chat font-sans">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

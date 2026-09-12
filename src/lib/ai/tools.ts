@@ -172,10 +172,108 @@ export const financialChartTool = tool({
   },
 });
 
+export const bankProfileTool = tool({
+  description:
+    "Retrieve and display Deep Yadav's complete net banking profile, accounts overview, card limits, KYC status, or relationship manager details in an interactive visual card widget.",
+  inputSchema: z.object({
+    view: z
+      .enum(["overview", "accounts", "cards", "wealth", "kyc"])
+      .default("overview")
+      .describe("Specific section to highlight in the profile card."),
+  }),
+  execute: async ({ view = "overview" }) => {
+    return {
+      view,
+    };
+  },
+});
+
+export const bookFixedDepositTool = tool({
+  description:
+    "Open or book a new Fixed Deposit (FD) for the user. Prompts the user to review details and securely authorize the booking by entering their 6-digit transaction PIN. Use whenever the user asks to create, open, or invest in an FD / fixed deposit.",
+  inputSchema: z.object({
+    amount: z
+      .number()
+      .describe("Principal amount to invest in the Fixed Deposit in INR / Rupees (e.g. 20000, 50000)."),
+    tenureYears: z
+      .number()
+      .default(2)
+      .describe("Tenure duration in years (e.g. 1, 2, 3, 5)."),
+    interestRate: z
+      .number()
+      .default(7.25)
+      .describe("Annual interest rate percentage (e.g. 7.25 for 7.25% p.a.)."),
+    payoutType: z
+      .string()
+      .default("Cumulative (At Maturity)")
+      .describe("Interest payout mode: 'Cumulative (At Maturity)', 'Quarterly Payout', or 'Monthly Payout'."),
+  }),
+  execute: async ({
+    amount,
+    tenureYears = 2,
+    interestRate = 7.25,
+    payoutType = "Cumulative (At Maturity)",
+  }) => {
+    const n = tenureYears;
+    const r = interestRate;
+    const estimatedMaturity = Math.round(amount * Math.pow(1 + r / 400, 4 * n));
+    return {
+      actionType: "fixed-deposit" as const,
+      amount,
+      tenureYears,
+      interestRate,
+      payoutType,
+      estimatedMaturity,
+      status: "pending_pin_authorization",
+    };
+  },
+});
+
+export const transferFundsTool = tool({
+  description:
+    "Initiate a fund transfer (UPI / IMPS / NEFT) to a recipient. Prompts the user to enter their 6-digit transaction PIN to authorize the payment. Use whenever the user asks to send, transfer, or pay money to someone.",
+  inputSchema: z.object({
+    recipientName: z
+      .string()
+      .describe("Name of the recipient or beneficiary."),
+    recipientAccount: z
+      .string()
+      .optional()
+      .default("•••• 4092")
+      .describe("Account number, UPI ID, or mobile number."),
+    amount: z
+      .number()
+      .describe("Amount in INR / Rupees to transfer."),
+    note: z
+      .string()
+      .optional()
+      .default("Fund Transfer")
+      .describe("Payment description or note (e.g. 'Rent payment', 'Dinner split')."),
+  }),
+  execute: async ({
+    recipientName,
+    recipientAccount = "•••• 4092",
+    amount,
+    note = "Fund Transfer",
+  }) => {
+    return {
+      actionType: "transfer" as const,
+      recipientName,
+      recipientAccount,
+      amount,
+      note,
+      status: "pending_pin_authorization",
+    };
+  },
+});
+
 export const chatTools = {
   "transaction-table": transactionTableTool,
   "loan-calculator": loanCalculatorTool,
   "financial-chart": financialChartTool,
+  "bank-profile": bankProfileTool,
+  "book-fixed-deposit": bookFixedDepositTool,
+  "transfer-funds": transferFundsTool,
 };
 
 export type ChatTools = typeof chatTools;
@@ -185,3 +283,8 @@ export type ChatUIMessage = UIMessage<unknown, UIDataTypes, ChatUITools>;
 export type TransactionTableUITool = InferUITool<typeof transactionTableTool>;
 export type LoanCalculatorUITool = InferUITool<typeof loanCalculatorTool>;
 export type FinancialChartUITool = InferUITool<typeof financialChartTool>;
+export type BankProfileUITool = InferUITool<typeof bankProfileTool>;
+export type BookFixedDepositUITool = InferUITool<typeof bookFixedDepositTool>;
+export type TransferFundsUITool = InferUITool<typeof transferFundsTool>;
+
+

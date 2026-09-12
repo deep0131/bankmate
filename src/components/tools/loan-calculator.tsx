@@ -115,13 +115,13 @@ export function LoanCalculator(props: LoanCalculatorProps) {
       <CardContent className="flex flex-col gap-4">
         {/* EMI Summary Display */}
         <div className="space-y-1">
-          <div className="text-2xl font-semibold tracking-tight">
+          <div className="text-2xl font-semibold tracking-tight whitespace-nowrap tabular-nums">
             {detailedCurrencyFormatter.format(calc.monthlyPayment)}
-            <span className="text-xs font-normal text-muted-foreground">
+            <span className="text-xs font-normal text-muted-foreground ml-1">
               /mo
             </span>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
             Total {currencyFormatter.format(calc.totalPayment)} · Interest{" "}
             {currencyFormatter.format(calc.totalInterest)}
           </p>
@@ -133,7 +133,7 @@ export function LoanCalculator(props: LoanCalculatorProps) {
           <Field>
             <div className="flex items-center justify-between">
               <FieldTitle>Principal Amount</FieldTitle>
-              <FieldDescription>
+              <FieldDescription className="whitespace-nowrap tabular-nums">
                 {currencyFormatter.format(principal)}
               </FieldDescription>
             </div>

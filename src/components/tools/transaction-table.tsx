@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/table";
 import type { transactionTableTool } from "@/lib/ai/tools";
 import type { Transaction } from "@/types/transaction";
+import { useBankStore } from "@/lib/bank-store";
 
 const features = tableFeatures({
   columnVisibilityFeature,
@@ -148,18 +149,18 @@ const columns = columnHelper.columns([
 
       return (
         <div
-          className={`flex items-center justify-end gap-1 text-right font-medium tabular-nums text-xs ${
+          className={`flex items-center justify-end gap-1 text-right font-medium tabular-nums text-xs whitespace-nowrap ${
             isCredit
               ? "text-emerald-600 dark:text-emerald-400"
               : "text-foreground"
           }`}
         >
           {isCredit ? (
-            <ArrowDownLeft className="size-3 text-emerald-600 dark:text-emerald-400" />
+            <ArrowDownLeft className="size-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
           ) : (
-            <ArrowUpRight className="size-3 text-muted-foreground" />
+            <ArrowUpRight className="size-3 text-muted-foreground shrink-0" />
           )}
-          <span>{isCredit ? `+${formatted}` : `-${formatted}`}</span>
+          <span className="whitespace-nowrap">{isCredit ? `+${formatted}` : `-${formatted}`}</span>
         </div>
       );
     },
@@ -186,10 +187,25 @@ export function TransactionTable(props: TransactionTableProps) {
   const errorText = "errorText" in props ? props.errorText : undefined;
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const transactions = React.useMemo(
-    () => output?.transactions ?? [],
-    [output?.transactions],
-  );
+  const { transactions: liveTransactions } = useBankStore();
+
+  const transactions = React.useMemo(() => {
+    if (liveTransactions && liveTransactions.length > 0) {
+      let filtered = liveTransactions;
+      if (output?.account && output.account !== "all") {
+        filtered = filtered.filter(
+          (tx) => tx.account.toLowerCase() === output.account.toLowerCase(),
+        );
+      }
+      if (output?.category && output.category !== "all") {
+        filtered = filtered.filter(
+          (tx) => tx.category.toLowerCase() === output.category.toLowerCase(),
+        );
+      }
+      return filtered;
+    }
+    return output?.transactions ?? [];
+  }, [liveTransactions, output?.transactions, output?.account, output?.category]);
 
   const table = useTable({
     features,
