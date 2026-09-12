@@ -1,12 +1,9 @@
 "use client";
 
-import type { UIMessage } from "ai";
 import { UserIcon } from "lucide-react";
 import { Streamdown } from "streamdown";
-import {
-  TransactionTable,
-  type TransactionTableOutput,
-} from "@/components/tools/transaction-table";
+import { LoanCalculator } from "@/components/tools/loan-calculator";
+import { TransactionTable } from "@/components/tools/transaction-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
@@ -18,9 +15,10 @@ import {
 } from "@/components/ui/message";
 import { MessageScrollerItem } from "@/components/ui/message-scroller";
 import { Spinner } from "@/components/ui/spinner";
+import type { ChatUIMessage } from "@/lib/ai/tools";
 
 interface ChatMessageItemProps {
-  message: UIMessage;
+  message: ChatUIMessage;
 }
 
 export function ChatMessageItem({ message }: ChatMessageItemProps) {
@@ -50,16 +48,11 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
                     );
                   case "tool-transaction-table":
                     return (
-                      <TransactionTable
-                        key={`${message.id}-${i}`}
-                        output={
-                          part.output as TransactionTableOutput | undefined
-                        }
-                        state={part.state}
-                        errorText={
-                          "errorText" in part ? part.errorText : undefined
-                        }
-                      />
+                      <TransactionTable key={`${message.id}-${i}`} {...part} />
+                    );
+                  case "tool-loan-calculator":
+                    return (
+                      <LoanCalculator key={`${message.id}-${i}`} {...part} />
                     );
                   default:
                     return null;

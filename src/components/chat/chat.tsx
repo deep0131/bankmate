@@ -9,6 +9,7 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
+import type { ChatUIMessage } from "@/lib/ai/tools";
 import { ChatEmptyState } from "./chat-empty-state";
 import { ChatHeader } from "./chat-header";
 import { ChatInput } from "./chat-input";
@@ -16,7 +17,8 @@ import { ChatMessageItem, ChatThinkingIndicator } from "./chat-message-item";
 
 export function Chat() {
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status, setMessages, stop } = useChat();
+  const { messages, sendMessage, status, setMessages, stop } =
+    useChat<ChatUIMessage>();
 
   const isBusy = status === "submitted" || status === "streaming";
 

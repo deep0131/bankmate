@@ -13,17 +13,26 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
+import type { UIToolInvocation } from "ai";
 import {
   ArrowDownLeft,
   ArrowUpDown,
   ArrowUpRight,
   ChevronLeft,
   ChevronRight,
-  ReceiptText,
 } from "lucide-react";
 import * as React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
 import { Spinner } from "@/components/ui/spinner";
 import {
@@ -34,6 +43,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { transactionTableTool } from "@/lib/ai/tools";
 import type { Transaction } from "@/types/transaction";
 
 const features = tableFeatures({
@@ -49,25 +59,9 @@ type DataTableFeatures = typeof features;
 
 const columnHelper = createColumnHelper<DataTableFeatures, Transaction>();
 
-export interface TransactionTableOutput {
-  account?: string;
-  category?: string;
-  totalCount: number;
-  transactions: Transaction[];
-}
-
-export interface TransactionTableProps {
-  output?: TransactionTableOutput;
-  state?:
-    | "input-streaming"
-    | "input-available"
-    | "approval-requested"
-    | "approval-responded"
-    | "output-available"
-    | "output-error"
-    | "output-denied";
-  errorText?: string;
-}
+export type TransactionTableProps = UIToolInvocation<
+  typeof transactionTableTool
+>;
 
 const columns = columnHelper.columns([
   columnHelper.accessor("date", {
@@ -185,11 +179,11 @@ const columns = columnHelper.columns([
   }),
 ]);
 
-export function TransactionTable({
-  output,
-  state,
-  errorText,
-}: TransactionTableProps) {
+export function TransactionTable(props: TransactionTableProps) {
+  const output = "output" in props ? props.output : undefined;
+  const state = props.state;
+  const errorText = "errorText" in props ? props.errorText : undefined;
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const transactions = React.useMemo(
     () => output?.transactions ?? [],
@@ -233,9 +227,11 @@ export function TransactionTable({
 
   if (!output || transactions.length === 0) {
     return (
-      <div className="rounded-lg border border-border bg-card/50 p-4 text-center text-xs text-muted-foreground">
-        No transactions found matching your criteria.
-      </div>
+      <Card size="sm" className="w-full my-2">
+        <CardContent className="py-6 text-center text-xs text-muted-foreground">
+          No transactions found matching your criteria.
+        </CardContent>
+      </Card>
     );
   }
 
@@ -243,20 +239,24 @@ export function TransactionTable({
   const totalPages = table.getPageCount();
 
   return (
-    <div className="w-full max-w-full space-y-2.5 my-2">
-      <div className="flex items-center justify-between text-xs text-muted-foreground px-0.5">
-        <div className="flex items-center gap-1.5 font-medium text-foreground">
-          <ReceiptText className="size-3.5 text-primary" />
-          <span>Recent Transactions</span>
-        </div>
-        <span>
-          Showing {transactions.length} of {output.totalCount} records
-        </span>
-      </div>
+    <Card size="sm" className="w-full max-w-2xl my-2">
+      <CardHeader className="border-b">
+        <CardTitle>Recent Transactions</CardTitle>
+        <CardDescription>
+          {output.account && output.account !== "all"
+            ? `${output.account.charAt(0).toUpperCase() + output.account.slice(1)} account`
+            : "All accounts"}
+        </CardDescription>
+        <CardAction>
+          <Badge variant="outline" className="text-[10px]">
+            {transactions.length} of {output.totalCount}
+          </Badge>
+        </CardAction>
+      </CardHeader>
 
-      <div className="overflow-hidden rounded-lg border border-border bg-card shadow-xs">
+      <CardContent className="p-0">
         <Table>
-          <TableHeader className="bg-muted/40">
+          <TableHeader className="bg-muted/30">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -292,10 +292,10 @@ export function TransactionTable({
             )}
           </TableBody>
         </Table>
-      </div>
+      </CardContent>
 
       {transactions.length > 5 && (
-        <div className="flex items-center justify-between px-1 text-xs text-muted-foreground">
+        <CardFooter className="justify-between border-t py-2 text-xs text-muted-foreground">
           <div>
             Page {currentPage} of {totalPages}
           </div>
@@ -319,8 +319,8 @@ export function TransactionTable({
               <span className="sr-only">Next Page</span>
             </Button>
           </div>
-        </div>
+        </CardFooter>
       )}
-    </div>
+    </Card>
   );
 }
