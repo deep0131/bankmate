@@ -3,6 +3,10 @@
 import type { UIMessage } from "ai";
 import { UserIcon } from "lucide-react";
 import { Streamdown } from "streamdown";
+import {
+  TransactionTable,
+  type TransactionTableOutput,
+} from "@/components/tools/transaction-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
@@ -43,6 +47,19 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
                       <Streamdown key={`${message.id}-${i}`}>
                         {part.text}
                       </Streamdown>
+                    );
+                  case "tool-transaction-table":
+                    return (
+                      <TransactionTable
+                        key={`${message.id}-${i}`}
+                        output={
+                          part.output as TransactionTableOutput | undefined
+                        }
+                        state={part.state}
+                        errorText={
+                          "errorText" in part ? part.errorText : undefined
+                        }
+                      />
                     );
                   default:
                     return null;

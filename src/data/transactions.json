@@ -1,0 +1,152 @@
+[
+  {
+    "id": "tx_101",
+    "date": "2026-09-12T10:15:00Z",
+    "description": "Starbucks Coffee",
+    "category": "Dining",
+    "account": "checking",
+    "type": "debit",
+    "amount": 6.75,
+    "status": "completed"
+  },
+  {
+    "id": "tx_102",
+    "date": "2026-09-11T16:30:00Z",
+    "description": "Whole Foods Market",
+    "category": "Groceries",
+    "account": "checking",
+    "type": "debit",
+    "amount": 114.5,
+    "status": "completed"
+  },
+  {
+    "id": "tx_103",
+    "date": "2026-09-10T09:00:00Z",
+    "description": "Acme Corp Payroll Direct Deposit",
+    "category": "Income",
+    "account": "checking",
+    "type": "credit",
+    "amount": 3450.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_104",
+    "date": "2026-09-09T19:45:00Z",
+    "description": "Uber Ride",
+    "category": "Travel",
+    "account": "credit",
+    "type": "debit",
+    "amount": 28.3,
+    "status": "completed"
+  },
+  {
+    "id": "tx_105",
+    "date": "2026-09-08T12:00:00Z",
+    "description": "Netflix Subscription",
+    "category": "Subscriptions",
+    "account": "credit",
+    "type": "debit",
+    "amount": 19.99,
+    "status": "completed"
+  },
+  {
+    "id": "tx_106",
+    "date": "2026-09-07T14:20:00Z",
+    "description": "Apple Store - Hardware & Services",
+    "category": "Shopping",
+    "account": "credit",
+    "type": "debit",
+    "amount": 149.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_107",
+    "date": "2026-09-06T08:15:00Z",
+    "description": "Electric & Gas Utility",
+    "category": "Utilities",
+    "account": "checking",
+    "type": "debit",
+    "amount": 87.65,
+    "status": "completed"
+  },
+  {
+    "id": "tx_108",
+    "date": "2026-09-05T18:00:00Z",
+    "description": "Trader Joe's",
+    "category": "Groceries",
+    "account": "checking",
+    "type": "debit",
+    "amount": 62.4,
+    "status": "completed"
+  },
+  {
+    "id": "tx_109",
+    "date": "2026-09-04T11:10:00Z",
+    "description": "Monthly High-Yield Savings Interest",
+    "category": "Income",
+    "account": "savings",
+    "type": "credit",
+    "amount": 84.15,
+    "status": "completed"
+  },
+  {
+    "id": "tx_110",
+    "date": "2026-09-03T15:30:00Z",
+    "description": "Transfer to High-Yield Savings",
+    "category": "Transfer",
+    "account": "checking",
+    "type": "debit",
+    "amount": 500.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_111",
+    "date": "2026-09-02T20:10:00Z",
+    "description": "Chipotle Mexican Grill",
+    "category": "Dining",
+    "account": "checking",
+    "type": "debit",
+    "amount": 16.45,
+    "status": "completed"
+  },
+  {
+    "id": "tx_112",
+    "date": "2026-09-01T13:00:00Z",
+    "description": "Amazon Online Marketplace",
+    "category": "Shopping",
+    "account": "credit",
+    "type": "debit",
+    "amount": 45.89,
+    "status": "completed"
+  },
+  {
+    "id": "tx_113",
+    "date": "2026-08-30T17:25:00Z",
+    "description": "Shell Gas Station",
+    "category": "Travel",
+    "account": "credit",
+    "type": "debit",
+    "amount": 52.1,
+    "status": "completed"
+  },
+  {
+    "id": "tx_114",
+    "date": "2026-08-28T09:40:00Z",
+    "description": "Spotify Premium",
+    "category": "Subscriptions",
+    "account": "credit",
+    "type": "debit",
+    "amount": 11.99,
+    "status": "completed"
+  },
+  {
+    "id": "tx_115",
+    "date": "2026-08-25T11:00:00Z",
+    "description": "Acme Corp Mid-Month Paycheck",
+    "category": "Income",
+    "account": "checking",
+    "type": "credit",
+    "amount": 3450.0,
+    "status": "completed"
+  }
+]
