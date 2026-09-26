@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpIcon, PaperclipIcon, MicIcon, BookOpenIcon, SquareIcon } from "lucide-react";
+import { ArrowUpIcon, SquareIcon } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -44,53 +44,7 @@ export function ChatInput({
               }}
               maxLength={maxChars}
             />
-            <InputGroupAddon align="block-end" className="justify-between">
-              {/* Action buttons */}
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150"
-                  style={{ color: "var(--muted-foreground)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "var(--nav-hover)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <PaperclipIcon className="size-3.5" />
-                  Attach
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150"
-                  style={{ color: "var(--muted-foreground)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "var(--nav-hover)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <MicIcon className="size-3.5" />
-                  Voice Message
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-150"
-                  style={{ color: "var(--muted-foreground)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "var(--nav-hover)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  <BookOpenIcon className="size-3.5" />
-                  Browse Prompts
-                </button>
-              </div>
-
+            <InputGroupAddon align="block-end" className="justify-end">
               {/* Char count + send */}
               <div className="flex items-center gap-2">
                 <span
