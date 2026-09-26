@@ -51,6 +51,22 @@ export function Chat({
     }
   }, [status, messages, chatId, onMessagesChange]);
 
+  // Listen for programmatic prompt dispatches from interactive widgets (e.g. Loan Apply CTA)
+  useEffect(() => {
+    const handleChatPromptEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ text: string }>;
+      if (customEvent.detail?.text) {
+        userActedRef.current = true;
+        sendMessage({ text: customEvent.detail.text });
+      }
+    };
+
+    window.addEventListener("bankmate-send-chat-prompt", handleChatPromptEvent);
+    return () => {
+      window.removeEventListener("bankmate-send-chat-prompt", handleChatPromptEvent);
+    };
+  }, [sendMessage]);
+
   const handleReset = () => {
     setMessages([]);
     userActedRef.current = true;

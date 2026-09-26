@@ -51,7 +51,7 @@ export function BankProfileModal({
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [txFilter, setTxFilter] = useState<"all" | "savings" | "credit" | "debit">("all");
-  const { profile, transactions, resetToDefault } = useBankStore();
+  const { profile, transactions, loanApplications, resetToDefault } = useBankStore();
 
   useEffect(() => {
     setMounted(true);
@@ -473,10 +473,76 @@ export function BankProfileModal({
                 </div>
               </div>
 
+              {/* Submitted Applications with Human RM Status */}
+              {loanApplications && loanApplications.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider mb-3 flex items-center justify-between" style={{ color: "var(--muted-foreground)" }}>
+                    <span>Active Loan Applications (Human Review)</span>
+                    <span className="text-[10px] font-semibold text-amber-500">
+                      {loanApplications.length} In Progress
+                    </span>
+                  </h3>
+                  <div className="space-y-3">
+                    {loanApplications.map((app) => (
+                      <div
+                        key={app.applicationId}
+                        className="p-4 rounded-xl border"
+                        style={{
+                          borderColor: "rgba(245, 158, 11, 0.4)",
+                          backgroundColor: "var(--toggle-bg)",
+                        }}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-foreground">
+                              {app.loanName}
+                            </span>
+                            <span className="text-[10px] font-mono text-muted-foreground">
+                              ({app.applicationId})
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                            {app.status}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] mb-3">
+                          <div>
+                            <span className="text-muted-foreground block text-[10px]">Requested</span>
+                            <strong className="text-foreground font-mono">{formatINR(app.requestedAmount)}</strong>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground block text-[10px]">Tenure</span>
+                            <span className="text-foreground">{app.tenureYears} Years</span>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground block text-[10px]">Est. EMI</span>
+                            <strong className="text-foreground font-mono">{formatINR(app.estimatedEmi)}/mo</strong>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground block text-[10px]">Rate</span>
+                            <span className="text-emerald-600 font-bold">{app.interestRate}% p.a.</span>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 border-t flex items-center justify-between text-[11px]" style={{ borderColor: "var(--panel-border)" }}>
+                          <span className="text-muted-foreground">
+                            Assigned RM: <strong className="text-foreground">{app.rmAssigned.name}</strong> ({app.rmAssigned.phone})
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            Submitted: {new Date(app.submittedAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Loans */}
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--muted-foreground)" }}>
-                  Loan Accounts & Pre-Approved Offers
+                  Pre-Approved Loan Offers & Existing Lines
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {profile.loans.map((loan) => (

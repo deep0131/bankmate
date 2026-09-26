@@ -11,6 +11,10 @@ import {
 } from "@/components/tools/transaction-action-card";
 import { TransactionTable } from "@/components/tools/transaction-table";
 import { UserProfileWidget } from "@/components/tools/user-profile-widget";
+import {
+  LoanOffersCatalog,
+  ApplyLoanCard,
+} from "@/components/tools/loan-offers-widget";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
@@ -79,6 +83,14 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
                   case "tool-transfer-funds":
                     return (
                       <TransferFundsCard key={`${message.id}-${i}`} {...part} />
+                    );
+                  case "tool-show-loan-offers":
+                    return (
+                      <LoanOffersCatalog key={`${message.id}-${i}`} {...part} />
+                    );
+                  case "tool-apply-loan":
+                    return (
+                      <ApplyLoanCard key={`${message.id}-${i}`} {...part} />
                     );
                   default:
                     return null;

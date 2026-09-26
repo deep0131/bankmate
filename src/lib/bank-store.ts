@@ -10,12 +10,37 @@ import type { Transaction } from "@/types/transaction";
 const PROFILE_STORAGE_KEY = "bankmate_live_profile_v1";
 const TRANSACTIONS_STORAGE_KEY = "bankmate_live_transactions_v1";
 const PIN_STORAGE_KEY = "bankmate_security_pin_v1";
+const LOAN_APPLICATIONS_STORAGE_KEY = "bankmate_loan_applications_v1";
 const DEFAULT_DEMO_PIN = "123456";
+
+export interface LoanApplicationRecord {
+  applicationId: string;
+  loanId: string;
+  loanName: string;
+  category: string;
+  requestedAmount: number;
+  tenureYears: number;
+  interestRate: number;
+  estimatedEmi: number;
+  status: "Pending RM Review" | "Under Human Approval" | "RM Review Scheduled" | "Approved";
+  rmAssigned: {
+    name: string;
+    title: string;
+    email: string;
+    phone: string;
+    branch: string;
+  };
+  submittedAt: string;
+  cibilScore: number;
+  monthlyIncome: number;
+  notes?: string;
+}
 
 export interface BankStoreState {
   profile: UserProfile;
   transactions: Transaction[];
   pin: string;
+  loanApplications: LoanApplicationRecord[];
 }
 
 // Custom event name for instant cross-component updates
@@ -269,11 +294,96 @@ export function executeTransferFunds({
   };
 }
 
+export function getLiveLoanApplications(): LoanApplicationRecord[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(LOAN_APPLICATIONS_STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+export interface SubmitLoanApplicationParams {
+  loanId: string;
+  loanName: string;
+  category: string;
+  requestedAmount: number;
+  tenureYears: number;
+  interestRate: number;
+  notes?: string;
+}
+
+export function executeSubmitLoanApplication(
+  params: SubmitLoanApplicationParams
+): { success: boolean; application: LoanApplicationRecord; message: string } {
+  const profile = getLiveProfile();
+  const applications = getLiveLoanApplications();
+
+  // EMI calculation: r = interestRate / 100 / 12, n = tenureYears * 12
+  const r = params.interestRate / 100 / 12;
+  const n = params.tenureYears * 12;
+  const estimatedEmi =
+    r === 0
+      ? Math.round(params.requestedAmount / n)
+      : Math.round((params.requestedAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1));
+
+  const appId = `LN-APP-${Date.now().toString().slice(-6)}`;
+  const rm = profile.personal.relationshipManager || {
+    name: "Priya Sharma",
+    title: "Senior Wealth Director",
+    email: "priya.sharma@bankmate.io",
+    phone: "+91 22 6123 4567",
+    branch: "BKC Flagship Lounge, Mumbai",
+  };
+
+  const newApp: LoanApplicationRecord = {
+    applicationId: appId,
+    loanId: params.loanId,
+    loanName: params.loanName,
+    category: params.category,
+    requestedAmount: params.requestedAmount,
+    tenureYears: params.tenureYears,
+    interestRate: params.interestRate,
+    estimatedEmi,
+    status: "Pending RM Review",
+    rmAssigned: {
+      name: rm.name,
+      title: rm.title,
+      email: rm.email,
+      phone: rm.phone,
+      branch: rm.branch,
+    },
+    submittedAt: new Date().toISOString(),
+    cibilScore: profile.wealth.creditScore?.score || 795,
+    monthlyIncome: 240000,
+    notes: params.notes,
+  };
+
+  applications.unshift(newApp);
+
+  try {
+    localStorage.setItem(LOAN_APPLICATIONS_STORAGE_KEY, JSON.stringify(applications));
+  } catch (err) {
+    console.error("Failed to save loan application:", err);
+  }
+
+  emitStoreUpdate();
+
+  return {
+    success: true,
+    application: newApp,
+    message: `Loan application ${appId} submitted successfully. Assigned to RM ${rm.name} for human review.`,
+  };
+}
+
 export function resetBankStoreToDefault() {
   if (typeof window === "undefined") return;
   localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(mockProfile));
   localStorage.setItem(TRANSACTIONS_STORAGE_KEY, JSON.stringify(mockTransactions));
   localStorage.setItem(PIN_STORAGE_KEY, DEFAULT_DEMO_PIN);
+  localStorage.removeItem(LOAN_APPLICATIONS_STORAGE_KEY);
   emitStoreUpdate();
 }
 
@@ -281,17 +391,22 @@ export function useBankStore() {
   const [profile, setProfile] = useState<UserProfile>(() => getLiveProfile());
   const [transactions, setTransactions] = useState<Transaction[]>(() => getLiveTransactions());
   const [pin, setPin] = useState<string>(() => getLivePin());
+  const [loanApplications, setLoanApplications] = useState<LoanApplicationRecord[]>(() =>
+    getLiveLoanApplications()
+  );
 
   useEffect(() => {
     // Initial sync
     setProfile(getLiveProfile());
     setTransactions(getLiveTransactions());
     setPin(getLivePin());
+    setLoanApplications(getLiveLoanApplications());
 
     const handleUpdate = () => {
       setProfile(getLiveProfile());
       setTransactions(getLiveTransactions());
       setPin(getLivePin());
+      setLoanApplications(getLiveLoanApplications());
     };
 
     window.addEventListener(STORE_UPDATE_EVENT, handleUpdate);
@@ -307,8 +422,10 @@ export function useBankStore() {
     profile,
     transactions,
     pin,
+    loanApplications,
     createFixedDeposit: executeCreateFixedDeposit,
     transferFunds: executeTransferFunds,
+    submitLoanApplication: executeSubmitLoanApplication,
     validatePin: validateTransactionPin,
     resetToDefault: resetBankStoreToDefault,
   };

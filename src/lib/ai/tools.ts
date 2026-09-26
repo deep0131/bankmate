@@ -267,6 +267,143 @@ export const transferFundsTool = tool({
   },
 });
 
+export const showLoanOffersTool = tool({
+  description:
+    "Show all available bank loan products with Deep Yadav's personalized eligibility status, pre-approved limits, interest rates, and key benefits. Use when the user asks to see available loans, apply for a loan, or check what loans they can get.",
+  inputSchema: z.object({
+    category: z
+      .string()
+      .optional()
+      .describe(
+        "Optional category filter (e.g. 'all', 'Home Loan', 'Personal Loan', 'Auto Loan', 'Education Loan', 'Gold Loan', 'Property Loan')."
+      ),
+  }),
+  execute: async ({ category }) => {
+    const loansCatalog = (await import("@/data/loans-catalog.json")).default;
+    // Deep Yadav's profile data
+    const userCreditScore = 795;
+    const userMonthlyIncome = 240000;
+
+    const evaluatedLoans = loansCatalog.map((loan) => {
+      const isEligible =
+        userCreditScore >= loan.minCreditScore &&
+        userMonthlyIncome >= loan.minMonthlyIncome;
+
+      return {
+        ...loan,
+        userEligible: isEligible,
+        eligibilityReason: isEligible
+          ? loan.isPreApproved
+            ? `Pre-approved! Credit score ${userCreditScore} qualifies for instant sanction.`
+            : `Eligible based on CIBIL ${userCreditScore} and monthly salary ₹2,40,000.`
+          : `Requires minimum credit score of ${loan.minCreditScore} and ₹${loan.minMonthlyIncome.toLocaleString("en-IN")}/mo salary.`,
+      };
+    });
+
+    const filtered =
+      category && category.toLowerCase() !== "all"
+        ? evaluatedLoans.filter(
+            (l) => l.category.toLowerCase() === category.toLowerCase()
+          )
+        : evaluatedLoans;
+
+    return {
+      category: category ?? "all",
+      totalAvailable: filtered.length,
+      userCreditScore,
+      userMonthlyIncome,
+      loans: filtered,
+    };
+  },
+});
+
+export const applyLoanTool = tool({
+  description:
+    "Perform bank-side eligibility verification for a specific loan product requested by Deep Yadav, check credit limits, and initiate a loan application request requiring human approval by their dedicated Relationship Manager (Priya Sharma). Use when the user specifies a particular loan they want to apply for (e.g. 'I want to apply for the Home Loan', 'Apply for 15 Lakh personal loan', 'Apply for EV auto loan').",
+  inputSchema: z.object({
+    loanTypeOrName: z
+      .string()
+      .describe(
+        "Name or category of the loan (e.g. 'Home Loan', 'Personal Loan', 'Auto Loan', 'loan_home_preapproved')."
+      ),
+    requestedAmount: z
+      .number()
+      .optional()
+      .describe("Requested loan principal in INR / Rupees (e.g. 5000000)."),
+    tenureYears: z
+      .number()
+      .optional()
+      .describe("Requested tenure in years (e.g. 5, 10, 20)."),
+    notes: z
+      .string()
+      .optional()
+      .describe("Specific purpose or customer note (e.g. 'Property in Bandra', 'EV purchase')."),
+  }),
+  execute: async ({
+    loanTypeOrName,
+    requestedAmount,
+    tenureYears,
+    notes,
+  }) => {
+    const loansCatalog = (await import("@/data/loans-catalog.json")).default;
+    const userCreditScore = 795;
+    const userMonthlyIncome = 240000;
+
+    // Fuzzy find matching loan
+    const query = loanTypeOrName.toLowerCase();
+    const matchedLoan =
+      loansCatalog.find(
+        (l) =>
+          l.id.toLowerCase() === query ||
+          l.name.toLowerCase().includes(query) ||
+          l.category.toLowerCase().includes(query)
+      ) || loansCatalog[0];
+
+    const finalAmount = requestedAmount ?? (matchedLoan.isPreApproved && matchedLoan.preApprovedAmount ? matchedLoan.preApprovedAmount : matchedLoan.minAmount);
+    const finalTenure = tenureYears ?? Math.min(matchedLoan.maxTenureYears, 10);
+
+    const isEligible =
+      userCreditScore >= matchedLoan.minCreditScore &&
+      userMonthlyIncome >= matchedLoan.minMonthlyIncome &&
+      finalAmount <= matchedLoan.maxAmount;
+
+    // Calculate preliminary EMI
+    const r = matchedLoan.interestRate / 100 / 12;
+    const n = finalTenure * 12;
+    const estimatedEmi =
+      r === 0
+        ? Math.round(finalAmount / n)
+        : Math.round((finalAmount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1));
+
+    const rm = {
+      name: "Priya Sharma",
+      title: "Senior Wealth Director & Dedicated RM",
+      email: "priya.sharma@bankmate.io",
+      phone: "+91 22 6123 4567",
+      branch: "BKC Flagship Lounge, Mumbai",
+    };
+
+    return {
+      loan: matchedLoan,
+      isEligible,
+      eligibilityVerification: {
+        cibilScore: userCreditScore,
+        requiredScore: matchedLoan.minCreditScore,
+        monthlyIncome: userMonthlyIncome,
+        requiredIncome: matchedLoan.minMonthlyIncome,
+        creditVerdict: isEligible ? "PASSED (Prime Tier 795)" : "NEEDS HUMAN EXCEPTION",
+      },
+      requestedAmount: finalAmount,
+      tenureYears: finalTenure,
+      interestRate: matchedLoan.interestRate,
+      estimatedEmi,
+      rm,
+      notes: notes || "Submitted via BankMate AI Concierge",
+      status: "ready_for_submission",
+    };
+  },
+});
+
 export const chatTools = {
   "transaction-table": transactionTableTool,
   "loan-calculator": loanCalculatorTool,
@@ -274,6 +411,8 @@ export const chatTools = {
   "bank-profile": bankProfileTool,
   "book-fixed-deposit": bookFixedDepositTool,
   "transfer-funds": transferFundsTool,
+  "show-loan-offers": showLoanOffersTool,
+  "apply-loan": applyLoanTool,
 };
 
 export type ChatTools = typeof chatTools;
@@ -286,5 +425,7 @@ export type FinancialChartUITool = InferUITool<typeof financialChartTool>;
 export type BankProfileUITool = InferUITool<typeof bankProfileTool>;
 export type BookFixedDepositUITool = InferUITool<typeof bookFixedDepositTool>;
 export type TransferFundsUITool = InferUITool<typeof transferFundsTool>;
+export type ShowLoanOffersUITool = InferUITool<typeof showLoanOffersTool>;
+export type ApplyLoanUITool = InferUITool<typeof applyLoanTool>;
 
 

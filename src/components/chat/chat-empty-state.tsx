@@ -42,8 +42,8 @@ const SUGGESTIONS = [
     color: "#8B5CF6",
     bg: "#F5F3FF",
     bgDark: "#2E1065",
-    label: "Home Loan EMI",
-    prompt: "Calculate EMI for my ₹1 Crore pre-approved home loan at 8.25% for 20 years",
+    label: "Apply for Loans",
+    prompt: "I want to apply for a loan. Show me all available loans and my eligibility",
   },
 ];
 
