@@ -1,0 +1,125 @@
+[
+  {
+    "id": "loan_home_preapproved",
+    "name": "Pre-Approved Privilege Home Loan",
+    "category": "Home Loan",
+    "interestRate": 8.25,
+    "minAmount": 1000000,
+    "maxAmount": 10000000,
+    "maxTenureYears": 30,
+    "minCreditScore": 750,
+    "minMonthlyIncome": 100000,
+    "isPreApproved": true,
+    "preApprovedAmount": 10000000,
+    "processingFee": "0% (Nil for Premier Wealth)",
+    "description": "Exclusive pre-approved home loan offer with zero processing fees and instant digital sanction for Premier Wealth clients.",
+    "features": [
+      "Instant sanction in principle",
+      "Concession of 0.25% on standard rates",
+      "Nil prepayment and foreclosure charges",
+      "Flexible repayment up to 30 years"
+    ]
+  },
+  {
+    "id": "loan_personal_express",
+    "name": "Express Personal Loan",
+    "category": "Personal Loan",
+    "interestRate": 10.5,
+    "minAmount": 100000,
+    "maxAmount": 2500000,
+    "maxTenureYears": 5,
+    "minCreditScore": 720,
+    "minMonthlyIncome": 50000,
+    "isPreApproved": true,
+    "preApprovedAmount": 1500000,
+    "processingFee": "0.5% (Max ₹2,500)",
+    "description": "Multi-purpose unsecured personal loan for travel, medical emergencies, weddings, or debt consolidation.",
+    "features": [
+      "Disbursement within 4 hours",
+      "Minimal documentation for existing customers",
+      "Fixed monthly EMI repayment",
+      "No collateral or guarantor required"
+    ]
+  },
+  {
+    "id": "loan_auto_ev",
+    "name": "Green Wheels EV & Luxury Auto Loan",
+    "category": "Auto Loan",
+    "interestRate": 8.4,
+    "minAmount": 300000,
+    "maxAmount": 5000000,
+    "maxTenureYears": 7,
+    "minCreditScore": 700,
+    "minMonthlyIncome": 60000,
+    "isPreApproved": false,
+    "processingFee": "₹1,500 flat",
+    "description": "Financing up to 100% on-road price for new electric vehicles and luxury automobiles with preferential rates.",
+    "features": [
+      "Up to 100% on-road funding",
+      "Special 0.20% rebate for Electric Vehicles",
+      "Tenure up to 84 months",
+      "Complimentary Roadside Assistance bundle"
+    ]
+  },
+  {
+    "id": "loan_education_global",
+    "name": "Global Scholar Premier Education Loan",
+    "category": "Education Loan",
+    "interestRate": 8.75,
+    "minAmount": 500000,
+    "maxAmount": 7500000,
+    "maxTenureYears": 15,
+    "minCreditScore": 700,
+    "minMonthlyIncome": 75000,
+    "isPreApproved": false,
+    "processingFee": "Nil for top 100 global universities",
+    "description": "Comprehensive student funding covering 100% tuition, living expenses, and travel for top domestic and international institutions.",
+    "features": [
+      "Moratorium period: Course duration + 1 year",
+      "Section 80E tax benefit on total interest",
+      "Covers tuition, boarding, laptop & airfare",
+      "Direct university fee remittance"
+    ]
+  },
+  {
+    "id": "loan_gold_sovereign",
+    "name": "Sovereign Instant Gold Loan",
+    "category": "Gold Loan",
+    "interestRate": 7.9,
+    "minAmount": 50000,
+    "maxAmount": 2500000,
+    "maxTenureYears": 3,
+    "minCreditScore": 650,
+    "minMonthlyIncome": 25000,
+    "isPreApproved": true,
+    "preApprovedAmount": 1000000,
+    "processingFee": "Nil",
+    "description": "Instant liquidity against 22K+ gold ornaments with highest per-gram value and secure bank locker custody.",
+    "features": [
+      "Same-day branch valuation and disbursement",
+      "Bullet repayment or monthly interest options",
+      "Insured bank vault storage",
+      "Zero foreclosure penalties after 3 months"
+    ]
+  },
+  {
+    "id": "loan_lap_business",
+    "name": "Loan Against Property (LAP)",
+    "category": "Property Loan",
+    "interestRate": 9.1,
+    "minAmount": 2500000,
+    "maxAmount": 50000000,
+    "maxTenureYears": 15,
+    "minCreditScore": 720,
+    "minMonthlyIncome": 150000,
+    "isPreApproved": false,
+    "processingFee": "0.5% of loan amount",
+    "description": "Unlock equity from residential or commercial property for business expansion or high-value personal commitments.",
+    "features": [
+      "High sanction limit up to ₹5 Crores",
+      "Longer repayment tenure up to 15 years",
+      "Both salaried and self-employed eligible",
+      "Lower EMI compared to unsecured credit"
+    ]
+  }
+]

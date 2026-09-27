@@ -1,0 +1,174 @@
+{
+  "personal": {
+    "fullName": "Deep Yadav",
+    "displayName": "Deep Yadav",
+    "avatarInitials": "DY",
+    "cifNumber": "CIF-8829104",
+    "userId": "deep.yadav",
+    "dateOfBirth": "1994-08-14",
+    "gender": "Male",
+    "email": "deep.yadav@bankmate.io",
+    "phone": "+91 98765 43210",
+    "tier": "Premier Wealth Privilege",
+    "kycStatus": "Verified",
+    "reKycDue": "2028-08-15",
+    "panNumber": "ABCDE1234F",
+    "aadhaarNumber": "•••• •••• 8921",
+    "communicationAddress": {
+      "line1": "Flat 1402, Tower B, Signature Crest",
+      "line2": "Bandra Kurla Complex (BKC)",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "postalCode": "400051",
+      "country": "India"
+    },
+    "relationshipManager": {
+      "name": "Priya Sharma",
+      "title": "Senior Wealth Director",
+      "email": "priya.sharma@bankmate.io",
+      "phone": "+91 22 6123 4567",
+      "branch": "BKC Flagship Lounge, Mumbai"
+    }
+  },
+  "accounts": [
+    {
+      "id": "acc_savings_01",
+      "accountNumber": "4092 1102 8842",
+      "accountType": "Premier Privilege Savings",
+      "category": "savings",
+      "currency": "INR",
+      "availableBalance": 485250.0,
+      "ledgerBalance": 485250.0,
+      "ifsc": "BKMT0001042",
+      "micr": "400240012",
+      "branch": "BKC Flagship Branch, Mumbai",
+      "upiId": "deepyadav@bankmate",
+      "interestRate": "3.5% p.a.",
+      "status": "Active"
+    },
+    {
+      "id": "acc_salary_02",
+      "accountNumber": "4092 5590 1928",
+      "accountType": "Corporate Executive Salary",
+      "category": "salary",
+      "currency": "INR",
+      "availableBalance": 124680.0,
+      "ledgerBalance": 124680.0,
+      "ifsc": "BKMT0001042",
+      "micr": "400240012",
+      "branch": "BKC Flagship Branch, Mumbai",
+      "upiId": "deep.salary@bankmate",
+      "employer": "TechCorp India Ltd.",
+      "monthlyCredit": 240000.0,
+      "status": "Active"
+    }
+  ],
+  "fixedDeposits": [
+    {
+      "id": "fd_01",
+      "fdNumber": "FD-994021-A",
+      "principalAmount": 1000000.0,
+      "maturityAmount": 1264800.0,
+      "interestRate": 7.3,
+      "bookingDate": "2024-10-15",
+      "maturityDate": "2027-10-15",
+      "tenure": "3 Years",
+      "payoutType": "Cumulative (At Maturity)",
+      "status": "Active"
+    },
+    {
+      "id": "fd_02",
+      "fdNumber": "FD-883190-B",
+      "principalAmount": 500000.0,
+      "maturityAmount": 578500.0,
+      "interestRate": 7.1,
+      "bookingDate": "2025-03-20",
+      "maturityDate": "2028-03-20",
+      "tenure": "3 Years",
+      "payoutType": "Quarterly Interest Payout",
+      "status": "Active"
+    }
+  ],
+  "cards": [
+    {
+      "id": "card_credit_01",
+      "cardName": "BankMate Metal Reserve",
+      "cardType": "Credit Card",
+      "network": "Visa Infinite",
+      "cardNumberMasked": "4129 •••• •••• 9904",
+      "expiry": "08/29",
+      "totalLimit": 500000.0,
+      "availableLimit": 384200.0,
+      "outstandingDue": 115800.0,
+      "paymentDueDate": "2026-09-28",
+      "rewardPoints": 34250,
+      "rewardValue": 8562.5,
+      "status": "Active",
+      "contactless": true,
+      "international": true
+    },
+    {
+      "id": "card_debit_01",
+      "cardName": "BankMate World Debit",
+      "cardType": "Debit Card",
+      "network": "Mastercard Platinum",
+      "cardNumberMasked": "5241 •••• •••• 7701",
+      "expiry": "11/28",
+      "dailyAtm": 100000.0,
+      "dailyPos": 300000.0,
+      "status": "Active",
+      "contactless": true,
+      "international": false
+    }
+  ],
+  "wealth": {
+    "totalNetWorth": 4248130.0,
+    "liquidCash": 609930.0,
+    "fixedIncome": 1500000.0,
+    "investments": 1245800.0,
+    "mutualFunds": [
+      { "scheme": "BankMate Bluechip Equity Growth", "invested": 400000, "currentValue": 512000, "returnPercent": 28.0 },
+      { "scheme": "Parag Parikh Flexi Cap Regular Growth", "invested": 300000, "currentValue": 395000, "returnPercent": 31.6 },
+      { "scheme": "Nippon India Small Cap Fund", "invested": 250000, "currentValue": 338800, "returnPercent": 35.5 }
+    ],
+    "goldBonds": 250000.0,
+    "creditScore": {
+      "score": 795,
+      "agency": "CIBIL / TransUnion",
+      "rating": "Excellent",
+      "lastUpdated": "2026-09-01"
+    }
+  },
+  "loans": [
+    {
+      "loanType": "Pre-Approved Home Loan",
+      "offerAmount": 10000000.0,
+      "interestRate": 8.25,
+      "tenure": "Up to 30 Years",
+      "status": "Pre-Approved"
+    },
+    {
+      "loanType": "Auto Loan (Luxury Sedan)",
+      "accountNumber": "LN-AUTO-4091",
+      "sanctionedAmount": 800000.0,
+      "outstandingAmount": 385000.0,
+      "interestRate": 8.6,
+      "monthlyEmi": 19250.0,
+      "tenureRemaining": "22 months",
+      "status": "Regular"
+    }
+  ],
+  "security": {
+    "twoFactorEnabled": true,
+    "authMethod": "Biometric (Face ID) + SMS OTP",
+    "primaryDevice": "Apple iPhone 16 Pro",
+    "dailyTransferLimit": 1000000.0,
+    "internationalTransferEnabled": true,
+    "nominee": {
+      "name": "Sunita Yadav",
+      "relation": "Mother",
+      "sharePercentage": 100,
+      "status": "Verified & Registered"
+    }
+  }
+}

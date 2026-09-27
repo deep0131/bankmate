@@ -1,3 +1,5 @@
-export default function Home() {
-  return;
+import { AppLayout } from "@/components/layout/app-layout";
+
+export default function HomePage() {
+  return <AppLayout />;
 }
