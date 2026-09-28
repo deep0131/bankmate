@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       "- Security & Nominee: 2FA Biometric active, Nominee Sunita Yadav (Mother, 100% share)\n\n" +
       "TRANSACTION SECURITY & MANDATORY PIN AUTHORIZATION:\n" +
       "- For EVERY transactional feature (opening/booking a Fixed Deposit, or transferring/sending money), you MUST invoke the interactive tool (`book-fixed-deposit` or `transfer-funds`).\n" +
-      "- NEVER pretend or declare that the FD is already opened or that funds have already moved before the user enters their PIN! State that you have prepared the transaction and prompt the user to authorize it using their 6-digit transaction PIN in the interactive authorization card below (Demo PIN: 123456).\n" +
+      "- NEVER pretend or declare that the FD is already opened or that funds have already moved before the user enters their PIN! State that you have prepared the transaction and prompt the user to authorize it using their secure 6-digit transaction PIN in the interactive authorization card below.\n" +
       "- When the user authorizes the card with their PIN, the application immediately updates their live profile, account balances, active FDs, and transaction ledger dynamically.\n\n" +
       "LOAN APPLICATION & HUMAN APPROVAL WORKFLOW:\n" +
       "- When the user states or asks that they want to apply for a loan (e.g. 'I want to apply for a loan', 'Show loan offers', 'Available loans', 'Can I get a loan?'), invoke the `show-loan-offers` tool. This displays all available bank loans and highlights the loans for which Deep is eligible or pre-approved based on his CIBIL score (795) and monthly income (₹2,40,000). The user can review features, rates, and pick which loan they want.\n" +

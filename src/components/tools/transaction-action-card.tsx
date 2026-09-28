@@ -413,11 +413,6 @@ export function TransactionActionCard({
                     {errorMessage}
                   </p>
                 )}
-
-                {/* Demo PIN Helper */}
-                <p className="text-[11px] text-center text-muted-foreground mt-2">
-                  Default Demo PIN: <strong className="font-mono text-foreground">123456</strong>
-                </p>
               </div>
 
               {/* Action Buttons */}
