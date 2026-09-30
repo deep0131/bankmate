@@ -51,18 +51,13 @@ export function UserProfileWidget(_props: BankProfileWidgetProps) {
               </p>
             </div>
 
-            {/* Privilege & KYC Status Badge */}
-            <div className="flex flex-col gap-1 items-start ml-2 sm:ml-4">
-              <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-[#DBEAFE] text-[#1D4ED8] dark:bg-blue-950/80 dark:text-blue-300 whitespace-nowrap">
-                {profile.personal.tier}
+            {/* KYC Status Badge */}
+            <div className="flex items-center gap-1.5 ml-2 sm:ml-4">
+              <span className="text-xs text-slate-400">•</span>
+              <ShieldCheckIcon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+                KYC Verified
               </span>
-              <p className="text-xs text-slate-400 flex items-center gap-1 font-medium">
-                <span>•</span>
-                <ShieldCheckIcon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
-                  KYC Verified
-                </span>
-              </p>
             </div>
           </div>
 

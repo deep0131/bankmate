@@ -404,8 +404,141 @@ export const applyLoanTool = tool({
   },
 });
 
+function parseStatementDate(dateStr?: string, fallbackDate?: Date): Date {
+  if (!dateStr) return fallbackDate || new Date("2026-09-01T00:00:00Z");
+
+  const trimmed = dateStr.trim();
+  // Standard ISO / YYYY-MM-DD
+  const direct = new Date(trimmed);
+  if (!isNaN(direct.getTime())) {
+    return direct;
+  }
+
+  // Handle formats like "1 Sept", "10 September", "25 Aug", "15 September 2026"
+  const clean = trimmed.replace(/(\d+)(st|nd|rd|th)/gi, "$1");
+  const withYear = clean.includes("202") ? clean : `${clean} 2026`;
+  const parsedWithYear = new Date(withYear);
+  if (!isNaN(parsedWithYear.getTime())) {
+    return parsedWithYear;
+  }
+
+  return fallbackDate || new Date("2026-09-01T00:00:00Z");
+}
+
+export const accountStatementTool = tool({
+  description:
+    "Retrieve the user's official bank account statement for a specified date range or time period (e.g. from X date to Y date, last month, September 2026) with full financial summary, credit/debit totals, and options to download as PDF or email as PDF.",
+  inputSchema: z.object({
+    startDate: z
+      .string()
+      .optional()
+      .describe(
+        "Start date of the statement period (e.g. '2026-09-01', '1 Sept 2026', '2026-08-25')."
+      ),
+    endDate: z
+      .string()
+      .optional()
+      .describe(
+        "End date of the statement period (e.g. '2026-09-12', '10 Sept 2026', '2026-09-30')."
+      ),
+    account: z
+      .enum(["checking", "savings", "credit", "all"])
+      .optional()
+      .default("all")
+      .describe(
+        "Account to generate statement for (checking, savings, credit, or all)."
+      ),
+  }),
+  execute: async ({ startDate, endDate, account = "all" }) => {
+    let allTx = (mockTransactions as unknown) as Transaction[];
+
+    // Sort chronologically
+    allTx = [...allTx].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    // Filter by account if requested
+    if (account && account !== "all") {
+      allTx = allTx.filter(
+        (tx) => tx.account.toLowerCase() === account.toLowerCase()
+      );
+    }
+
+    const minDate = new Date("2026-08-20T00:00:00Z");
+    const maxDate = new Date("2026-09-30T23:59:59Z");
+
+    const start = startDate
+      ? parseStatementDate(startDate, minDate)
+      : new Date("2026-09-01T00:00:00Z");
+    const end = endDate
+      ? parseStatementDate(endDate, maxDate)
+      : new Date("2026-09-15T23:59:59Z");
+
+    // Ensure end encompasses whole day
+    end.setHours(23, 59, 59, 999);
+
+    const filtered = allTx.filter((tx) => {
+      const d = new Date(tx.date);
+      return d >= start && d <= end;
+    });
+
+    const totalCredits = filtered
+      .filter((tx) => tx.type === "credit")
+      .reduce((sum, tx) => sum + tx.amount, 0);
+
+    const totalDebits = filtered
+      .filter((tx) => tx.type === "debit")
+      .reduce((sum, tx) => sum + tx.amount, 0);
+
+    const netCashflow = totalCredits - totalDebits;
+    const baseBalance =
+      account === "checking"
+        ? 124680
+        : account === "savings"
+        ? 484250
+        : 608930;
+    const openingBalance = Math.max(0, baseBalance - netCashflow);
+    const closingBalance = openingBalance + netCashflow;
+
+    const startLabel = start.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    const endLabel = end.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    return {
+      statementId: `STM-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+      account,
+      accountNumber:
+        account === "savings"
+          ? "4092 •••• 8842"
+          : account === "checking"
+          ? "4092 •••• 1928"
+          : "4092 •••• 8842 (Primary)",
+      accountName: "Deep Yadav",
+      startDate: start.toISOString().split("T")[0],
+      endDate: end.toISOString().split("T")[0],
+      periodLabel: `${startLabel} – ${endLabel}`,
+      generatedAt: new Date().toISOString(),
+      openingBalance,
+      closingBalance,
+      totalCredits,
+      totalDebits,
+      netCashflow,
+      totalCount: filtered.length,
+      transactions: filtered,
+    };
+  },
+});
+
 export const chatTools = {
   "transaction-table": transactionTableTool,
+  "account-statement": accountStatementTool,
   "loan-calculator": loanCalculatorTool,
   "financial-chart": financialChartTool,
   "bank-profile": bankProfileTool,
@@ -420,6 +553,7 @@ export type ChatUITools = InferUITools<ChatTools>;
 export type ChatUIMessage = UIMessage<unknown, UIDataTypes, ChatUITools>;
 
 export type TransactionTableUITool = InferUITool<typeof transactionTableTool>;
+export type AccountStatementUITool = InferUITool<typeof accountStatementTool>;
 export type LoanCalculatorUITool = InferUITool<typeof loanCalculatorTool>;
 export type FinancialChartUITool = InferUITool<typeof financialChartTool>;
 export type BankProfileUITool = InferUITool<typeof bankProfileTool>;

@@ -61,7 +61,12 @@ export function getLiveProfile(): UserProfile {
       localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(initial));
       return initial;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (parsed.personal && parsed.personal.email !== (mockProfile as unknown as UserProfile).personal.email) {
+      parsed.personal.email = (mockProfile as unknown as UserProfile).personal.email;
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(parsed));
+    }
+    return parsed;
   } catch {
     return mockProfile as unknown as UserProfile;
   }

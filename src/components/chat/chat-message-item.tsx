@@ -10,6 +10,7 @@ import {
   TransferFundsCard,
 } from "@/components/tools/transaction-action-card";
 import { TransactionTable } from "@/components/tools/transaction-table";
+import { AccountStatementCard } from "@/components/tools/account-statement-card";
 import { UserProfileWidget } from "@/components/tools/user-profile-widget";
 import {
   LoanOffersCatalog,
@@ -91,6 +92,10 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
                 case "tool-transaction-table":
                   return (
                     <TransactionTable key={`${message.id}-${i}`} {...part} />
+                  );
+                case "tool-account-statement":
+                  return (
+                    <AccountStatementCard key={`${message.id}-${i}`} {...part} />
                   );
                 case "tool-loan-calculator":
                   return (

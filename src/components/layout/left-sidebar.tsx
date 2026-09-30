@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { BankProfileModal } from "@/components/profile/bank-profile-modal";
 import type { ChatSession } from "@/lib/chat-history";
+import { useBankStore } from "@/lib/bank-store";
 import { ThemeToggle } from "./theme-toggle";
 
 interface LeftSidebarProps {
@@ -57,6 +58,7 @@ export function LeftSidebar({
   onSelectChat,
   onDeleteChat,
 }: LeftSidebarProps) {
+  const { profile } = useBankStore();
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -286,7 +288,7 @@ export function LeftSidebar({
               </span>
             </div>
             <span className="text-[11px] truncate text-muted-foreground leading-none mt-0.5">
-              deep.yadav@bankmate.io
+              {profile?.personal?.email || "mitulshah3107@gmail.com"}
             </span>
           </div>
           <ChevronRightIcon className="size-4 text-muted-foreground/60 group-hover:text-foreground transition-colors shrink-0" />

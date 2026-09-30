@@ -7,6 +7,7 @@ import {
   createSortedRowModel,
   rowPaginationFeature,
   rowSortingFeature,
+  type PaginationState,
   type SortingState,
   sortFn_alphanumeric,
   sortFn_text,
@@ -187,6 +188,10 @@ export function TransactionTable(props: TransactionTableProps) {
   const errorText = "errorText" in props ? props.errorText : undefined;
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 5,
+  });
   const { transactions: liveTransactions } = useBankStore();
 
   const transactions = React.useMemo(() => {
@@ -207,17 +212,20 @@ export function TransactionTable(props: TransactionTableProps) {
     return output?.transactions ?? [];
   }, [liveTransactions, output?.transactions, output?.account, output?.category]);
 
+  // Reset page when account/category filters change
+  React.useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [output?.account, output?.category]);
+
   const table = useTable({
     features,
     data: transactions,
     columns,
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     state: {
       sorting,
-      pagination: {
-        pageIndex: 0,
-        pageSize: 5,
-      },
+      pagination,
     },
   });
 
@@ -252,8 +260,8 @@ export function TransactionTable(props: TransactionTableProps) {
     );
   }
 
-  const currentPage = (table.state?.pagination?.pageIndex ?? 0) + 1;
-  const totalPages = table.getPageCount();
+  const currentPage = pagination.pageIndex + 1;
+  const totalPages = Math.max(1, table.getPageCount());
 
   return (
     <Card size="sm" className="w-full max-w-[880px] my-2">

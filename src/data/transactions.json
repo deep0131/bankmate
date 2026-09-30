@@ -148,5 +148,95 @@
     "type": "credit",
     "amount": 50000.0,
     "status": "completed"
+  },
+  {
+    "id": "tx_116",
+    "date": "2026-08-20T20:30:00Z",
+    "description": "Taj Lands End Luxury Dining",
+    "category": "Dining",
+    "account": "credit",
+    "type": "debit",
+    "amount": 8450.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_117",
+    "date": "2026-08-18T15:10:00Z",
+    "description": "Apple Store Mumbai BKC",
+    "category": "Shopping",
+    "account": "credit",
+    "type": "debit",
+    "amount": 12900.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_118",
+    "date": "2026-08-15T10:00:00Z",
+    "description": "Independence Day Premier Cashback",
+    "category": "Income",
+    "account": "savings",
+    "type": "credit",
+    "amount": 2500.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_119",
+    "date": "2026-08-10T09:00:00Z",
+    "description": "TechCorp India Monthly Payroll",
+    "category": "Income",
+    "account": "checking",
+    "type": "credit",
+    "amount": 145000.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_120",
+    "date": "2026-08-08T11:45:00Z",
+    "description": "Tata Power Utility Auto-Debit",
+    "category": "Utilities",
+    "account": "checking",
+    "type": "debit",
+    "amount": 3890.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_121",
+    "date": "2026-08-05T19:20:00Z",
+    "description": "Zomato Gourmet Experience",
+    "category": "Dining",
+    "account": "credit",
+    "type": "debit",
+    "amount": 1840.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_122",
+    "date": "2026-08-01T12:00:00Z",
+    "description": "Cult.fit Annual Fitness Pass",
+    "category": "Health",
+    "account": "credit",
+    "type": "debit",
+    "amount": 15500.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_123",
+    "date": "2026-07-28T16:00:00Z",
+    "description": "Nippon India Mutual Fund Dividend",
+    "category": "Income",
+    "account": "savings",
+    "type": "credit",
+    "amount": 18200.0,
+    "status": "completed"
+  },
+  {
+    "id": "tx_124",
+    "date": "2026-07-10T09:00:00Z",
+    "description": "TechCorp India Monthly Payroll",
+    "category": "Income",
+    "account": "checking",
+    "type": "credit",
+    "amount": 145000.0,
+    "status": "completed"
   }
 ]
