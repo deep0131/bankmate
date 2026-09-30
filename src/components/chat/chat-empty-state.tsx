@@ -65,7 +65,7 @@ export function ChatEmptyState({ onSelectPrompt }: ChatEmptyStateProps) {
       </p>
 
       {/* Suggestion cards — 2×2 grid */}
-      <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
+      <div className="grid grid-cols-2 gap-3 w-full max-w-2xl">
         {SUGGESTIONS.map((item) => (
           <button
             key={item.label}

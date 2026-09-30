@@ -79,7 +79,7 @@ export function AppLayout() {
       className="w-full h-dvh overflow-hidden flex justify-center font-sans p-1"
       style={{ backgroundColor: "var(--background)" }}
     >
-      {/* 1440p Max Width Application Container */}
+      {/* 1440p+ Max Width Application Container (+30% wider) */}
       <div
         className="flex h-full w-full max-w-[1440px] mx-auto gap-1 relative font-sans"
       >

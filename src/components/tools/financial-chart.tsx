@@ -122,7 +122,7 @@ export function FinancialChart(props: FinancialChartProps) {
   }
 
   return (
-    <Card size="sm" className="w-full max-w-md my-2">
+    <Card size="sm" className="w-full max-w-[580px] my-2">
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
           <div>
@@ -147,7 +147,7 @@ export function FinancialChart(props: FinancialChartProps) {
           <div className="flex flex-col gap-3">
             <ChartContainer
               config={chartConfig}
-              className="mx-auto aspect-square max-h-[220px] w-full"
+              className="mx-auto aspect-square max-h-[260px] w-full"
             >
               <PieChart>
                 <ChartTooltip

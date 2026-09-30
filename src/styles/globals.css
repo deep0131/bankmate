@@ -107,49 +107,62 @@
   --history-hover: #F8FAFC;
 }
 
-/* ───── Dark theme (deep blue-slate) ───── */
+/* ───── Dark theme (layered shades of black) ───── */
 .dark {
-  --background: #0B0F19;
-  --foreground: #F1F5F9;
-  --card: #111827;
-  --card-foreground: #F1F5F9;
-  --popover: #111827;
-  --popover-foreground: #F1F5F9;
-  --primary: #3B82F6;
-  --primary-foreground: #FFFFFF;
-  --secondary: #1E293B;
-  --secondary-foreground: #F1F5F9;
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-  --accent: #1E293B;
+  /* Layer 0: Root app backdrop / canvas */
+  --background: #000000;
+  --foreground: #F4F4F5;
+
+  /* Layer 1: Left navigation sidebar */
+  --sidebar: #09090b;
+  --sidebar-foreground: #A1A1AA;
+  --sidebar-primary: #3B82F6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #18181b;
+  --sidebar-accent-foreground: #F4F4F5;
+  --sidebar-border: #1f1f23;
+  --sidebar-ring: #3B82F6;
+
+  /* Layer 1: Main chat panel & header */
+  --panel-bg: #0d0d0f;
+  --panel-border: #1f1f23;
+
+  /* Layer 2: Elevated cards, widgets, dialogs, modals */
+  --card: #141416;
+  --card-foreground: #F4F4F5;
+  --popover: #141416;
+  --popover-foreground: #F4F4F5;
+
+  /* Layer 3: Secondary buttons, sub-surfaces, elevated tiles */
+  --secondary: #1a1a1e;
+  --secondary-foreground: #F4F4F5;
+
+  /* Layer 4: Muted chips, sub-backgrounds */
+  --muted: #18181b;
+  --muted-foreground: #A1A1AA;
+
+  /* Interactive accents & inputs */
+  --accent: #1e1e24;
   --accent-foreground: #60A5FA;
   --destructive: #F87171;
-  --border: #1E293B;
-  --input: #1E293B;
+  --border: #222226;
+  --input: #1f1f23;
   --ring: #3B82F6;
+
+  /* Charts */
   --chart-1: #3B82F6;
   --chart-2: #34D399;
   --chart-3: #A78BFA;
   --chart-4: #F472B6;
   --chart-5: #FBBF24;
 
-  --sidebar: #0D1322;
-  --sidebar-foreground: #94A3B8;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #F1F5F9;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #3B82F6;
-
-  --panel-bg: #0D1322;
-  --panel-border: #1E293B;
-  --nav-hover: #1E293B;
+  /* Custom navigation & interactive tokens */
+  --nav-hover: #18181b;
   --nav-active: #172554;
   --nav-active-text: #60A5FA;
-  --toggle-bg: #1E293B;
-  --toggle-active: #26354D;
-  --history-hover: #141E33;
+  --toggle-bg: #141416;
+  --toggle-active: #27272a;
+  --history-hover: #141417;
 }
 
 @layer base {

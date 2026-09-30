@@ -256,7 +256,7 @@ export function TransactionTable(props: TransactionTableProps) {
   const totalPages = table.getPageCount();
 
   return (
-    <Card size="sm" className="w-full max-w-2xl my-2">
+    <Card size="sm" className="w-full max-w-[880px] my-2">
       <CardHeader className="border-b">
         <CardTitle>Recent Transactions</CardTitle>
         <CardDescription>

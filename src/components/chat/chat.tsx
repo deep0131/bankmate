@@ -108,11 +108,11 @@ export function Chat({
             <MessageScroller className="flex-1">
               <MessageScrollerViewport className="w-full px-4 py-6">
                 {messages.length === 0 ? (
-                  <div className="max-w-3xl mx-auto w-full h-full flex flex-col justify-center">
+                  <div className="max-w-[1000px] mx-auto w-full h-full flex flex-col justify-center">
                     <ChatEmptyState onSelectPrompt={handleQuickPrompt} />
                   </div>
                 ) : (
-                  <MessageScrollerContent className="max-w-3xl mx-auto w-full pb-4 not-typeset">
+                  <MessageScrollerContent className="max-w-[1000px] mx-auto w-full pb-4 not-typeset">
                     {messages.map((message) => (
                       <ChatMessageItem key={message.id} message={message} />
                     ))}

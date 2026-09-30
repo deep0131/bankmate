@@ -127,9 +127,24 @@
     "fixedIncome": 1500000.0,
     "investments": 1245800.0,
     "mutualFunds": [
-      { "scheme": "BankMate Bluechip Equity Growth", "invested": 400000, "currentValue": 512000, "returnPercent": 28.0 },
-      { "scheme": "Parag Parikh Flexi Cap Regular Growth", "invested": 300000, "currentValue": 395000, "returnPercent": 31.6 },
-      { "scheme": "Nippon India Small Cap Fund", "invested": 250000, "currentValue": 338800, "returnPercent": 35.5 }
+      {
+        "scheme": "BankMate Bluechip Equity Growth",
+        "invested": 400000,
+        "currentValue": 512000,
+        "returnPercent": 28.0
+      },
+      {
+        "scheme": "Parag Parikh Flexi Cap Regular Growth",
+        "invested": 300000,
+        "currentValue": 395000,
+        "returnPercent": 31.6
+      },
+      {
+        "scheme": "Nippon India Small Cap Fund",
+        "invested": 250000,
+        "currentValue": 338800,
+        "returnPercent": 35.5
+      }
     ],
     "goldBonds": 250000.0,
     "creditScore": {

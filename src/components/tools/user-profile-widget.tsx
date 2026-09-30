@@ -9,77 +9,74 @@ import {
   ShieldCheckIcon,
   SparklesIcon,
   TrendingUpIcon,
-  UserCheckIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { BankProfileModal, type TabType } from "@/components/profile/bank-profile-modal";
+import {
+  BankProfileModal,
+  type TabType,
+} from "@/components/profile/bank-profile-modal";
 import { useBankStore, formatINR } from "@/lib/bank-store";
 import type { bankProfileTool } from "@/lib/ai/tools";
 
 export type BankProfileWidgetProps = UIToolInvocation<typeof bankProfileTool>;
 
-export function UserProfileWidget(props: BankProfileWidgetProps) {
+export function UserProfileWidget(_props: BankProfileWidgetProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTab, setModalTab] = useState<TabType>("accounts");
   const { profile } = useBankStore();
-  const view = props.input?.view || "overview";
 
   return (
-    <div className="w-full my-3">
-      <div
-        className="rounded-2xl border overflow-hidden shadow-sm transition-all"
-        style={{
-          borderColor: "var(--panel-border)",
-          backgroundColor: "var(--card)",
-        }}
-      >
-        {/* Top Gradient Banner */}
-        <div
-          className="p-4 sm:p-5 flex items-center justify-between"
-          style={{
-            background: "linear-gradient(135deg, rgba(37,99,235,0.12) 0%, rgba(79,70,229,0.06) 100%)",
-            borderBottom: "1px solid var(--panel-border)",
-          }}
-        >
+    <div className="w-full my-1">
+      <div className="rounded-2xl border border-slate-200 dark:border-border bg-white dark:bg-card overflow-hidden shadow-2xs transition-all">
+        {/* Top Header Section */}
+        <div className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex items-center gap-3.5">
             <div
-              className="size-12 rounded-xl flex items-center justify-center text-base font-bold text-white shadow-md shrink-0"
+              className="size-12 rounded-2xl flex items-center justify-center text-base font-bold text-white shadow-xs shrink-0"
               style={{
-                background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
+                backgroundColor: "#1D4ED8",
               }}
             >
               {profile.personal.avatarInitials}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold tracking-tight text-foreground">
-                  {profile.personal.fullName}
-                </h3>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400">
-                  {profile.personal.tier}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
-                <span>CIF: <strong className="font-mono text-foreground">{profile.personal.cifNumber}</strong></span>
+              <h3 className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
+                {profile.personal.fullName}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                CIF:{" "}
+                <strong className="font-bold text-slate-900 dark:text-slate-100">
+                  {profile.personal.cifNumber}
+                </strong>
+              </p>
+            </div>
+
+            {/* Privilege & KYC Status Badge */}
+            <div className="flex flex-col gap-1 items-start ml-2 sm:ml-4">
+              <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-[#DBEAFE] text-[#1D4ED8] dark:bg-blue-950/80 dark:text-blue-300 whitespace-nowrap">
+                {profile.personal.tier}
+              </span>
+              <p className="text-xs text-slate-400 flex items-center gap-1 font-medium">
                 <span>•</span>
-                <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 font-medium">
-                  <ShieldCheckIcon className="size-3" /> KYC Verified
+                <ShieldCheckIcon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                  KYC Verified
                 </span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Quick Action Buttons */}
+          <div className="flex items-center gap-2.5 shrink-0 self-end md:self-auto">
             <button
               type="button"
               onClick={() => {
                 setModalTab("transactions");
                 setModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors hover:bg-muted/50 cursor-pointer"
-              style={{ borderColor: "var(--panel-border)", color: "var(--foreground)" }}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium border border-slate-200 dark:border-border bg-white dark:bg-secondary/70 hover:bg-slate-50 dark:hover:bg-secondary text-slate-800 dark:text-slate-200 transition-colors shadow-2xs cursor-pointer"
             >
-              <ReceiptIcon className="size-3 text-blue-600 dark:text-blue-400" />
+              <ReceiptIcon className="size-3.5 text-blue-600 dark:text-blue-400" />
               <span>Recent Transactions</span>
             </button>
             <button
@@ -88,88 +85,88 @@ export function UserProfileWidget(props: BankProfileWidgetProps) {
                 setModalTab("accounts");
                 setModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-[#1D4ED8] hover:bg-blue-700 text-white transition-colors shadow-xs cursor-pointer"
             >
               <span>View Profile</span>
-              <ExternalLinkIcon className="size-3" />
+              <ExternalLinkIcon className="size-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Snapshot Cards */}
-        <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div
-            className="p-3 rounded-xl border min-w-0 flex flex-col justify-between"
-            style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
-          >
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 min-w-0">
+        {/* 4 Financial Snapshot Stat Cards */}
+        <div className="px-4 sm:px-5 pb-4 grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+          {/* Savings Balance */}
+          <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-border/80 bg-slate-50/90 dark:bg-secondary/60 flex flex-col justify-between gap-1 min-w-0">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 min-w-0">
               <LandmarkIcon className="size-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-              <span className="truncate">Savings Balance</span>
+              <span className="truncate">Savings Bal...</span>
             </div>
-            <p className="text-sm sm:text-base font-bold font-mono text-foreground whitespace-nowrap tabular-nums tracking-tight">
+            <p className="text-base sm:text-lg font-bold font-mono text-slate-900 dark:text-slate-100 whitespace-nowrap tabular-nums tracking-tight">
               {formatINR(profile.accounts[0].availableBalance)}
             </p>
-            <span className="text-[10px] text-muted-foreground font-mono truncate mt-1 whitespace-nowrap">
+            <span className="text-[11px] text-slate-400 font-mono truncate whitespace-nowrap">
               A/C •••• 8842
             </span>
           </div>
 
-          <div
-            className="p-3 rounded-xl border min-w-0 flex flex-col justify-between"
-            style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
-          >
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 min-w-0">
+          {/* Credit Available */}
+          <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-border/80 bg-slate-50/90 dark:bg-secondary/60 flex flex-col justify-between gap-1 min-w-0">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 min-w-0">
               <CreditCardIcon className="size-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-              <span className="truncate">Credit Available</span>
+              <span className="truncate">Credit Avail...</span>
             </div>
-            <p className="text-sm sm:text-base font-bold font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap tabular-nums tracking-tight">
+            <p className="text-base sm:text-lg font-bold font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap tabular-nums tracking-tight">
               {formatINR(profile.cards[0].availableLimit || 0)}
             </p>
-            <span className="text-[10px] text-muted-foreground font-mono truncate mt-1 whitespace-nowrap">
+            <span className="text-[11px] text-slate-400 font-mono truncate whitespace-nowrap">
               Limit: {formatINR(profile.cards[0].totalLimit || 0)}
             </span>
           </div>
 
-          <div
-            className="p-3 rounded-xl border min-w-0 flex flex-col justify-between"
-            style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
-          >
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 min-w-0">
+          {/* Fixed Deposits */}
+          <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-border/80 bg-slate-50/90 dark:bg-secondary/60 flex flex-col justify-between gap-1 min-w-0">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 min-w-0">
               <TrendingUpIcon className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span className="truncate">Fixed Deposits</span>
+              <span className="truncate">Fixed Depos...</span>
             </div>
-            <p className="text-sm sm:text-base font-bold font-mono text-foreground whitespace-nowrap tabular-nums tracking-tight">
+            <p className="text-base sm:text-lg font-bold font-mono text-slate-900 dark:text-slate-100 whitespace-nowrap tabular-nums tracking-tight">
               {formatINR(profile.wealth.fixedIncome)}
             </p>
-            <span className="text-[10px] text-muted-foreground font-mono truncate mt-1 whitespace-nowrap">
-              2 Active (Up to 7.3%)
+            <span className="text-[11px] text-slate-400 font-mono truncate whitespace-nowrap">
+              2 Active (Up to 7.3...
             </span>
           </div>
 
-          <div
-            className="p-3 rounded-xl border min-w-0 flex flex-col justify-between"
-            style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
-          >
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1 min-w-0">
-              <SparklesIcon className="size-3.5 text-amber-500 shrink-0" />
+          {/* CIBIL Score */}
+          <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-border/80 bg-slate-50/90 dark:bg-secondary/60 flex flex-col justify-between gap-1 min-w-0">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 min-w-0">
+              <SparklesIcon className="size-3.5 text-amber-500 fill-amber-500 shrink-0" />
               <span className="truncate">CIBIL Score</span>
             </div>
-            <p className="text-sm sm:text-base font-bold font-mono text-blue-600 dark:text-blue-400 whitespace-nowrap tabular-nums tracking-tight">
+            <p className="text-base sm:text-lg font-bold font-mono text-blue-600 dark:text-blue-400 whitespace-nowrap tabular-nums tracking-tight">
               {profile.wealth.creditScore.score}
             </p>
-            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 truncate mt-1 whitespace-nowrap">
-              Prime Tier ({profile.wealth.creditScore.rating})
+            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 truncate whitespace-nowrap">
+              Prime Tier (Excell...
             </span>
           </div>
         </div>
 
         {/* Footer Quick Info */}
-        <div
-          className="px-4 py-2.5 border-t flex flex-wrap items-center justify-between text-xs"
-          style={{ borderColor: "var(--panel-border)", color: "var(--muted-foreground)" }}
-        >
-          <span>Branch: <strong className="text-foreground">{profile.accounts[0].branch}</strong> (IFSC: {profile.accounts[0].ifsc})</span>
-          <span>RM: <strong className="text-foreground">{profile.personal.relationshipManager.name}</strong></span>
+        <div className="px-4 sm:px-5 py-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+          <span>
+            Branch:{" "}
+            <strong className="text-slate-900 dark:text-slate-100 font-semibold">
+              {profile.accounts[0].branch}
+            </strong>{" "}
+            (IFSC: {profile.accounts[0].ifsc})
+          </span>
+          <span>
+            RM:{" "}
+            <strong className="text-slate-900 dark:text-slate-100 font-semibold">
+              {profile.personal.relationshipManager.name}
+            </strong>
+          </span>
         </div>
       </div>
 

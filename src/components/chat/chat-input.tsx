@@ -28,7 +28,7 @@ export function ChatInput({
 
   return (
     <footer className="shrink-0 p-4">
-      <div className="max-w-3xl mx-auto w-full">
+      <div className="max-w-[1000px] mx-auto w-full">
         <form onSubmit={onSubmit} className="w-full">
           <InputGroup>
             <InputGroupTextarea

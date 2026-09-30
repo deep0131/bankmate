@@ -43,54 +43,54 @@ export function ChatHeader({ hasMessages, isBusy, onReset }: ChatHeaderProps) {
           </span>
         </div>
 
-          <div className="flex items-center gap-2.5">
-            {hasMessages && (
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label="Reset conversation"
-                      onClick={onReset}
-                      disabled={isBusy}
-                    >
-                      <RotateCwIcon />
-                    </Button>
-                  }
-                />
-                <TooltipContent>
-                  <p>Reset conversation</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
+        <div className="flex items-center gap-2.5">
+          {hasMessages && (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label="Reset conversation"
+                    onClick={onReset}
+                    disabled={isBusy}
+                  >
+                    <RotateCwIcon />
+                  </Button>
+                }
+              />
+              <TooltipContent>
+                <p>Reset conversation</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
 
-            {/* Premier Wealth Tier Pill (matching Upgrade pill in reference screenshot) */}
-            <button
-              type="button"
-              onClick={() => setProfileModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-sm transition-transform duration-150 hover:scale-105"
-              style={{
-                backgroundColor: "#0F172A",
-              }}
-            >
-              <SparklesIcon className="size-3 text-amber-400" />
-              <span>Premier Wealth</span>
-            </button>
+          {/* Premier Wealth Tier Pill (matching Upgrade pill in reference screenshot) */}
+          <button
+            type="button"
+            onClick={() => setProfileModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-sm transition-transform duration-150 hover:scale-105"
+            style={{
+              backgroundColor: "#0F172A",
+            }}
+          >
+            <SparklesIcon className="size-3 text-amber-400" />
+            <span>Premier Wealth</span>
+          </button>
 
-            {/* Profile Avatar button */}
-            <button
-              type="button"
-              onClick={() => setProfileModalOpen(true)}
-              className="size-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm transition-transform duration-150 hover:scale-105"
-              style={{
-                background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
-              }}
-              title="Deep Yadav Profile"
-            >
-              DY
-            </button>
-          </div>
+          {/* Profile Avatar button */}
+          <button
+            type="button"
+            onClick={() => setProfileModalOpen(true)}
+            className="size-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm transition-transform duration-150 hover:scale-105"
+            style={{
+              background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
+            }}
+            title="Deep Yadav Profile"
+          >
+            DY
+          </button>
+        </div>
       </header>
 
       <BankProfileModal

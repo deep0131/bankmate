@@ -25,7 +25,7 @@ export function dispatchChatPrompt(promptText: string) {
     window.dispatchEvent(
       new CustomEvent("bankmate-send-chat-prompt", {
         detail: { text: promptText },
-      })
+      }),
     );
   }
 }
@@ -57,7 +57,10 @@ export function LoanOffersCatalog(props: ShowLoanOffersProps) {
           borderColor: "var(--panel-border)",
         }}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b" style={{ borderColor: "var(--panel-border)" }}>
+        <div
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b"
+          style={{ borderColor: "var(--panel-border)" }}
+        >
           <div className="flex items-center gap-2.5">
             <div className="size-9 rounded-xl flex items-center justify-center bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold">
               <Building2Icon className="size-5" />
@@ -70,15 +73,26 @@ export function LoanOffersCatalog(props: ShowLoanOffersProps) {
                 </span>
               </h4>
               <p className="text-xs text-muted-foreground">
-                Showing bank offerings with personalized eligibility & pre-approved sanctions
+                Showing bank offerings with personalized eligibility &
+                pre-approved sanctions
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto">
-            <div className="px-3 py-1 rounded-lg border text-right" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
-              <span className="text-[10px] text-muted-foreground block">Monthly Salary</span>
-              <span className="text-xs font-bold font-mono text-foreground">₹2,40,000</span>
+            <div
+              className="px-3 py-1 rounded-lg border text-right"
+              style={{
+                borderColor: "var(--panel-border)",
+                backgroundColor: "var(--toggle-bg)",
+              }}
+            >
+              <span className="text-[10px] text-muted-foreground block">
+                Monthly Salary
+              </span>
+              <span className="text-xs font-bold font-mono text-foreground">
+                ₹2,40,000
+              </span>
             </div>
           </div>
         </div>
@@ -110,9 +124,7 @@ export function LoanOffersCatalog(props: ShowLoanOffersProps) {
             className="p-4 rounded-2xl border flex flex-col justify-between transition-all duration-200 hover:shadow-md"
             style={{
               backgroundColor: "var(--card)",
-              borderColor: loan.isPreApproved
-                ? "rgba(59, 130, 246, 0.4)"
-                : "var(--panel-border)",
+              borderColor: "var(--panel-border)",
             }}
           >
             <div>
@@ -140,17 +152,28 @@ export function LoanOffersCatalog(props: ShowLoanOffersProps) {
               </div>
 
               {/* Amount & Rate Highlight */}
-              <div className="p-2.5 rounded-xl my-2.5 flex items-center justify-between" style={{ backgroundColor: "var(--toggle-bg)" }}>
+              <div
+                className="p-2.5 rounded-xl my-2.5 flex items-center justify-between"
+                style={{ backgroundColor: "var(--toggle-bg)" }}
+              >
                 <div>
                   <span className="text-[10px] text-muted-foreground block">
-                    {loan.isPreApproved ? "Pre-Approved Limit" : "Max Sanction Limit"}
+                    {loan.isPreApproved
+                      ? "Pre-Approved Limit"
+                      : "Max Sanction Limit"}
                   </span>
                   <span className="text-base font-bold font-mono text-foreground">
-                    {formatINR(loan.isPreApproved && loan.preApprovedAmount ? loan.preApprovedAmount : loan.maxAmount)}
+                    {formatINR(
+                      loan.isPreApproved && loan.preApprovedAmount
+                        ? loan.preApprovedAmount
+                        : loan.maxAmount,
+                    )}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-muted-foreground block">Interest Rate</span>
+                  <span className="text-[10px] text-muted-foreground block">
+                    Interest Rate
+                  </span>
                   <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 font-mono">
                     {loan.interestRate}% p.a.
                   </span>
@@ -164,7 +187,10 @@ export function LoanOffersCatalog(props: ShowLoanOffersProps) {
               {/* Key Features */}
               <ul className="space-y-1 mb-4">
                 {loan.features?.slice(0, 2).map((feat: string, idx: number) => (
-                  <li key={idx} className="text-[11px] text-foreground/80 flex items-center gap-1.5">
+                  <li
+                    key={idx}
+                    className="text-[11px] text-foreground/80 flex items-center gap-1.5"
+                  >
                     <CheckCircle2Icon className="size-3 text-emerald-500 shrink-0" />
                     <span>{feat}</span>
                   </li>
@@ -173,7 +199,10 @@ export function LoanOffersCatalog(props: ShowLoanOffersProps) {
             </div>
 
             {/* Application CTA */}
-            <div className="pt-3 border-t flex items-center justify-between gap-2" style={{ borderColor: "var(--panel-border)" }}>
+            <div
+              className="pt-3 border-t flex items-center justify-between gap-2"
+              style={{ borderColor: "var(--panel-border)" }}
+            >
               <span className="text-[11px] text-muted-foreground">
                 Tenure: Up to {loan.maxTenureYears} yrs
               </span>
@@ -202,10 +231,17 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
   const output = props.output;
   const { submitLoanApplication, loanApplications } = useBankStore();
 
-  const [amount, setAmount] = useState<number>(output?.requestedAmount ?? 5000000);
-  const [tenureYears, setTenureYears] = useState<number>(output?.tenureYears ?? 15);
-  const [status, setStatus] = useState<"ready" | "submitting" | "submitted" | "error">("ready");
-  const [submittedRecord, setSubmittedRecord] = useState<LoanApplicationRecord | null>(null);
+  const [amount, setAmount] = useState<number>(
+    output?.requestedAmount ?? 5000000,
+  );
+  const [tenureYears, setTenureYears] = useState<number>(
+    output?.tenureYears ?? 15,
+  );
+  const [status, setStatus] = useState<
+    "ready" | "submitting" | "submitted" | "error"
+  >("ready");
+  const [submittedRecord, setSubmittedRecord] =
+    useState<LoanApplicationRecord | null>(null);
 
   const loan = output?.loan;
   const rm = output?.rm || {
@@ -224,14 +260,16 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
   const liveEmi =
     r === 0
       ? Math.round(amount / n)
-      : Math.round((amount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1));
+      : Math.round(
+          (amount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1),
+        );
 
   const totalRepayment = liveEmi * n;
   const totalInterest = totalRepayment - amount;
 
   // Check if this application was already submitted in store
   const existingApp = loanApplications.find(
-    (app) => app.loanId === loan?.id && app.requestedAmount === amount
+    (app) => app.loanId === loan?.id && app.requestedAmount === amount,
   );
 
   const handleSubmitApplication = () => {
@@ -268,7 +306,10 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
         }}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b" style={{ borderColor: "var(--panel-border)" }}>
+        <div
+          className="p-4 sm:p-5 border-b"
+          style={{ borderColor: "var(--panel-border)" }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="size-10 rounded-2xl flex items-center justify-center bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold shrink-0">
@@ -319,34 +360,76 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
                 <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-0.5">
                   Application ID:{" "}
                   <strong className="font-mono">
-                    {submittedRecord?.applicationId || existingApp?.applicationId}
+                    {submittedRecord?.applicationId ||
+                      existingApp?.applicationId}
                   </strong>
-                  . As per regulatory compliance, bank loans are finalized with human verification.
+                  . As per regulatory compliance, bank loans are finalized with
+                  human verification.
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="p-3 rounded-xl border text-center" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
-                <span className="text-[10px] text-muted-foreground block">Sanction Amount</span>
+              <div
+                className="p-3 rounded-xl border text-center"
+                style={{
+                  borderColor: "var(--panel-border)",
+                  backgroundColor: "var(--toggle-bg)",
+                }}
+              >
+                <span className="text-[10px] text-muted-foreground block">
+                  Sanction Amount
+                </span>
                 <span className="text-xs sm:text-sm font-bold font-mono text-foreground">
-                  {formatINR(submittedRecord?.requestedAmount || existingApp?.requestedAmount || amount)}
+                  {formatINR(
+                    submittedRecord?.requestedAmount ||
+                      existingApp?.requestedAmount ||
+                      amount,
+                  )}
                 </span>
               </div>
-              <div className="p-3 rounded-xl border text-center" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
-                <span className="text-[10px] text-muted-foreground block">Est. Monthly EMI</span>
+              <div
+                className="p-3 rounded-xl border text-center"
+                style={{
+                  borderColor: "var(--panel-border)",
+                  backgroundColor: "var(--toggle-bg)",
+                }}
+              >
+                <span className="text-[10px] text-muted-foreground block">
+                  Est. Monthly EMI
+                </span>
                 <span className="text-xs sm:text-sm font-bold font-mono text-foreground">
-                  {formatINR(submittedRecord?.estimatedEmi || existingApp?.estimatedEmi || liveEmi)}
+                  {formatINR(
+                    submittedRecord?.estimatedEmi ||
+                      existingApp?.estimatedEmi ||
+                      liveEmi,
+                  )}
                 </span>
               </div>
-              <div className="p-3 rounded-xl border text-center" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
-                <span className="text-[10px] text-muted-foreground block">Interest Rate</span>
+              <div
+                className="p-3 rounded-xl border text-center"
+                style={{
+                  borderColor: "var(--panel-border)",
+                  backgroundColor: "var(--toggle-bg)",
+                }}
+              >
+                <span className="text-[10px] text-muted-foreground block">
+                  Interest Rate
+                </span>
                 <span className="text-xs sm:text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
                   {rate}% p.a.
                 </span>
               </div>
-              <div className="p-3 rounded-xl border text-center" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
-                <span className="text-[10px] text-muted-foreground block">Application Status</span>
+              <div
+                className="p-3 rounded-xl border text-center"
+                style={{
+                  borderColor: "var(--panel-border)",
+                  backgroundColor: "var(--toggle-bg)",
+                }}
+              >
+                <span className="text-[10px] text-muted-foreground block">
+                  Application Status
+                </span>
                 <span className="text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400">
                   Pending RM Review
                 </span>
@@ -354,14 +437,24 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
             </div>
 
             {/* Assigned RM Card */}
-            <div className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}>
+            <div
+              className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+              style={{
+                borderColor: "var(--panel-border)",
+                backgroundColor: "var(--card)",
+              }}
+            >
               <div className="flex items-center gap-3">
                 <div className="size-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
                   PS
                 </div>
                 <div>
-                  <h6 className="text-xs font-bold text-foreground">{rm.name}</h6>
-                  <p className="text-[11px] text-muted-foreground">{rm.title} • {rm.branch}</p>
+                  <h6 className="text-xs font-bold text-foreground">
+                    {rm.name}
+                  </h6>
+                  <p className="text-[11px] text-muted-foreground">
+                    {rm.title} • {rm.branch}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 self-end sm:self-auto text-xs text-muted-foreground">
@@ -376,11 +469,18 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
           /* Application Customization & Review Form */
           <div className="p-5 sm:p-6 space-y-5">
             {/* Eligibility Verified Box */}
-            <div className="p-3.5 rounded-xl border flex items-center justify-between text-xs" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
+            <div
+              className="p-3.5 rounded-xl border flex items-center justify-between text-xs"
+              style={{
+                borderColor: "var(--panel-border)",
+                backgroundColor: "var(--toggle-bg)",
+              }}
+            >
               <div className="flex items-center gap-2">
                 <CheckCircle2Icon className="size-4 text-emerald-500" />
                 <span className="font-medium text-foreground">
-                  Bank verification passed: CIBIL Score <strong>795</strong> & Salary <strong>₹2.4L/mo</strong> qualify
+                  Bank verification passed: CIBIL Score <strong>795</strong> &
+                  Salary <strong>₹2.4L/mo</strong> qualify
                 </span>
               </div>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600">
@@ -440,26 +540,50 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
             </div>
 
             {/* Financial Summary */}
-            <div className="grid grid-cols-3 gap-2.5 p-3.5 rounded-xl border text-center" style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}>
+            <div
+              className="grid grid-cols-3 gap-2.5 p-3.5 rounded-xl border text-center"
+              style={{
+                borderColor: "var(--panel-border)",
+                backgroundColor: "var(--toggle-bg)",
+              }}
+            >
               <div>
-                <span className="text-[10px] text-muted-foreground block">Estimated EMI</span>
-                <span className="text-sm font-bold font-mono text-foreground">{formatINR(liveEmi)}/mo</span>
+                <span className="text-[10px] text-muted-foreground block">
+                  Estimated EMI
+                </span>
+                <span className="text-sm font-bold font-mono text-foreground">
+                  {formatINR(liveEmi)}/mo
+                </span>
               </div>
               <div>
-                <span className="text-[10px] text-muted-foreground block">Interest Rate</span>
-                <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">{rate}% p.a.</span>
+                <span className="text-[10px] text-muted-foreground block">
+                  Interest Rate
+                </span>
+                <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  {rate}% p.a.
+                </span>
               </div>
               <div>
-                <span className="text-[10px] text-muted-foreground block">Total Interest</span>
-                <span className="text-sm font-bold font-mono text-foreground">{formatINR(totalInterest)}</span>
+                <span className="text-[10px] text-muted-foreground block">
+                  Total Interest
+                </span>
+                <span className="text-sm font-bold font-mono text-foreground">
+                  {formatINR(totalInterest)}
+                </span>
               </div>
             </div>
 
             {/* Human RM Routing Notice */}
-            <div className="p-3 rounded-xl border flex items-start gap-2.5 text-xs text-muted-foreground bg-muted/20" style={{ borderColor: "var(--panel-border)" }}>
+            <div
+              className="p-3 rounded-xl border flex items-start gap-2.5 text-xs text-muted-foreground bg-muted/20"
+              style={{ borderColor: "var(--panel-border)" }}
+            >
               <InfoIcon className="size-4 text-blue-500 shrink-0 mt-0.5" />
               <span>
-                Loan sanctioning follows bank governance and requires manual approval. Submitting this request sends an expedited file to your Senior Wealth Director <strong>{rm.name}</strong> for final verification and document sign-off.
+                Loan sanctioning follows bank governance and requires manual
+                approval. Submitting this request sends an expedited file to
+                your Senior Wealth Director <strong>{rm.name}</strong> for final
+                verification and document sign-off.
               </span>
             </div>
 
