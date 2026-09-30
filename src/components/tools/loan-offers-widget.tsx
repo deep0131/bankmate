@@ -8,6 +8,7 @@ import {
   ChevronRightIcon,
   FileCheckIcon,
   InfoIcon,
+  MailCheckIcon,
   PercentIcon,
   PhoneCallIcon,
   ShieldCheckIcon,
@@ -18,6 +19,7 @@ import {
 import { formatINR } from "@/lib/bank-store";
 import type { showLoanOffersTool, applyLoanTool } from "@/lib/ai/tools";
 import { useBankStore, type LoanApplicationRecord } from "@/lib/bank-store";
+import { sendTransactionEmail } from "@/lib/transaction-email";
 
 // Custom event to allow widgets in chat to dispatch prompt messages to the chat input
 export function dispatchChatPrompt(promptText: string) {
@@ -229,7 +231,7 @@ export type ApplyLoanProps = UIToolInvocation<typeof applyLoanTool>;
 
 export function ApplyLoanCard(props: ApplyLoanProps) {
   const output = props.output;
-  const { submitLoanApplication, loanApplications } = useBankStore();
+  const { submitLoanApplication, loanApplications, profile } = useBankStore();
 
   const [amount, setAmount] = useState<number>(
     output?.requestedAmount ?? 5000000,
@@ -290,6 +292,23 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
       if (res.success) {
         setSubmittedRecord(res.application);
         setStatus("submitted");
+
+        // Send confirmation email to registered email
+        sendTransactionEmail({
+          type: "loan-application",
+          recipientEmail: profile?.personal?.email,
+          data: {
+            applicationId: res.application.applicationId,
+            loanName: loan.name,
+            category: loan.category,
+            requestedAmount: amount,
+            tenureYears,
+            interestRate: rate,
+            estimatedEmi: liveEmi,
+            rmName: rm.name,
+            rmEmail: rm.email,
+          },
+        });
       } else {
         setStatus("error");
       }

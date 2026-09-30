@@ -10,6 +10,7 @@ import {
   KeyRoundIcon,
   LandmarkIcon,
   LockIcon,
+  MailCheckIcon,
   PiggyBankIcon,
   ReceiptIcon,
   SendIcon,
@@ -24,7 +25,9 @@ import {
   executeTransferFunds,
   formatINR,
   getLiveProfile,
+  useBankStore,
 } from "@/lib/bank-store";
+import { sendTransactionEmail } from "@/lib/transaction-email";
 import type { bookFixedDepositTool, transferFundsTool } from "@/lib/ai/tools";
 
 export interface TransactionActionCardProps {
@@ -50,6 +53,7 @@ export function TransactionActionCard({
   recipientAccount = "•••• 4092",
   note = "Personal Transfer",
 }: TransactionActionCardProps) {
+  const { profile } = useBankStore();
   const [pin, setPin] = useState(["", "", "", "", "", ""]);
   const [showPin, setShowPin] = useState(false);
   const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
@@ -151,6 +155,22 @@ export function TransactionActionCard({
             newBalance: res.newBalance,
             maturityAmount: res.fd?.maturityAmount,
           });
+
+          // Send confirmation email to registered email
+          sendTransactionEmail({
+            type: "fixed-deposit",
+            recipientEmail: profile?.personal?.email,
+            data: {
+              fdNumber: res.fd?.fdNumber || "FD-2026-9904",
+              principalAmount: amount,
+              tenureYears,
+              interestRate,
+              maturityAmount: res.fd?.maturityAmount || maturityAmount,
+              payoutType,
+              sourceAccount: "Savings A/C 4092 •••• 8842",
+              newBalance: res.newBalance || 0,
+            },
+          });
         } else {
           setStatus("error");
           setErrorMessage(res.message);
@@ -171,6 +191,21 @@ export function TransactionActionCard({
           setResultData({
             referenceId: res.referenceId,
             newBalance: res.newBalance,
+          });
+
+          // Send confirmation email to registered email
+          sendTransactionEmail({
+            type: "transfer",
+            recipientEmail: profile?.personal?.email,
+            data: {
+              recipientName,
+              recipientAccount,
+              amount,
+              note,
+              referenceId: res.referenceId || "TX-IMPS",
+              sourceAccount: "Savings A/C 4092 •••• 8842",
+              newBalance: res.newBalance || 0,
+            },
           });
         } else {
           setStatus("error");
@@ -315,14 +350,9 @@ export function TransactionActionCard({
               </div>
 
               <div
-                className="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t"
+                className="flex items-center justify-end gap-2 pt-3 border-t"
                 style={{ borderColor: "var(--panel-border)" }}
               >
-                <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-                  <ShieldCheckIcon className="size-3.5 text-emerald-600" />
-                  Live accounts & statements updated
-                </span>
-                <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => {
@@ -346,7 +376,6 @@ export function TransactionActionCard({
                     <UserCheckIcon className="size-3.5" />
                     <span>View Bank Profile</span>
                   </button>
-                </div>
               </div>
             </div>
           ) : (
