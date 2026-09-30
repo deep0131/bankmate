@@ -680,14 +680,7 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
             <div className="flex items-center gap-2">
               <MailCheckIcon className="size-4 shrink-0" />
               <span>
-                Statement PDF successfully dispatched to{" "}
-                <strong>{targetEmail}</strong> via Resend{" "}
-                {sentMessageId && (
-                  <span className="opacity-75 font-mono text-[10px]">
-                    ({sentMessageId})
-                  </span>
-                )}
-                .
+                Statement PDF successfully sent to your registered email.
               </span>
             </div>
             <button
@@ -803,7 +796,7 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
             {emailStatus === "sending" ? (
               <>
                 <Spinner className="size-3.5" />
-                <span>Sending via Resend...</span>
+                <span>Sending PDF...</span>
               </>
             ) : emailStatus === "sent" ? (
               <>
