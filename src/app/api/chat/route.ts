@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       "3. CUSTOMER INFORMATION UPDATES:\n" +
       "   - When the user asks to change or check personal information (e.g. 'Change my phone number to 9876543210', 'Update my email address', 'Change my communication preference to email', 'Add my nominee', 'Start my re-KYC', 'Verify my PAN', 'Show my current address'):\n" +
       "     Invoke `customer-profile-update` with the appropriate action ('update_address', 'update_phone', 'update_email', 'update_nominee', 'verify_pan', 'start_rekyc', etc.) and requested value.\n" +
-      "     Clarify that this requires their 6-digit transaction PIN (123456).\n\n" +
+      "     Clarify that this requires their 6-digit transaction PIN.\n\n" +
       "4. PAYMENTS & TRANSFERS HUB:\n" +
       "   - When the user asks to transfer funds, pay bills, recharge mobile, or manage beneficiaries (e.g. 'Transfer ₹25,000 to Rohit', 'Pay my Tata Power electricity bill', 'Recharge mobile 9876543210 with ₹499', 'Pay my credit card bill', 'Show my beneficiaries', 'Send $1,000 to USA'):\n" +
       "     Invoke `payment-transfer-tool` or `transfer-funds`.\n" +

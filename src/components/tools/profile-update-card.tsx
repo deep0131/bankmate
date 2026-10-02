@@ -85,9 +85,7 @@ export function ProfileUpdateCard(props: ProfileUpdateCardProps) {
   const handleConfirmUpdate = () => {
     if (!validateTransactionPin(pin)) {
       setStatus("error");
-      setErrorMessage(
-        "Incorrect 6-digit transaction PIN. (Default PIN: 123456)",
-      );
+      setErrorMessage("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
 
@@ -212,8 +210,8 @@ export function ProfileUpdateCard(props: ProfileUpdateCardProps) {
             <div className="flex items-start gap-2 p-3 rounded-xl bg-slate-50 dark:bg-muted/30 border border-slate-200/60 dark:border-border text-xs text-muted-foreground">
               <ShieldCheckIcon className="size-4 text-blue-600 shrink-0 mt-0.5" />
               <span>
-                Enter your 6-digit transaction PIN (<strong>123456</strong>) to
-                authorize updating this account record.
+                Enter your 6-digit transaction PIN to authorize updating this
+                account record.
               </span>
             </div>
 
@@ -234,7 +232,7 @@ export function ProfileUpdateCard(props: ProfileUpdateCardProps) {
                   maxLength={6}
                   value={pin}
                   onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-                  placeholder="Enter 6-digit PIN (123456)"
+                  placeholder="Enter 6-digit PIN"
                   className="pl-9 text-xs h-9 tracking-widest font-mono"
                 />
               </div>

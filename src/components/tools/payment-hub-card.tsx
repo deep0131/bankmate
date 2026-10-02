@@ -101,9 +101,7 @@ export function PaymentHubCard(props: PaymentHubCardProps) {
   const handleAuthorizeTransfer = () => {
     if (!validateTransactionPin(pin)) {
       setStatus("error");
-      setErrorMessage(
-        "Incorrect 6-digit transaction PIN. (Default PIN: 123456)",
-      );
+      setErrorMessage("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
 
@@ -437,8 +435,8 @@ export function PaymentHubCard(props: PaymentHubCardProps) {
                   <LockIcon className="size-3.5" />
                   <span>Enter 6-digit Transaction PIN to Authorize</span>
                 </div>
-                <span className="text-[11px] text-muted-foreground">
-                  PIN: 123456
+                <span className="text-[11px] text-muted-foreground font-medium">
+                  Confidential
                 </span>
               </div>
 

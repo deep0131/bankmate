@@ -578,12 +578,7 @@ export function TransactionActionCard({
                 </div>
 
                 <p className="text-[11px] text-muted-foreground text-center mt-1.5">
-                  PIN:{" "}
-                  <strong className="font-mono text-foreground font-semibold">
-                    123456
-                  </strong>{" "}
-                  (speak &ldquo;1 2 3 4 5 6&rdquo; or &ldquo;one two three four
-                  five six&rdquo;)
+                  Enter your 6-digit transaction PIN to authorize
                 </p>
 
                 {/* Error message */}

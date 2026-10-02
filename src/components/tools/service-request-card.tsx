@@ -148,7 +148,7 @@ export function ServiceRequestCard(props: ServiceRequestCardProps) {
 
   const handleConfirmPinAction = () => {
     if (!validateTransactionPin(pin)) {
-      setPinError("Incorrect 6-digit transaction PIN. (Default PIN: 123456)");
+      setPinError("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
     if (!pinPrompt) return;
@@ -478,7 +478,7 @@ export function ServiceRequestCard(props: ServiceRequestCardProps) {
                           setPin(e.target.value.replace(/\D/g, ""));
                           setPinError(null);
                         }}
-                        placeholder="PIN: 123456"
+                        placeholder="Enter 6-digit PIN"
                         className="h-8 text-xs font-mono tracking-widest bg-background"
                       />
                       <Button

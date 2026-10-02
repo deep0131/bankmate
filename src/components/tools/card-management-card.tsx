@@ -204,7 +204,7 @@ export function CardManagementCard(props: CardManagementCardProps) {
   const handleConfirmSensitiveAction = () => {
     if (!validateTransactionPin(sensitivePin)) {
       setSensitivePinError(
-        "Incorrect 6-digit transaction PIN. (Default PIN: 123456)",
+        "Incorrect 6-digit transaction PIN. Please try again.",
       );
       return;
     }
@@ -269,7 +269,7 @@ export function CardManagementCard(props: CardManagementCardProps) {
 
   const handleRedeem = () => {
     if (!validateTransactionPin(pin)) {
-      setFeedback("Incorrect 6-digit transaction PIN. (Default: 123456)");
+      setFeedback("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
     setIsProcessing(true);
@@ -489,12 +489,11 @@ export function CardManagementCard(props: CardManagementCardProps) {
                     setSensitivePin(e.target.value.replace(/\D/g, ""));
                     setSensitivePinError(null);
                   }}
-                  placeholder="Enter 6-digit PIN (Default: 123456)"
+                  placeholder="Enter 6-digit PIN"
                   className="h-9 text-xs font-mono tracking-widest text-foreground bg-background"
                 />
                 <span className="text-[10px] text-muted-foreground block mt-1">
-                  Authorization PIN:{" "}
-                  <strong className="font-mono">123456</strong>
+                  Required for card security actions
                 </span>
               </div>
               <div className="flex gap-2 shrink-0">
@@ -657,8 +656,8 @@ export function CardManagementCard(props: CardManagementCardProps) {
               <span className="font-semibold text-foreground">
                 Redeem Points into Savings Account
               </span>
-              <span className="text-[11px] text-muted-foreground">
-                PIN: 123456
+              <span className="text-[11px] text-muted-foreground font-medium">
+                Confidential
               </span>
             </div>
             <div className="flex gap-2">

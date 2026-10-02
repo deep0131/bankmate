@@ -167,7 +167,7 @@ export function LoanServicingCard(props: LoanServicingCardProps) {
 
   const handleConfirmForeclosure = () => {
     if (!validateTransactionPin(pin)) {
-      setFeedback("Incorrect 6-digit transaction PIN. (Default: 123456)");
+      setFeedback("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
     setIsProcessing(true);
@@ -191,7 +191,7 @@ export function LoanServicingCard(props: LoanServicingCardProps) {
 
   const handleConfirmPrepayment = () => {
     if (!validateTransactionPin(pin)) {
-      setFeedback("Incorrect 6-digit transaction PIN. (Default PIN: 123456)");
+      setFeedback("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
     const savings =
@@ -642,7 +642,7 @@ export function LoanServicingCard(props: LoanServicingCardProps) {
                   maxLength={6}
                   value={pin}
                   onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-                  placeholder="Enter 6-digit PIN (123456)"
+                  placeholder="Enter 6-digit PIN"
                   className="h-8 text-xs font-mono tracking-widest bg-background"
                 />
                 <Button
@@ -712,7 +712,7 @@ export function LoanServicingCard(props: LoanServicingCardProps) {
                   maxLength={6}
                   value={pin}
                   onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-                  placeholder="Enter 6-digit PIN (123456)"
+                  placeholder="Enter 6-digit PIN"
                   className="h-8 text-xs font-mono tracking-widest"
                 />
                 <Button

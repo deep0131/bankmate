@@ -121,7 +121,7 @@ export function FinanceIntelligenceCard(props: FinanceIntelligenceCardProps) {
 
   const handleContribute = (goalId: string) => {
     if (!validateTransactionPin(pin)) {
-      setFeedback("Incorrect 6-digit transaction PIN. (Default: 123456)");
+      setFeedback("Incorrect 6-digit transaction PIN. Please try again.");
       return;
     }
     setIsProcessing(true);
@@ -643,7 +643,7 @@ export function FinanceIntelligenceCard(props: FinanceIntelligenceCardProps) {
                     {isContributeActive && (
                       <div className="p-3 rounded-lg bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 space-y-2">
                         <span className="font-semibold block">
-                          Transfer from Savings (PIN: 123456)
+                          Transfer from Savings
                         </span>
                         <div className="flex gap-2">
                           <Input
@@ -662,7 +662,7 @@ export function FinanceIntelligenceCard(props: FinanceIntelligenceCardProps) {
                             onChange={(e) =>
                               setPin(e.target.value.replace(/\D/g, ""))
                             }
-                            placeholder="PIN: 123456"
+                            placeholder="6-digit PIN"
                             className="h-8 text-xs font-mono tracking-widest w-32"
                           />
                           <Button
