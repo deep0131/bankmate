@@ -22,7 +22,9 @@ function generateTitle(messages: ChatUIMessage[]): string {
   const textPart = firstUserMsg.parts.find((p) => p.type === "text");
   if (!textPart || textPart.type !== "text") return "New Conversation";
   const clean = textPart.text.replace(/\s+/g, " ").trim();
-  return clean.length > 42 ? `${clean.slice(0, 39)}...` : clean || "New Conversation";
+  return clean.length > 42
+    ? `${clean.slice(0, 39)}...`
+    : clean || "New Conversation";
 }
 
 export function loadChatSessions(): ChatSession[] {
@@ -32,14 +34,13 @@ export function loadChatSessions(): ChatSession[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    const valid = parsed.filter(
-      (s): s is ChatSession =>
-        Boolean(
-          s &&
-            typeof s.id === "string" &&
-            Array.isArray(s.messages) &&
-            s.messages.length > 0,
-        ),
+    const valid = parsed.filter((s): s is ChatSession =>
+      Boolean(
+        s &&
+          typeof s.id === "string" &&
+          Array.isArray(s.messages) &&
+          s.messages.length > 0,
+      ),
     );
     return valid.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   } catch {
@@ -92,9 +93,7 @@ export function saveChatSession(
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
         break;
-      } catch {
-        continue;
-      }
+      } catch {}
     }
   }
 

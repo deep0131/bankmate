@@ -14,7 +14,10 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="flex items-center h-9 rounded-full p-1 w-full" style={{ backgroundColor: "var(--toggle-bg)" }}>
+      <div
+        className="flex items-center h-9 rounded-full p-1 w-full"
+        style={{ backgroundColor: "var(--toggle-bg)" }}
+      >
         <div className="flex-1 h-full rounded-full" />
         <div className="flex-1 h-full rounded-full" />
       </div>

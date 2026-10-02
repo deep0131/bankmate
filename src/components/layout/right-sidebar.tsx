@@ -56,7 +56,10 @@ export function RightSidebar({
         style={{ borderColor: "var(--panel-border)" }}
       >
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+          <h2
+            className="text-sm font-semibold"
+            style={{ color: "var(--foreground)" }}
+          >
             Chat History
           </h2>
           <span
@@ -87,7 +90,10 @@ export function RightSidebar({
       {/* Session List */}
       <div className="flex-1 overflow-y-auto px-3 py-2">
         {sessions.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-xs" style={{ color: "var(--muted-foreground)" }}>
+          <div
+            className="flex items-center justify-center h-32 text-xs"
+            style={{ color: "var(--muted-foreground)" }}
+          >
             No chat history yet
           </div>
         ) : (
@@ -108,11 +114,14 @@ export function RightSidebar({
                     }}
                     className="group w-full text-left px-3 py-2.5 rounded-lg transition-all duration-150 relative cursor-pointer"
                     style={{
-                      backgroundColor: isActive ? "var(--nav-active)" : "transparent",
+                      backgroundColor: isActive
+                        ? "var(--nav-active)"
+                        : "transparent",
                     }}
                     onMouseEnter={(e) => {
                       if (!isActive) {
-                        e.currentTarget.style.backgroundColor = "var(--history-hover)";
+                        e.currentTarget.style.backgroundColor =
+                          "var(--history-hover)";
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -125,7 +134,9 @@ export function RightSidebar({
                       <p
                         className="text-sm font-medium truncate flex-1"
                         style={{
-                          color: isActive ? "var(--nav-active-text)" : "var(--foreground)",
+                          color: isActive
+                            ? "var(--nav-active-text)"
+                            : "var(--foreground)",
                         }}
                       >
                         {session.title}
@@ -149,7 +160,8 @@ export function RightSidebar({
                             e.currentTarget.style.color = "#E5484D";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.color = "var(--muted-foreground)";
+                            e.currentTarget.style.color =
+                              "var(--muted-foreground)";
                           }}
                         >
                           <TrashIcon className="size-3" />

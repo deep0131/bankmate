@@ -14,7 +14,9 @@ import {
 import { LeftSidebar } from "./left-sidebar";
 
 export function AppLayout() {
-  const [activeChatId, setActiveChatId] = useState<string>(() => createNewChatId());
+  const [activeChatId, setActiveChatId] = useState<string>(() =>
+    createNewChatId(),
+  );
   const [activeMessages, setActiveMessages] = useState<ChatUIMessage[]>([]);
   const [sessions, setSessions] = useState<ChatSession[]>([]);
 
@@ -80,9 +82,7 @@ export function AppLayout() {
       style={{ backgroundColor: "var(--background)" }}
     >
       {/* 1440p+ Max Width Application Container (+30% wider) */}
-      <div
-        className="flex h-full w-full max-w-[1440px] mx-auto gap-1 relative font-sans"
-      >
+      <div className="flex h-full w-full max-w-[1440px] mx-auto gap-1 relative font-sans">
         {/* Left Sidebar with New Chat and Chat History */}
         <div className="w-[280px] shrink-0 hidden md:flex h-full">
           <LeftSidebar

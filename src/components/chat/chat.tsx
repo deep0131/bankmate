@@ -9,6 +9,7 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
+import { useVoice } from "@/context/voice-context";
 import type { ChatUIMessage } from "@/lib/ai/tools";
 import { ChatEmptyState } from "./chat-empty-state";
 import { ChatHeader } from "./chat-header";
@@ -32,9 +33,82 @@ export function Chat({
       messages: initialMessages,
     });
 
+  const { voiceMode, speak, stopSpeaking } = useVoice();
+  const lastSpokenMessageIdRef = useRef<string | null>(null);
+
   const isBusy = status === "submitted" || status === "streaming";
   const initialCountRef = useRef(initialMessages.length);
   const userActedRef = useRef(false);
+
+  // Hands-free Autoplay: When Voice Mode is On and generation completes, read out response
+  useEffect(() => {
+    if (voiceMode && status === "ready" && messages.length > 0) {
+      const lastMsg = messages[messages.length - 1];
+      if (
+        lastMsg &&
+        lastMsg.role === "assistant" &&
+        lastSpokenMessageIdRef.current !== lastMsg.id
+      ) {
+        lastSpokenMessageIdRef.current = lastMsg.id;
+
+        const textParts = lastMsg.parts
+          .filter((p) => p.type === "text")
+          .map((p: any) => p.text)
+          .join("\n");
+
+        let speechText = textParts.trim();
+
+        // If assistant invoked an interactive tool (e.g. transaction-table, loan card) without plain text,
+        // provide a natural executive summary so the assistant speaks and resumes the conversational loop!
+        if (!speechText) {
+          const toolPart = lastMsg.parts.find(
+            (p: any) =>
+              p.type?.startsWith("tool") ||
+              p.type === "dynamic-tool" ||
+              p.toolName ||
+              (p as any).name,
+          ) as any;
+
+          const toolName = (
+            toolPart?.toolName ||
+            toolPart?.name ||
+            ""
+          ).toLowerCase();
+
+          if (toolName.includes("transaction")) {
+            speechText =
+              "Here are your recent account transactions and ledger.";
+          } else if (toolName.includes("profile")) {
+            speechText =
+              "Here is an overview of your accounts, balance, and credit profile.";
+          } else if (toolName.includes("deposit") || toolName.includes("fd")) {
+            speechText =
+              "I have prepared your fixed deposit booking. Please speak your 6-digit PIN or enter it to authorize.";
+          } else if (toolName.includes("transfer")) {
+            speechText =
+              "I have prepared your funds transfer. Please speak your 6-digit PIN or enter it to authorize.";
+          } else if (
+            toolName.includes("loan-offers") ||
+            toolName.includes("show-loan")
+          ) {
+            speechText =
+              "Here are the loan offers and interest rates tailored for you.";
+          } else if (toolName.includes("loan")) {
+            speechText = "I have prepared your loan application for review.";
+          } else if (toolName.includes("statement")) {
+            speechText = "Here is your requested account statement.";
+          } else if (toolName.includes("chart")) {
+            speechText =
+              "Here is your spending analysis and financial breakdown.";
+          } else {
+            speechText = "Here are the requested banking details.";
+          }
+        }
+
+        speak(speechText, lastMsg.id);
+      }
+    }
+  }, [voiceMode, status, messages, speak]);
 
   // Persist messages only when new messages are added/modified in this session
   useEffect(() => {
@@ -63,11 +137,15 @@ export function Chat({
 
     window.addEventListener("bankmate-send-chat-prompt", handleChatPromptEvent);
     return () => {
-      window.removeEventListener("bankmate-send-chat-prompt", handleChatPromptEvent);
+      window.removeEventListener(
+        "bankmate-send-chat-prompt",
+        handleChatPromptEvent,
+      );
     };
   }, [sendMessage]);
 
   const handleReset = () => {
+    stopSpeaking();
     setMessages([]);
     userActedRef.current = true;
     onMessagesChange?.(chatId, []);
@@ -75,6 +153,7 @@ export function Chat({
 
   const handleQuickPrompt = (promptText: string) => {
     if (isBusy) return;
+    stopSpeaking();
     userActedRef.current = true;
     sendMessage({ text: promptText });
   };
@@ -82,6 +161,7 @@ export function Chat({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isBusy) return;
+    stopSpeaking();
     userActedRef.current = true;
     sendMessage({ text: input.trim() });
     setInput("");

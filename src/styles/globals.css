@@ -6,9 +6,9 @@
 @source "../../node_modules/streamdown/dist/*.js";
 
 .typeset-chat {
-  --typeset-font-body: var(--font-poppins), 'Poppins', sans-serif;
-  --typeset-font-heading: var(--font-poppins), 'Poppins', sans-serif;
-  --typeset-font-mono: var(--font-poppins), 'Poppins', sans-serif;
+  --typeset-font-body: var(--font-poppins), "Poppins", sans-serif;
+  --typeset-font-heading: var(--font-poppins), "Poppins", sans-serif;
+  --typeset-font-mono: var(--font-poppins), "Poppins", sans-serif;
   --typeset-size: 15px;
   --typeset-leading: 1.75;
   --typeset-flow: 1.25em;
@@ -19,8 +19,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-poppins), 'Poppins', sans-serif;
-  --font-mono: var(--font-poppins), 'Poppins', sans-serif;
+  --font-sans: var(--font-poppins), "Poppins", sans-serif;
+  --font-mono: var(--font-poppins), "Poppins", sans-serif;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -62,66 +62,66 @@
 
 /* ───── Light theme (crisp cool blueish modern) ───── */
 :root {
-  --background: #F8FAFC;
-  --foreground: #0F172A;
-  --card: #FFFFFF;
-  --card-foreground: #0F172A;
-  --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
-  --primary: #2563EB;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
-  --secondary-foreground: #1E293B;
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --accent: #EFF6FF;
-  --accent-foreground: #1D4ED8;
-  --destructive: #EF4444;
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #2563EB;
-  --chart-1: #2563EB;
-  --chart-2: #10B981;
-  --chart-3: #8B5CF6;
-  --chart-4: #EC4899;
-  --chart-5: #F59E0B;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #eff6ff;
+  --accent-foreground: #1d4ed8;
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+  --chart-1: #2563eb;
+  --chart-2: #10b981;
+  --chart-3: #8b5cf6;
+  --chart-4: #ec4899;
+  --chart-5: #f59e0b;
   --radius: 0.75rem;
 
-  --sidebar: #FFFFFF;
+  --sidebar: #ffffff;
   --sidebar-foreground: #334155;
-  --sidebar-primary: #2563EB;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F1F5F9;
-  --sidebar-accent-foreground: #0F172A;
-  --sidebar-border: #E2E8F0;
-  --sidebar-ring: #2563EB;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #2563eb;
 
   /* Custom layout tokens */
-  --panel-bg: #FFFFFF;
-  --panel-border: #E2E8F0;
-  --nav-hover: #F1F5F9;
-  --nav-active: #EFF6FF;
-  --nav-active-text: #2563EB;
-  --toggle-bg: #F1F5F9;
-  --toggle-active: #FFFFFF;
-  --history-hover: #F8FAFC;
+  --panel-bg: #ffffff;
+  --panel-border: #e2e8f0;
+  --nav-hover: #f1f5f9;
+  --nav-active: #eff6ff;
+  --nav-active-text: #2563eb;
+  --toggle-bg: #f1f5f9;
+  --toggle-active: #ffffff;
+  --history-hover: #f8fafc;
 }
 
 /* ───── Dark theme (layered shades of black) ───── */
 .dark {
   /* Layer 0: Root app backdrop / canvas */
   --background: #000000;
-  --foreground: #F4F4F5;
+  --foreground: #f4f4f5;
 
   /* Layer 1: Left navigation sidebar */
   --sidebar: #09090b;
-  --sidebar-foreground: #A1A1AA;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-foreground: #a1a1aa;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #18181b;
-  --sidebar-accent-foreground: #F4F4F5;
+  --sidebar-accent-foreground: #f4f4f5;
   --sidebar-border: #1f1f23;
-  --sidebar-ring: #3B82F6;
+  --sidebar-ring: #3b82f6;
 
   /* Layer 1: Main chat panel & header */
   --panel-bg: #0d0d0f;
@@ -129,37 +129,37 @@
 
   /* Layer 2: Elevated cards, widgets, dialogs, modals */
   --card: #141416;
-  --card-foreground: #F4F4F5;
+  --card-foreground: #f4f4f5;
   --popover: #141416;
-  --popover-foreground: #F4F4F5;
+  --popover-foreground: #f4f4f5;
 
   /* Layer 3: Secondary buttons, sub-surfaces, elevated tiles */
   --secondary: #1a1a1e;
-  --secondary-foreground: #F4F4F5;
+  --secondary-foreground: #f4f4f5;
 
   /* Layer 4: Muted chips, sub-backgrounds */
   --muted: #18181b;
-  --muted-foreground: #A1A1AA;
+  --muted-foreground: #a1a1aa;
 
   /* Interactive accents & inputs */
   --accent: #1e1e24;
-  --accent-foreground: #60A5FA;
-  --destructive: #F87171;
+  --accent-foreground: #60a5fa;
+  --destructive: #f87171;
   --border: #222226;
   --input: #1f1f23;
-  --ring: #3B82F6;
+  --ring: #3b82f6;
 
   /* Charts */
-  --chart-1: #3B82F6;
-  --chart-2: #34D399;
-  --chart-3: #A78BFA;
-  --chart-4: #F472B6;
-  --chart-5: #FBBF24;
+  --chart-1: #3b82f6;
+  --chart-2: #34d399;
+  --chart-3: #a78bfa;
+  --chart-4: #f472b6;
+  --chart-5: #fbbf24;
 
   /* Custom navigation & interactive tokens */
   --nav-hover: #18181b;
   --nav-active: #172554;
-  --nav-active-text: #60A5FA;
+  --nav-active-text: #60a5fa;
   --toggle-bg: #141416;
   --toggle-active: #27272a;
   --history-hover: #141417;
@@ -168,7 +168,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Poppins', var(--font-poppins), sans-serif;
+    font-family: "Poppins", var(--font-poppins), sans-serif;
   }
 
   html,
@@ -177,7 +177,7 @@
   input,
   select,
   textarea {
-    font-family: 'Poppins', var(--font-poppins), sans-serif !important;
+    font-family: "Poppins", var(--font-poppins), sans-serif;
   }
 
   body {
@@ -219,9 +219,9 @@
 }
 
 ::-webkit-scrollbar-button {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 ::-webkit-scrollbar-corner {

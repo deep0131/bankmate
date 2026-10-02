@@ -23,12 +23,13 @@ export async function POST(req: Request) {
           error: "CONFIG_REQUIRED",
           message: "RESEND_API_KEY is not configured.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const fromAddress =
-      process.env.RESEND_FROM_EMAIL || "BankMate Alerts <onboarding@resend.dev>";
+      process.env.RESEND_FROM_EMAIL ||
+      "BankMate Alerts <onboarding@resend.dev>";
 
     let subject = "";
     let textContent = "";
@@ -54,8 +55,7 @@ export async function POST(req: Request) {
       } = data;
 
       subject = `BankMate Alert: INR ${Number(amount).toLocaleString("en-IN")} Debited - ${referenceId}`;
-      textContent =
-`Dear Deep Yadav,
+      textContent = `Dear Deep Yadav,
 
 Your account has been debited for the following fund transfer:
 
@@ -95,8 +95,7 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
       } = data;
 
       subject = `BankMate Confirmation: Fixed Deposit ${fdNumber} Booked Successfully`;
-      textContent =
-`Dear Deep Yadav,
+      textContent = `Dear Deep Yadav,
 
 We are pleased to confirm that your new Fixed Deposit has been booked successfully under your Premier Wealth account.
 
@@ -139,8 +138,7 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
       } = data;
 
       subject = `BankMate Loan Application Received: ${applicationId} (${loanName})`;
-      textContent =
-`Dear Deep Yadav,
+      textContent = `Dear Deep Yadav,
 
 Your loan application has been successfully submitted and forwarded to your dedicated Relationship Manager and Credit Committee for human review and final verification.
 
@@ -176,8 +174,12 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
 `;
     } else {
       return NextResponse.json(
-        { ok: false, error: "INVALID_TYPE", message: "Unsupported transaction type" },
-        { status: 400 }
+        {
+          ok: false,
+          error: "INVALID_TYPE",
+          message: "Unsupported transaction type",
+        },
+        { status: 400 },
       );
     }
 
@@ -204,10 +206,11 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
         {
           ok: false,
           error: "RESEND_ERROR",
-          message: resData.message || "Failed to deliver transaction alert email.",
+          message:
+            resData.message || "Failed to deliver transaction alert email.",
           details: resData,
         },
-        { status: resendResponse.status }
+        { status: resendResponse.status },
       );
     }
 
@@ -221,7 +224,7 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
     console.error("Transaction email API error:", error);
     return NextResponse.json(
       { ok: false, error: "INTERNAL_ERROR", message: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

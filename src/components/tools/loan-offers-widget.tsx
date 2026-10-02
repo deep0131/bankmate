@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import type { UIToolInvocation } from "ai";
 import {
   Building2Icon,
@@ -8,17 +7,18 @@ import {
   ChevronRightIcon,
   FileCheckIcon,
   InfoIcon,
-  MailCheckIcon,
-  PercentIcon,
   PhoneCallIcon,
   ShieldCheckIcon,
   SparklesIcon,
-  TrendingUpIcon,
   UserCheckIcon,
 } from "lucide-react";
-import { formatINR } from "@/lib/bank-store";
-import type { showLoanOffersTool, applyLoanTool } from "@/lib/ai/tools";
-import { useBankStore, type LoanApplicationRecord } from "@/lib/bank-store";
+import { useState } from "react";
+import type { applyLoanTool, showLoanOffersTool } from "@/lib/ai/tools";
+import {
+  formatINR,
+  type LoanApplicationRecord,
+  useBankStore,
+} from "@/lib/bank-store";
 import { sendTransactionEmail } from "@/lib/transaction-email";
 
 // Custom event to allow widgets in chat to dispatch prompt messages to the chat input
@@ -262,9 +262,7 @@ export function ApplyLoanCard(props: ApplyLoanProps) {
   const liveEmi =
     r === 0
       ? Math.round(amount / n)
-      : Math.round(
-          (amount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1),
-        );
+      : Math.round((amount * (r * (1 + r) ** n)) / ((1 + r) ** n - 1));
 
   const totalRepayment = liveEmi * n;
   const totalInterest = totalRepayment - amount;

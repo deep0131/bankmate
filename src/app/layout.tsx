@@ -19,6 +19,8 @@ export const metadata: Metadata = {
     "Conversational Net Banking powered by AI. Check balances, view transactions, calculate EMIs, and more.",
 };
 
+import { VoiceProvider } from "@/context/voice-context";
+
 export default function RootLayout({
   children,
 }: {
@@ -37,7 +39,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <VoiceProvider>{children}</VoiceProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

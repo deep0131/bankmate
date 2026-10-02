@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { UIToolInvocation } from "ai";
 import { cn } from "cn";
 import {
@@ -20,26 +19,19 @@ import {
   RotateCcwIcon,
   XIcon,
 } from "lucide-react";
-import type { accountStatementTool } from "@/lib/ai/tools";
-import { formatINR, getLiveTransactions, useBankStore } from "@/lib/bank-store";
-import {
-  downloadStatementPdf,
-  filterStatementData,
-  printStatementHtml,
-  type StatementData,
-} from "@/lib/pdf-statement";
+import { useEffect, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -48,6 +40,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import type { accountStatementTool } from "@/lib/ai/tools";
+import { formatINR, getLiveTransactions, useBankStore } from "@/lib/bank-store";
+import {
+  downloadStatementPdf,
+  filterStatementData,
+  printStatementHtml,
+  type StatementData,
+} from "@/lib/pdf-statement";
 
 export type AccountStatementCardProps = UIToolInvocation<
   typeof accountStatementTool
@@ -94,9 +94,8 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
   const { profile } = useBankStore();
 
   // Primary live statement state (allows in-place interactive date filtering)
-  const [currentStatement, setCurrentStatement] = useState<StatementData | null>(
-    (output as StatementData) || null
-  );
+  const [currentStatement, setCurrentStatement] =
+    useState<StatementData | null>((output as StatementData) || null);
 
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [emailStatus, setEmailStatus] = useState<
@@ -106,17 +105,17 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
     code: string;
     message: string;
   } | null>(null);
-  const [sentMessageId, setSentMessageId] = useState<string | null>(null);
+  const [_sentMessageId, setSentMessageId] = useState<string | null>(null);
   const targetEmail = profile?.personal?.email || "mitulshah3107@gmail.com";
 
   // Date range picker modal / popover state
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [customStart, setCustomStart] = useState(
-    output?.startDate || "2026-09-01"
+    output?.startDate || "2026-09-01",
   );
   const [customEnd, setCustomEnd] = useState(output?.endDate || "2026-09-30");
   const [selectedAccount, setSelectedAccount] = useState<string>(
-    output?.account || "all"
+    output?.account || "all",
   );
   const [isCustomPeriod, setIsCustomPeriod] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -179,7 +178,7 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
   const applyPeriod = (
     startStr: string,
     endStr: string,
-    accountFilter: string = selectedAccount
+    accountFilter: string = selectedAccount,
   ) => {
     const liveTxs = getLiveTransactions();
     const updated = filterStatementData({
@@ -259,7 +258,8 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
       setEmailError({
         code: "NETWORK_ERROR",
         message:
-          err.message || "Network request failed. Please check your connection.",
+          err.message ||
+          "Network request failed. Please check your connection.",
       });
     }
   };
@@ -312,7 +312,7 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
               aria-expanded={datePickerOpen}
               className={cn(
                 "flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs bg-secondary/60 hover:bg-secondary dark:bg-secondary/40 dark:hover:bg-secondary/70 transition-all cursor-pointer shadow-xs group",
-                datePickerOpen && "ring-2 ring-blue-500/40 border-blue-500/60"
+                datePickerOpen && "ring-2 ring-blue-500/40 border-blue-500/60",
               )}
               style={{ borderColor: "var(--panel-border)" }}
               title="Click to change statement period or date range"
@@ -330,7 +330,7 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
               <ChevronDownIcon
                 className={cn(
                   "size-3.5 text-muted-foreground group-hover:text-foreground transition-transform duration-200",
-                  datePickerOpen && "rotate-180"
+                  datePickerOpen && "rotate-180",
                 )}
               />
             </button>
@@ -342,7 +342,10 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
                 style={{ borderColor: "var(--panel-border)" }}
               >
                 {/* Popover Header */}
-                <div className="flex items-center justify-between pb-2 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                <div
+                  className="flex items-center justify-between pb-2 border-b"
+                  style={{ borderColor: "var(--panel-border)" }}
+                >
                   <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
                     <CalendarIcon className="size-3.5 text-blue-500" />
                     <span>Select Statement Period</span>
@@ -374,14 +377,14 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
                             applyPeriod(
                               preset.start,
                               preset.end,
-                              selectedAccount
+                              selectedAccount,
                             )
                           }
                           className={cn(
                             "p-2 text-left rounded-lg border transition-all cursor-pointer flex flex-col justify-between text-xs",
                             isSelected
                               ? "border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold shadow-xs"
-                              : "border-border/50 hover:border-border hover:bg-muted/40 text-foreground"
+                              : "border-border/50 hover:border-border hover:bg-muted/40 text-foreground",
                           )}
                         >
                           <div className="flex items-center justify-between w-full">
@@ -458,7 +461,7 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
                           "py-1 text-center rounded-md border text-[11px] cursor-pointer transition-all",
                           selectedAccount === acc.id
                             ? "border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold"
-                            : "border-border/40 text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                            : "border-border/40 text-muted-foreground hover:text-foreground hover:bg-muted/40",
                         )}
                       >
                         {acc.label}
@@ -585,7 +588,9 @@ export function AccountStatementCard(props: AccountStatementCardProps) {
             style={{ borderColor: "var(--panel-border)" }}
           >
             <div className="flex items-center gap-2">
-              <span>Statement Transactions ({currentStatement.totalCount})</span>
+              <span>
+                Statement Transactions ({currentStatement.totalCount})
+              </span>
               {isCustomPeriod && (
                 <Badge
                   variant="secondary"

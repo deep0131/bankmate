@@ -7,10 +7,8 @@ import {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const {
-      email,
-      statement,
-    }: { email?: string; statement?: StatementData } = body;
+    const { email, statement }: { email?: string; statement?: StatementData } =
+      body;
 
     const targetEmail = (email || "mitulshah3107@gmail.com").trim();
 
@@ -21,7 +19,7 @@ export async function POST(req: Request) {
           error: "INVALID_PAYLOAD",
           message: "Statement data is missing or incomplete.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,7 +33,7 @@ export async function POST(req: Request) {
           error: "CONFIG_REQUIRED",
           message: `RESEND_API_KEY is not configured in .env.local. To dispatch real emails to ${targetEmail}, add your free API key from https://resend.com to your .env.local file.`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -45,10 +43,10 @@ export async function POST(req: Request) {
 
     // 2. Build Professional Plain-Text Banking Email Body (No HTML, no colors, pure clean text)
     const fromAddress =
-      process.env.RESEND_FROM_EMAIL || "BankMate Statements <onboarding@resend.dev>";
+      process.env.RESEND_FROM_EMAIL ||
+      "BankMate Statements <onboarding@resend.dev>";
 
-    const textContent =
-`Dear ${statement.accountName},
+    const textContent = `Dear ${statement.accountName},
 
 Please find attached your official BankMate Account Statement for the period ${statement.periodLabel}.
 
@@ -112,7 +110,7 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
             "Resend could not deliver the email. Please check your Resend domain or recipient settings.",
           details: resData,
         },
-        { status: resendResponse.status }
+        { status: resendResponse.status },
       );
     }
 
@@ -130,7 +128,7 @@ BKC Flagship Branch, Bandra Kurla Complex, Mumbai, MH - 400051, India
         error: "INTERNAL_ERROR",
         message: error.message || "Failed to process statement email dispatch.",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

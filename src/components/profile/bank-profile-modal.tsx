@@ -1,32 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
-  Building2Icon,
-  CheckCircle2Icon,
-  ChevronRightIcon,
-  ClockIcon,
   CopyIcon,
   CreditCardIcon,
-  ExternalLinkIcon,
   LandmarkIcon,
   LockIcon,
   MailIcon,
   PhoneIcon,
-  PiggyBankIcon,
-  QrCodeIcon,
   ReceiptIcon,
   ShieldCheckIcon,
   SparklesIcon,
   TrendingUpIcon,
   UserCheckIcon,
-  WalletIcon,
   XIcon,
 } from "lucide-react";
-import { useBankStore, formatINR } from "@/lib/bank-store";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { formatINR, useBankStore } from "@/lib/bank-store";
 
 export type TabType =
   | "accounts"
@@ -50,8 +42,10 @@ export function BankProfileModal({
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [txFilter, setTxFilter] = useState<"all" | "savings" | "credit" | "debit">("all");
-  const { profile, transactions, loanApplications, resetToDefault } = useBankStore();
+  const [txFilter, setTxFilter] = useState<
+    "all" | "savings" | "credit" | "debit"
+  >("all");
+  const { profile, transactions, loanApplications } = useBankStore();
 
   useEffect(() => {
     setMounted(true);
@@ -61,7 +55,7 @@ export function BankProfileModal({
     if (initialTab) {
       setActiveTab(initialTab);
     }
-  }, [initialTab, isOpen]);
+  }, [initialTab]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -88,10 +82,14 @@ export function BankProfileModal({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
     >
       <div
-        onClick={(e) => e.stopPropagation()}
+        role="document"
+        tabIndex={-1}
         className="relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl border overflow-hidden not-typeset"
         style={{
           backgroundColor: "var(--card)",
@@ -119,7 +117,10 @@ export function BankProfileModal({
             </div>
             <div>
               <div className="flex items-center gap-2 m-0 p-0">
-                <h2 id="bank-profile-title" className="text-xl font-bold tracking-tight text-foreground m-0 p-0 leading-none">
+                <h2
+                  id="bank-profile-title"
+                  className="text-xl font-bold tracking-tight text-foreground m-0 p-0 leading-none"
+                >
                   {profile.personal.fullName}
                 </h2>
                 <div className="inline-flex items-center gap-1.5 m-0 p-0">
@@ -133,12 +134,20 @@ export function BankProfileModal({
                   </span>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center gap-3 mt-1 text-xs" style={{ color: "var(--muted-foreground)" }}>
+              <div
+                className="flex flex-wrap items-center gap-3 mt-1 text-xs"
+                style={{ color: "var(--muted-foreground)" }}
+              >
                 <span className="flex items-center gap-1">
-                  CIF: <strong className="font-mono text-foreground">{profile.personal.cifNumber}</strong>
+                  CIF:{" "}
+                  <strong className="font-mono text-foreground">
+                    {profile.personal.cifNumber}
+                  </strong>
                   <button
                     type="button"
-                    onClick={() => handleCopy(profile.personal.cifNumber, "cif")}
+                    onClick={() =>
+                      handleCopy(profile.personal.cifNumber, "cif")
+                    }
                     className="hover:text-foreground transition-colors"
                     title="Copy CIF"
                   >
@@ -150,7 +159,9 @@ export function BankProfileModal({
                 <span>•</span>
                 <span>{profile.personal.phone}</span>
                 {copiedField === "cif" && (
-                  <span className="text-emerald-500 font-medium text-[11px]">Copied!</span>
+                  <span className="text-emerald-500 font-medium text-[11px]">
+                    Copied!
+                  </span>
                 )}
               </div>
             </div>
@@ -176,27 +187,48 @@ export function BankProfileModal({
           }}
         >
           <div className="min-w-0">
-            <span className="text-[11px] truncate block" style={{ color: "var(--muted-foreground)" }}>Total Net Worth</span>
+            <span
+              className="text-[11px] truncate block"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Total Net Worth
+            </span>
             <p className="text-sm font-bold text-blue-600 dark:text-blue-400 font-mono whitespace-nowrap tabular-nums">
               {formatINR(profile.wealth.totalNetWorth)}
             </p>
           </div>
           <div className="min-w-0">
-            <span className="text-[11px] truncate block" style={{ color: "var(--muted-foreground)" }}>Liquid Balances</span>
+            <span
+              className="text-[11px] truncate block"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Liquid Balances
+            </span>
             <p className="text-sm font-semibold font-mono whitespace-nowrap tabular-nums">
               {formatINR(profile.wealth.liquidCash)}
             </p>
           </div>
           <div className="min-w-0">
-            <span className="text-[11px] truncate block" style={{ color: "var(--muted-foreground)" }}>Fixed Deposits</span>
+            <span
+              className="text-[11px] truncate block"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Fixed Deposits
+            </span>
             <p className="text-sm font-semibold font-mono whitespace-nowrap tabular-nums">
               {formatINR(profile.wealth.fixedIncome)}
             </p>
           </div>
           <div className="min-w-0">
-            <span className="text-[11px] truncate block" style={{ color: "var(--muted-foreground)" }}>CIBIL Score</span>
+            <span
+              className="text-[11px] truncate block"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              CIBIL Score
+            </span>
             <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 font-mono whitespace-nowrap tabular-nums">
-              {profile.wealth.creditScore.score} ({profile.wealth.creditScore.rating})
+              {profile.wealth.creditScore.score} (
+              {profile.wealth.creditScore.rating})
             </p>
           </div>
         </div>
@@ -208,9 +240,17 @@ export function BankProfileModal({
         >
           {[
             { id: "accounts", label: "Accounts & FDs", icon: LandmarkIcon },
-            { id: "transactions", label: "Recent Transactions", icon: ReceiptIcon },
+            {
+              id: "transactions",
+              label: "Recent Transactions",
+              icon: ReceiptIcon,
+            },
             { id: "cards", label: "Cards & Limits", icon: CreditCardIcon },
-            { id: "investments", label: "Wealth & Loans", icon: TrendingUpIcon },
+            {
+              id: "investments",
+              label: "Wealth & Loans",
+              icon: TrendingUpIcon,
+            },
             { id: "kyc", label: "KYC & Details", icon: UserCheckIcon },
             { id: "security", label: "Security & Nominee", icon: LockIcon },
           ].map((tab) => (
@@ -220,8 +260,12 @@ export function BankProfileModal({
               onClick={() => setActiveTab(tab.id as TabType)}
               className="flex items-center gap-2 py-3 px-3 border-b-2 text-xs font-semibold whitespace-nowrap transition-colors"
               style={{
-                borderColor: activeTab === tab.id ? "var(--primary)" : "transparent",
-                color: activeTab === tab.id ? "var(--primary)" : "var(--muted-foreground)",
+                borderColor:
+                  activeTab === tab.id ? "var(--primary)" : "transparent",
+                color:
+                  activeTab === tab.id
+                    ? "var(--primary)"
+                    : "var(--muted-foreground)",
               }}
             >
               <tab.icon className="size-3.5" />
@@ -236,7 +280,10 @@ export function BankProfileModal({
           {activeTab === "accounts" && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--muted-foreground)" }}>
+                <h3
+                  className="text-xs font-bold uppercase tracking-wider mb-3"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
                   Primary Deposit Accounts
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -254,7 +301,9 @@ export function BankProfileModal({
                           <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">
                             {acc.accountType}
                           </span>
-                          <h4 className="text-sm font-semibold mt-1.5">{acc.branch}</h4>
+                          <h4 className="text-sm font-semibold mt-1.5">
+                            {acc.branch}
+                          </h4>
                         </div>
                         <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                           <span className="size-1.5 rounded-full bg-emerald-500"></span>
@@ -263,26 +312,48 @@ export function BankProfileModal({
                       </div>
 
                       <div className="my-3">
-                        <span className="text-[11px]" style={{ color: "var(--muted-foreground)" }}>Available Balance</span>
+                        <span
+                          className="text-[11px]"
+                          style={{ color: "var(--muted-foreground)" }}
+                        >
+                          Available Balance
+                        </span>
                         <p className="text-2xl font-bold font-mono text-foreground">
                           {formatINR(acc.availableBalance)}
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-[11px] pt-3 border-t font-mono" style={{ borderColor: "var(--panel-border)", color: "var(--muted-foreground)" }}>
+                      <div
+                        className="grid grid-cols-2 gap-2 text-[11px] pt-3 border-t font-mono"
+                        style={{
+                          borderColor: "var(--panel-border)",
+                          color: "var(--muted-foreground)",
+                        }}
+                      >
                         <div>
                           <span>A/C:</span>{" "}
-                          <strong className="text-foreground">{acc.accountNumber}</strong>
+                          <strong className="text-foreground">
+                            {acc.accountNumber}
+                          </strong>
                         </div>
                         <div>
                           <span>IFSC:</span>{" "}
-                          <strong className="text-foreground">{acc.ifsc}</strong>
+                          <strong className="text-foreground">
+                            {acc.ifsc}
+                          </strong>
                         </div>
                         <div className="col-span-2 flex items-center justify-between">
-                          <span>UPI: <strong className="text-foreground">{acc.upiId}</strong></span>
+                          <span>
+                            UPI:{" "}
+                            <strong className="text-foreground">
+                              {acc.upiId}
+                            </strong>
+                          </span>
                           <button
                             type="button"
-                            onClick={() => handleCopy(acc.accountNumber, acc.id)}
+                            onClick={() =>
+                              handleCopy(acc.accountNumber, acc.id)
+                            }
                             className="text-primary hover:underline text-[10px] flex items-center gap-1 font-sans"
                           >
                             <CopyIcon className="size-2.5" />
@@ -296,7 +367,10 @@ export function BankProfileModal({
               </div>
 
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--muted-foreground)" }}>
+                <h3
+                  className="text-xs font-bold uppercase tracking-wider mb-3"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
                   Active Fixed Deposits ({profile.fixedDeposits.length})
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -310,29 +384,48 @@ export function BankProfileModal({
                       }}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold font-mono">{fd.fdNumber}</span>
+                        <span className="text-xs font-bold font-mono">
+                          {fd.fdNumber}
+                        </span>
                         <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">
                           {fd.interestRate}% p.a.
                         </span>
                       </div>
                       <div className="my-2">
-                        <span className="text-[11px]" style={{ color: "var(--muted-foreground)" }}>Principal Amount</span>
+                        <span
+                          className="text-[11px]"
+                          style={{ color: "var(--muted-foreground)" }}
+                        >
+                          Principal Amount
+                        </span>
                         <p className="text-lg font-bold font-mono text-foreground">
                           {formatINR(fd.principalAmount)}
                         </p>
                       </div>
-                      <div className="text-[11px] space-y-1 pt-2 border-t" style={{ borderColor: "var(--panel-border)", color: "var(--muted-foreground)" }}>
+                      <div
+                        className="text-[11px] space-y-1 pt-2 border-t"
+                        style={{
+                          borderColor: "var(--panel-border)",
+                          color: "var(--muted-foreground)",
+                        }}
+                      >
                         <div className="flex justify-between">
                           <span>Maturity Value:</span>
-                          <strong className="text-emerald-600 dark:text-emerald-400 font-mono">{formatINR(fd.maturityAmount)}</strong>
+                          <strong className="text-emerald-600 dark:text-emerald-400 font-mono">
+                            {formatINR(fd.maturityAmount)}
+                          </strong>
                         </div>
                         <div className="flex justify-between">
                           <span>Tenure & Payout:</span>
-                          <span className="text-foreground">{fd.tenure} • {fd.payoutType}</span>
+                          <span className="text-foreground">
+                            {fd.tenure} • {fd.payoutType}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Maturity Date:</span>
-                          <span className="text-foreground">{fd.maturityDate}</span>
+                          <span className="text-foreground">
+                            {fd.maturityDate}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -350,15 +443,20 @@ export function BankProfileModal({
                 <div
                   className="p-5 rounded-2xl text-white shadow-xl flex flex-col justify-between aspect-[1.6/1]"
                   style={{
-                    background: "linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #2563EB 100%)",
+                    background:
+                      "linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #2563EB 100%)",
                   }}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-[10px] tracking-widest uppercase opacity-75">BankMate Reserve</p>
+                      <p className="text-[10px] tracking-widest uppercase opacity-75">
+                        BankMate Reserve
+                      </p>
                       <h4 className="text-sm font-bold">Deep Yadav</h4>
                     </div>
-                    <span className="text-xs font-bold italic tracking-wider">VISA Infinite</span>
+                    <span className="text-xs font-bold italic tracking-wider">
+                      VISA Infinite
+                    </span>
                   </div>
 
                   <div className="my-4 flex items-center justify-between">
@@ -370,10 +468,16 @@ export function BankProfileModal({
 
                   <div className="flex items-center justify-between text-[10px] opacity-80 pt-2 border-t border-white/10">
                     <div>
-                      <span>EXPIRES:</span> <span className="font-mono">{profile.cards[0].expiry}</span>
+                      <span>EXPIRES:</span>{" "}
+                      <span className="font-mono">
+                        {profile.cards[0].expiry}
+                      </span>
                     </div>
                     <div>
-                      <span>POINTS:</span> <span className="font-mono font-bold text-amber-300">{profile.cards[0].rewardPoints?.toLocaleString()}</span>
+                      <span>POINTS:</span>{" "}
+                      <span className="font-mono font-bold text-amber-300">
+                        {profile.cards[0].rewardPoints?.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -381,19 +485,34 @@ export function BankProfileModal({
                 {/* Credit Card Limits & Stats */}
                 <div
                   className="p-5 rounded-xl border flex flex-col justify-between"
-                  style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}
+                  style={{
+                    borderColor: "var(--panel-border)",
+                    backgroundColor: "var(--card)",
+                  }}
                 >
                   <div>
-                    <h4 className="text-sm font-bold mb-1">Credit Limit Breakdown</h4>
-                    <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
-                      Payment Due: <strong className="text-foreground">{profile.cards[0].paymentDueDate}</strong>
+                    <h4 className="text-sm font-bold mb-1">
+                      Credit Limit Breakdown
+                    </h4>
+                    <p
+                      className="text-xs"
+                      style={{ color: "var(--muted-foreground)" }}
+                    >
+                      Payment Due:{" "}
+                      <strong className="text-foreground">
+                        {profile.cards[0].paymentDueDate}
+                      </strong>
                     </p>
                   </div>
 
                   <div className="space-y-2 my-4">
                     <div className="flex justify-between text-xs font-mono">
-                      <span style={{ color: "var(--muted-foreground)" }}>Available Limit:</span>
-                      <strong className="text-emerald-600 dark:text-emerald-400">{formatINR(profile.cards[0].availableLimit || 0)}</strong>
+                      <span style={{ color: "var(--muted-foreground)" }}>
+                        Available Limit:
+                      </span>
+                      <strong className="text-emerald-600 dark:text-emerald-400">
+                        {formatINR(profile.cards[0].availableLimit || 0)}
+                      </strong>
                     </div>
                     <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
                       <div
@@ -404,12 +523,19 @@ export function BankProfileModal({
                       ></div>
                     </div>
                     <div className="flex justify-between text-[11px] text-muted-foreground font-mono">
-                      <span>Used: {formatINR(profile.cards[0].outstandingDue || 0)}</span>
-                      <span>Total: {formatINR(profile.cards[0].totalLimit || 0)}</span>
+                      <span>
+                        Used: {formatINR(profile.cards[0].outstandingDue || 0)}
+                      </span>
+                      <span>
+                        Total: {formatINR(profile.cards[0].totalLimit || 0)}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 pt-3 border-t text-xs" style={{ borderColor: "var(--panel-border)" }}>
+                  <div
+                    className="flex items-center gap-2 pt-3 border-t text-xs"
+                    style={{ borderColor: "var(--panel-border)" }}
+                  >
                     <span className="size-2 rounded-full bg-emerald-500"></span>
                     <span>Tap to Pay & International Usage Active</span>
                   </div>
@@ -419,22 +545,35 @@ export function BankProfileModal({
               {/* Debit Card info */}
               <div
                 className="p-4 rounded-xl border flex items-center justify-between"
-                style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
+                style={{
+                  borderColor: "var(--panel-border)",
+                  backgroundColor: "var(--toggle-bg)",
+                }}
               >
                 <div className="flex items-center gap-3">
                   <div className="size-10 rounded-lg bg-blue-600/10 text-blue-600 flex items-center justify-center">
                     <CreditCardIcon className="size-5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold">{profile.cards[1].cardName}</h4>
-                    <p className="text-xs font-mono" style={{ color: "var(--muted-foreground)" }}>
-                      {profile.cards[1].cardNumberMasked} • {profile.cards[1].network}
+                    <h4 className="text-sm font-semibold">
+                      {profile.cards[1].cardName}
+                    </h4>
+                    <p
+                      className="text-xs font-mono"
+                      style={{ color: "var(--muted-foreground)" }}
+                    >
+                      {profile.cards[1].cardNumberMasked} •{" "}
+                      {profile.cards[1].network}
                     </p>
                   </div>
                 </div>
                 <div className="text-right text-xs">
-                  <p className="font-medium text-foreground">ATM Limit: {formatINR(profile.cards[1].dailyAtm || 0)}/day</p>
-                  <p style={{ color: "var(--muted-foreground)" }}>POS/E-Com: {formatINR(profile.cards[1].dailyPos || 0)}/day</p>
+                  <p className="font-medium text-foreground">
+                    ATM Limit: {formatINR(profile.cards[1].dailyAtm || 0)}/day
+                  </p>
+                  <p style={{ color: "var(--muted-foreground)" }}>
+                    POS/E-Com: {formatINR(profile.cards[1].dailyPos || 0)}/day
+                  </p>
                 </div>
               </div>
             </div>
@@ -446,8 +585,12 @@ export function BankProfileModal({
               {/* Mutual Funds Portfolio */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--muted-foreground)" }}>
-                    Mutual Funds & Equity Holdings ({formatINR(profile.wealth.investments)})
+                  <h3
+                    className="text-xs font-bold uppercase tracking-wider"
+                    style={{ color: "var(--muted-foreground)" }}
+                  >
+                    Mutual Funds & Equity Holdings (
+                    {formatINR(profile.wealth.investments)})
                   </h3>
                   <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                     +18.4% Overall Gain
@@ -458,15 +601,26 @@ export function BankProfileModal({
                     <div
                       key={fund.scheme}
                       className="p-3.5 rounded-xl border flex items-center justify-between text-xs"
-                      style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}
+                      style={{
+                        borderColor: "var(--panel-border)",
+                        backgroundColor: "var(--card)",
+                      }}
                     >
                       <div>
-                        <p className="font-semibold text-foreground">{fund.scheme}</p>
-                        <p style={{ color: "var(--muted-foreground)" }}>Invested: {formatINR(fund.invested)}</p>
+                        <p className="font-semibold text-foreground">
+                          {fund.scheme}
+                        </p>
+                        <p style={{ color: "var(--muted-foreground)" }}>
+                          Invested: {formatINR(fund.invested)}
+                        </p>
                       </div>
                       <div className="text-right font-mono">
-                        <p className="font-bold text-foreground">{formatINR(fund.currentValue)}</p>
-                        <p className="text-emerald-600 dark:text-emerald-400 font-semibold">+{fund.returnPercent}%</p>
+                        <p className="font-bold text-foreground">
+                          {formatINR(fund.currentValue)}
+                        </p>
+                        <p className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                          +{fund.returnPercent}%
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -476,7 +630,10 @@ export function BankProfileModal({
               {/* Submitted Applications with Human RM Status */}
               {loanApplications && loanApplications.length > 0 && (
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider mb-3 flex items-center justify-between" style={{ color: "var(--muted-foreground)" }}>
+                  <h3
+                    className="text-xs font-bold uppercase tracking-wider mb-3 flex items-center justify-between"
+                    style={{ color: "var(--muted-foreground)" }}
+                  >
                     <span>Active Loan Applications (Human Review)</span>
                     <span className="text-[10px] font-semibold text-amber-500">
                       {loanApplications.length} In Progress
@@ -508,29 +665,53 @@ export function BankProfileModal({
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] mb-3">
                           <div>
-                            <span className="text-muted-foreground block text-[10px]">Requested</span>
-                            <strong className="text-foreground font-mono">{formatINR(app.requestedAmount)}</strong>
+                            <span className="text-muted-foreground block text-[10px]">
+                              Requested
+                            </span>
+                            <strong className="text-foreground font-mono">
+                              {formatINR(app.requestedAmount)}
+                            </strong>
                           </div>
                           <div>
-                            <span className="text-muted-foreground block text-[10px]">Tenure</span>
-                            <span className="text-foreground">{app.tenureYears} Years</span>
+                            <span className="text-muted-foreground block text-[10px]">
+                              Tenure
+                            </span>
+                            <span className="text-foreground">
+                              {app.tenureYears} Years
+                            </span>
                           </div>
                           <div>
-                            <span className="text-muted-foreground block text-[10px]">Est. EMI</span>
-                            <strong className="text-foreground font-mono">{formatINR(app.estimatedEmi)}/mo</strong>
+                            <span className="text-muted-foreground block text-[10px]">
+                              Est. EMI
+                            </span>
+                            <strong className="text-foreground font-mono">
+                              {formatINR(app.estimatedEmi)}/mo
+                            </strong>
                           </div>
                           <div>
-                            <span className="text-muted-foreground block text-[10px]">Rate</span>
-                            <span className="text-emerald-600 font-bold">{app.interestRate}% p.a.</span>
+                            <span className="text-muted-foreground block text-[10px]">
+                              Rate
+                            </span>
+                            <span className="text-emerald-600 font-bold">
+                              {app.interestRate}% p.a.
+                            </span>
                           </div>
                         </div>
 
-                        <div className="pt-2 border-t flex items-center justify-between text-[11px]" style={{ borderColor: "var(--panel-border)" }}>
+                        <div
+                          className="pt-2 border-t flex items-center justify-between text-[11px]"
+                          style={{ borderColor: "var(--panel-border)" }}
+                        >
                           <span className="text-muted-foreground">
-                            Assigned RM: <strong className="text-foreground">{app.rmAssigned.name}</strong> ({app.rmAssigned.phone})
+                            Assigned RM:{" "}
+                            <strong className="text-foreground">
+                              {app.rmAssigned.name}
+                            </strong>{" "}
+                            ({app.rmAssigned.phone})
                           </span>
                           <span className="text-[10px] text-muted-foreground">
-                            Submitted: {new Date(app.submittedAt).toLocaleDateString()}
+                            Submitted:{" "}
+                            {new Date(app.submittedAt).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
@@ -541,7 +722,10 @@ export function BankProfileModal({
 
               {/* Loans */}
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: "var(--muted-foreground)" }}>
+                <h3
+                  className="text-xs font-bold uppercase tracking-wider mb-3"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
                   Pre-Approved Loan Offers & Existing Lines
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -549,31 +733,47 @@ export function BankProfileModal({
                     <div
                       key={loan.loanType}
                       className="p-4 rounded-xl border"
-                      style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
+                      style={{
+                        borderColor: "var(--panel-border)",
+                        backgroundColor: "var(--toggle-bg)",
+                      }}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400">{loan.loanType}</span>
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
+                          {loan.loanType}
+                        </span>
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600">
                           {loan.status}
                         </span>
                       </div>
                       <p className="text-xl font-bold font-mono text-foreground mb-2">
-                        {formatINR(loan.offerAmount || loan.outstandingAmount || 0)}
+                        {formatINR(
+                          loan.offerAmount || loan.outstandingAmount || 0,
+                        )}
                       </p>
-                      <div className="text-[11px] space-y-1" style={{ color: "var(--muted-foreground)" }}>
+                      <div
+                        className="text-[11px] space-y-1"
+                        style={{ color: "var(--muted-foreground)" }}
+                      >
                         <div className="flex justify-between">
                           <span>Interest Rate:</span>
-                          <strong className="text-foreground">{loan.interestRate}% p.a.</strong>
+                          <strong className="text-foreground">
+                            {loan.interestRate}% p.a.
+                          </strong>
                         </div>
                         {loan.monthlyEmi && (
                           <div className="flex justify-between">
                             <span>Monthly EMI:</span>
-                            <strong className="text-foreground font-mono">{formatINR(loan.monthlyEmi)}</strong>
+                            <strong className="text-foreground font-mono">
+                              {formatINR(loan.monthlyEmi)}
+                            </strong>
                           </div>
                         )}
                         <div className="flex justify-between">
                           <span>Tenure:</span>
-                          <span className="text-foreground">{loan.tenure || loan.tenureRemaining}</span>
+                          <span className="text-foreground">
+                            {loan.tenure || loan.tenureRemaining}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -589,21 +789,41 @@ export function BankProfileModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div
                   className="p-4 rounded-xl border space-y-3"
-                  style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}
+                  style={{
+                    borderColor: "var(--panel-border)",
+                    backgroundColor: "var(--card)",
+                  }}
                 >
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Identity & Verification</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Identity & Verification
+                  </h4>
                   <div className="space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                    <div
+                      className="flex justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
                       <span className="text-muted-foreground">PAN Number:</span>
-                      <strong className="font-mono">{profile.personal.panNumber} (Verified)</strong>
+                      <strong className="font-mono">
+                        {profile.personal.panNumber} (Verified)
+                      </strong>
                     </div>
-                    <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                    <div
+                      className="flex justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
                       <span className="text-muted-foreground">Aadhaar:</span>
-                      <strong className="font-mono">{profile.personal.aadhaarNumber} (e-KYC)</strong>
+                      <strong className="font-mono">
+                        {profile.personal.aadhaarNumber} (e-KYC)
+                      </strong>
                     </div>
-                    <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                    <div
+                      className="flex justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
                       <span className="text-muted-foreground">KYC Level:</span>
-                      <span className="font-semibold text-emerald-600">Full KYC (Tier 3)</span>
+                      <span className="font-semibold text-emerald-600">
+                        Full KYC (Tier 3)
+                      </span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span className="text-muted-foreground">Re-KYC Due:</span>
@@ -614,16 +834,26 @@ export function BankProfileModal({
 
                 <div
                   className="p-4 rounded-xl border space-y-3"
-                  style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}
+                  style={{
+                    borderColor: "var(--panel-border)",
+                    backgroundColor: "var(--card)",
+                  }}
                 >
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Address on File</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Address on File
+                  </h4>
                   <p className="text-xs leading-relaxed">
                     {profile.personal.communicationAddress.line1},<br />
                     {profile.personal.communicationAddress.line2},<br />
-                    {profile.personal.communicationAddress.city}, {profile.personal.communicationAddress.state} - {profile.personal.communicationAddress.postalCode},<br />
+                    {profile.personal.communicationAddress.city},{" "}
+                    {profile.personal.communicationAddress.state} -{" "}
+                    {profile.personal.communicationAddress.postalCode},<br />
                     {profile.personal.communicationAddress.country}
                   </p>
-                  <p className="text-[11px] text-muted-foreground pt-2 border-t" style={{ borderColor: "var(--panel-border)" }}>
+                  <p
+                    className="text-[11px] text-muted-foreground pt-2 border-t"
+                    style={{ borderColor: "var(--panel-border)" }}
+                  >
                     Verified via Government Address Proof (DigiLocker)
                   </p>
                 </div>
@@ -632,7 +862,10 @@ export function BankProfileModal({
               {/* Relationship Manager Contact */}
               <div
                 className="p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--toggle-bg)" }}
+                style={{
+                  borderColor: "var(--panel-border)",
+                  backgroundColor: "var(--toggle-bg)",
+                }}
               >
                 <div className="flex items-center gap-3">
                   <div className="size-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
@@ -642,8 +875,12 @@ export function BankProfileModal({
                     <span className="text-[10px] uppercase font-bold text-blue-600 dark:text-blue-400">
                       Dedicated Relationship Manager
                     </span>
-                    <h4 className="text-sm font-bold">{profile.personal.relationshipManager.name}</h4>
-                    <p className="text-xs text-muted-foreground">{profile.personal.relationshipManager.title}</p>
+                    <h4 className="text-sm font-bold">
+                      {profile.personal.relationshipManager.name}
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                      {profile.personal.relationshipManager.title}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -673,50 +910,98 @@ export function BankProfileModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div
                   className="p-4 rounded-xl border space-y-3"
-                  style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}
+                  style={{
+                    borderColor: "var(--panel-border)",
+                    backgroundColor: "var(--card)",
+                  }}
                 >
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Security Controls</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Security Controls
+                  </h4>
                   <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                    <div
+                      className="flex items-center justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
                       <span>2-Factor Authentication:</span>
-                      <strong className="text-emerald-600">Active (Biometric)</strong>
+                      <strong className="text-emerald-600">
+                        Active (Biometric)
+                      </strong>
                     </div>
-                    <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                    <div
+                      className="flex items-center justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
                       <span>Trusted Device:</span>
                       <span>{profile.security.primaryDevice}</span>
                     </div>
-                    <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
+                    <div
+                      className="flex items-center justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
                       <span>Daily Transfer Limit:</span>
-                      <strong className="font-mono">{formatINR(profile.security.dailyTransferLimit)}</strong>
+                      <strong className="font-mono">
+                        {formatINR(profile.security.dailyTransferLimit)}
+                      </strong>
                     </div>
                     <div className="flex items-center justify-between py-1">
                       <span>International Banking:</span>
-                      <span className="text-emerald-600 font-semibold">Enabled</span>
+                      <span className="text-emerald-600 font-semibold">
+                        Enabled
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div
                   className="p-4 rounded-xl border space-y-3"
-                  style={{ borderColor: "var(--panel-border)", backgroundColor: "var(--card)" }}
+                  style={{
+                    borderColor: "var(--panel-border)",
+                    backgroundColor: "var(--card)",
+                  }}
                 >
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Registered Nominee</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Registered Nominee
+                  </h4>
                   <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
-                      <span className="text-muted-foreground">Nominee Name:</span>
-                      <strong className="text-foreground">{profile.security.nominee.name}</strong>
+                    <div
+                      className="flex items-center justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
+                      <span className="text-muted-foreground">
+                        Nominee Name:
+                      </span>
+                      <strong className="text-foreground">
+                        {profile.security.nominee.name}
+                      </strong>
                     </div>
-                    <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
-                      <span className="text-muted-foreground">Relationship:</span>
+                    <div
+                      className="flex items-center justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
+                      <span className="text-muted-foreground">
+                        Relationship:
+                      </span>
                       <span>{profile.security.nominee.relation}</span>
                     </div>
-                    <div className="flex items-center justify-between py-1 border-b" style={{ borderColor: "var(--panel-border)" }}>
-                      <span className="text-muted-foreground">Entitlement Share:</span>
-                      <strong className="font-mono">{profile.security.nominee.sharePercentage}%</strong>
+                    <div
+                      className="flex items-center justify-between py-1 border-b"
+                      style={{ borderColor: "var(--panel-border)" }}
+                    >
+                      <span className="text-muted-foreground">
+                        Entitlement Share:
+                      </span>
+                      <strong className="font-mono">
+                        {profile.security.nominee.sharePercentage}%
+                      </strong>
                     </div>
                     <div className="flex items-center justify-between py-1">
-                      <span className="text-muted-foreground">Verification:</span>
-                      <span className="text-emerald-600 font-semibold">{profile.security.nominee.status}</span>
+                      <span className="text-muted-foreground">
+                        Verification:
+                      </span>
+                      <span className="text-emerald-600 font-semibold">
+                        {profile.security.nominee.status}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -736,7 +1021,8 @@ export function BankProfileModal({
                     Live Transaction Statements & Ledger
                   </h3>
                   <p className="text-xs text-muted-foreground">
-                    Real-time transaction log synced with all savings, credit, and investment accounts
+                    Real-time transaction log synced with all savings, credit,
+                    and investment accounts
                   </p>
                 </div>
 
@@ -747,19 +1033,22 @@ export function BankProfileModal({
                     backgroundColor: "var(--toggle-bg)",
                   }}
                 >
-                  {(["all", "savings", "credit", "debit"] as const).map((filter) => (
-                    <button
-                      key={filter}
-                      type="button"
-                      onClick={() => setTxFilter(filter)}
-                      className={`px-2.5 py-1 rounded-md capitalize font-medium transition-colors ${txFilter === filter
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
+                  {(["all", "savings", "credit", "debit"] as const).map(
+                    (filter) => (
+                      <button
+                        key={filter}
+                        type="button"
+                        onClick={() => setTxFilter(filter)}
+                        className={`px-2.5 py-1 rounded-md capitalize font-medium transition-colors ${
+                          txFilter === filter
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground"
                         }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
+                      >
+                        {filter}
+                      </button>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -770,11 +1059,15 @@ export function BankProfileModal({
                   backgroundColor: "var(--card)",
                 }}
               >
-                <div className="divide-y" style={{ borderColor: "var(--panel-border)" }}>
+                <div
+                  className="divide-y"
+                  style={{ borderColor: "var(--panel-border)" }}
+                >
                   {transactions
                     .filter((tx) => {
                       if (txFilter === "all") return true;
-                      if (txFilter === "savings") return tx.account === "savings";
+                      if (txFilter === "savings")
+                        return tx.account === "savings";
                       if (txFilter === "credit") return tx.type === "credit";
                       if (txFilter === "debit") return tx.type === "debit";
                       return true;
@@ -784,12 +1077,12 @@ export function BankProfileModal({
                       const dateObj = new Date(tx.date);
                       const formattedDate = !Number.isNaN(dateObj.getTime())
                         ? dateObj.toLocaleDateString("en-IN", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
                         : tx.date;
 
                       return (
@@ -799,10 +1092,11 @@ export function BankProfileModal({
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             <div
-                              className={`size-9 rounded-xl flex items-center justify-center shrink-0 ${isCredit
+                              className={`size-9 rounded-xl flex items-center justify-center shrink-0 ${
+                                isCredit
                                   ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                                   : "bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                                }`}
+                              }`}
                             >
                               {isCredit ? (
                                 <ArrowDownLeftIcon className="size-4" />
@@ -817,21 +1111,28 @@ export function BankProfileModal({
                               <div className="flex items-center gap-2 text-[11px] text-muted-foreground mt-0.5">
                                 <span>{formattedDate}</span>
                                 <span>•</span>
-                                <span className="capitalize">{tx.category}</span>
+                                <span className="capitalize">
+                                  {tx.category}
+                                </span>
                                 <span>•</span>
-                                <span className="font-mono uppercase">{tx.account}</span>
+                                <span className="font-mono uppercase">
+                                  {tx.account}
+                                </span>
                               </div>
                             </div>
                           </div>
 
                           <div className="text-right shrink-0 pl-3">
                             <span
-                              className={`font-mono font-bold text-xs whitespace-nowrap tabular-nums block ${isCredit
+                              className={`font-mono font-bold text-xs whitespace-nowrap tabular-nums block ${
+                                isCredit
                                   ? "text-emerald-600 dark:text-emerald-400"
                                   : "text-foreground"
-                                }`}
+                              }`}
                             >
-                              {isCredit ? `+${formatINR(tx.amount)}` : `-${formatINR(tx.amount)}`}
+                              {isCredit
+                                ? `+${formatINR(tx.amount)}`
+                                : `-${formatINR(tx.amount)}`}
                             </span>
                             <span className="inline-block text-[10px] font-semibold px-1.5 py-0.2 rounded bg-muted text-muted-foreground capitalize mt-0.5">
                               {tx.status}
@@ -855,17 +1156,20 @@ export function BankProfileModal({
             color: "var(--muted-foreground)",
           }}
         >
-          <span>BankMate Net Banking • Regulated by RBI</span>
+          <span>
+            BankMate Premier Net Banking • Licensed & Regulated by Reserve Bank
+            of India (RBI)
+          </span>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-lg font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            className="px-5 py-1.5 rounded-lg font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer"
           >
             Done
           </button>
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

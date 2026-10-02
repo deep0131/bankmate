@@ -1,6 +1,6 @@
 "use client";
 
-import { HelpCircleIcon, RotateCwIcon, SparklesIcon } from "lucide-react";
+import { RotateCwIcon, SparklesIcon, VolumeXIcon } from "lucide-react";
 import { useState } from "react";
 import { BankProfileModal } from "@/components/profile/bank-profile-modal";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useVoice } from "@/context/voice-context";
 
 interface ChatHeaderProps {
   hasMessages: boolean;
@@ -18,6 +19,7 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ hasMessages, isBusy, onReset }: ChatHeaderProps) {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const { isSpeaking, stopSpeaking } = useVoice();
 
   return (
     <>
@@ -44,6 +46,55 @@ export function ChatHeader({ hasMessages, isBusy, onReset }: ChatHeaderProps) {
         </div>
 
         <div className="flex items-center gap-2.5">
+          {/* Active Speaking Indicator with Instant Mute button */}
+          {isSpeaking && (
+            <button
+              type="button"
+              onClick={stopSpeaking}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
+              style={{
+                backgroundColor: "rgba(59, 130, 246, 0.12)",
+                border: "1px solid rgba(59, 130, 246, 0.3)",
+                color: "#2563EB",
+              }}
+              title="Assistant is speaking. Click to stop."
+            >
+              <span
+                className="flex items-center gap-0.5"
+                style={{ height: 12 }}
+              >
+                <span
+                  className="rounded-full animate-bounce"
+                  style={{
+                    width: 2,
+                    height: 10,
+                    backgroundColor: "#2563EB",
+                    animationDelay: "-0.3s",
+                  }}
+                />
+                <span
+                  className="rounded-full animate-bounce"
+                  style={{
+                    width: 2,
+                    height: 14,
+                    backgroundColor: "#2563EB",
+                    animationDelay: "-0.15s",
+                  }}
+                />
+                <span
+                  className="rounded-full animate-bounce"
+                  style={{
+                    width: 2,
+                    height: 8,
+                    backgroundColor: "#2563EB",
+                  }}
+                />
+              </span>
+              <span>Speaking</span>
+              <VolumeXIcon style={{ width: 14, height: 14, marginLeft: 2 }} />
+            </button>
+          )}
+
           {hasMessages && (
             <Tooltip>
               <TooltipTrigger

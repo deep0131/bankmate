@@ -129,7 +129,7 @@ export interface UserProfile {
 export const deepYadavProfile = profileData as UserProfile;
 
 export function formatINR(amount: number, forceDecimals?: boolean): string {
-  const hasDecimals = forceDecimals ?? (amount % 1 !== 0);
+  const hasDecimals = forceDecimals ?? amount % 1 !== 0;
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
@@ -137,4 +137,3 @@ export function formatINR(amount: number, forceDecimals?: boolean): string {
     maximumFractionDigits: hasDecimals ? 2 : 0,
   }).format(amount);
 }
-

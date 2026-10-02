@@ -39,16 +39,18 @@ export function filterStatementData({
   accountNumber?: string;
   statementId?: string;
 }): StatementData {
-  const start = new Date(startDateStr + "T00:00:00Z");
-  const end = new Date(endDateStr + "T23:59:59.999Z");
+  const start = new Date(`${startDateStr}T00:00:00Z`);
+  const end = new Date(`${endDateStr}T23:59:59.999Z`);
 
   // Sort chronologically
   let txs = [...allTransactions].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
 
   if (account && account !== "all") {
-    txs = txs.filter((tx) => tx.account.toLowerCase() === account.toLowerCase());
+    txs = txs.filter(
+      (tx) => tx.account.toLowerCase() === account.toLowerCase(),
+    );
   }
 
   const filtered = txs.filter((tx) => {
@@ -66,11 +68,7 @@ export function filterStatementData({
 
   const netCashflow = totalCredits - totalDebits;
   const baseBalance =
-    account === "checking"
-      ? 124680
-      : account === "savings"
-      ? 484250
-      : 608930;
+    account === "checking" ? 124680 : account === "savings" ? 484250 : 608930;
   const openingBalance = Math.max(0, baseBalance - netCashflow);
   const closingBalance = openingBalance + netCashflow;
 
@@ -99,8 +97,8 @@ export function filterStatementData({
       (account === "savings"
         ? "4092 •••• 8842"
         : account === "checking"
-        ? "4092 •••• 1928"
-        : "4092 •••• 8842 (Primary)"),
+          ? "4092 •••• 1928"
+          : "4092 •••• 8842 (Primary)"),
     accountName: accountName || "Deep Yadav",
     startDate: startDateStr,
     endDate: endDateStr,
@@ -118,10 +116,11 @@ export function filterStatementData({
 
 function escapePdfText(str: string): string {
   // Replace non-ascii characters (like rupee ₹) with INR or ASCII equivalents
-  const safeStr = str
-    .replace(/₹/g, "INR ")
-    .replace(/[^\x20-\x7E]/g, " ");
-  return safeStr.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+  const safeStr = str.replace(/₹/g, "INR ").replace(/[^\x20-\x7E]/g, " ");
+  return safeStr
+    .replace(/\\/g, "\\\\")
+    .replace(/\(/g, "\\(")
+    .replace(/\)/g, "\\)");
 }
 
 class SimplePdfBuilder {
@@ -156,7 +155,9 @@ class SimplePdfBuilder {
 /**
  * Generate a clean official BankMate Statement PDF binary bytes
  */
-export function generateStatementPdfBytes(statement: StatementData): Uint8Array {
+export function generateStatementPdfBytes(
+  statement: StatementData,
+): Uint8Array {
   const builder = new SimplePdfBuilder();
 
   // Object 1: Catalog
@@ -165,18 +166,35 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
   builder.addObject("<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
   // Object 3: Page (A4 is 595.28 x 841.89 points)
   builder.addObject(
-    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>"
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>",
   );
 
   // Content Stream construction
   const lines: string[] = [];
 
   // Helper drawing functions
-  const drawRect = (x: number, y: number, w: number, h: number, r: number, g: number, b: number) => {
+  const drawRect = (
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    r: number,
+    g: number,
+    b: number,
+  ) => {
     lines.push(`${r} ${g} ${b} rg ${x} ${y} ${w} ${h} re f`);
   };
 
-  const drawLine = (x1: number, y1: number, x2: number, y2: number, r: number, g: number, b: number, width = 1) => {
+  const drawLine = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    r: number,
+    g: number,
+    b: number,
+    width = 1,
+  ) => {
     lines.push(`${width} w ${r} ${g} ${b} RG ${x1} ${y1} m ${x2} ${y2} l S`);
   };
 
@@ -188,10 +206,12 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
     size: number,
     r: number,
     g: number,
-    b: number
+    b: number,
   ) => {
     const escaped = escapePdfText(text);
-    lines.push(`BT ${r} ${g} ${b} rg ${font} ${size} Tf ${x} ${y} Td (${escaped}) Tj ET`);
+    lines.push(
+      `BT ${r} ${g} ${b} rg ${font} ${size} Tf ${x} ${y} Td (${escaped}) Tj ET`,
+    );
   };
 
   // 1. Top Header Banner
@@ -209,12 +229,39 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
   drawText("ACCOUNT HOLDER DETAILS", 55, 738, "/F2", 10, 0.15, 0.2, 0.35);
   drawText(`Name: ${statement.accountName}`, 55, 722, "/F1", 9, 0.2, 0.25, 0.3);
   drawText(`CIF Number: CIF-8829104`, 55, 707, "/F1", 9, 0.2, 0.25, 0.3);
-  drawText(`Account No: ${statement.accountNumber}`, 55, 692, "/F1", 9, 0.2, 0.25, 0.3);
+  drawText(
+    `Account No: ${statement.accountNumber}`,
+    55,
+    692,
+    "/F1",
+    9,
+    0.2,
+    0.25,
+    0.3,
+  );
 
   drawText("BRANCH & PERIOD DETAILS", 320, 738, "/F2", 10, 0.15, 0.2, 0.35);
-  drawText(`Branch: BKC Flagship Branch, Mumbai`, 320, 722, "/F1", 9, 0.2, 0.25, 0.3);
+  drawText(
+    `Branch: BKC Flagship Branch, Mumbai`,
+    320,
+    722,
+    "/F1",
+    9,
+    0.2,
+    0.25,
+    0.3,
+  );
   drawText(`IFSC Code: BKMT0001042`, 320, 707, "/F1", 9, 0.2, 0.25, 0.3);
-  drawText(`Period: ${statement.periodLabel}`, 320, 692, "/F2", 9, 0.11, 0.31, 0.85);
+  drawText(
+    `Period: ${statement.periodLabel}`,
+    320,
+    692,
+    "/F2",
+    9,
+    0.11,
+    0.31,
+    0.85,
+  );
 
   // 3. Statement Summary Ribbon (Opening, Credits, Debits, Closing)
   const summaryY = 620;
@@ -223,16 +270,52 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
   drawLine(40, summaryY + 45, 555.28, summaryY + 45, 0.8, 0.85, 0.9);
 
   drawText("OPENING BALANCE", 50, summaryY + 30, "/F1", 8, 0.4, 0.45, 0.5);
-  drawText(`INR ${statement.openingBalance.toLocaleString("en-IN")}`, 50, summaryY + 12, "/F2", 11, 0.1, 0.15, 0.2);
+  drawText(
+    `INR ${statement.openingBalance.toLocaleString("en-IN")}`,
+    50,
+    summaryY + 12,
+    "/F2",
+    11,
+    0.1,
+    0.15,
+    0.2,
+  );
 
   drawText("TOTAL CREDITS (+)", 180, summaryY + 30, "/F1", 8, 0.4, 0.45, 0.5);
-  drawText(`+INR ${statement.totalCredits.toLocaleString("en-IN")}`, 180, summaryY + 12, "/F2", 11, 0.05, 0.6, 0.3);
+  drawText(
+    `+INR ${statement.totalCredits.toLocaleString("en-IN")}`,
+    180,
+    summaryY + 12,
+    "/F2",
+    11,
+    0.05,
+    0.6,
+    0.3,
+  );
 
   drawText("TOTAL DEBITS (-)", 310, summaryY + 30, "/F1", 8, 0.4, 0.45, 0.5);
-  drawText(`-INR ${statement.totalDebits.toLocaleString("en-IN")}`, 310, summaryY + 12, "/F2", 11, 0.85, 0.2, 0.2);
+  drawText(
+    `-INR ${statement.totalDebits.toLocaleString("en-IN")}`,
+    310,
+    summaryY + 12,
+    "/F2",
+    11,
+    0.85,
+    0.2,
+    0.2,
+  );
 
   drawText("CLOSING BALANCE", 430, summaryY + 30, "/F1", 8, 0.4, 0.45, 0.5);
-  drawText(`INR ${statement.closingBalance.toLocaleString("en-IN")}`, 430, summaryY + 12, "/F2", 11, 0.11, 0.31, 0.85);
+  drawText(
+    `INR ${statement.closingBalance.toLocaleString("en-IN")}`,
+    430,
+    summaryY + 12,
+    "/F2",
+    11,
+    0.11,
+    0.31,
+    0.85,
+  );
 
   // 4. Transactions Table Header
   const tableHeaderY = 585;
@@ -262,16 +345,37 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
 
     drawText(txDate, 45, rowY + 1, "/F1", 8, 0.2, 0.2, 0.2);
     // Truncate long descriptions
-    const desc = tx.description.length > 34 ? `${tx.description.substring(0, 32)}...` : tx.description;
+    const desc =
+      tx.description.length > 34
+        ? `${tx.description.substring(0, 32)}...`
+        : tx.description;
     drawText(desc, 110, rowY + 1, "/F2", 8, 0.15, 0.15, 0.15);
     drawText(tx.category, 320, rowY + 1, "/F1", 8, 0.35, 0.35, 0.4);
 
     if (isCredit) {
       drawText("CR", 410, rowY + 1, "/F2", 8, 0.05, 0.6, 0.3);
-      drawText(`+${tx.amount.toLocaleString("en-IN")}`, 475, rowY + 1, "/F2", 8, 0.05, 0.6, 0.3);
+      drawText(
+        `+${tx.amount.toLocaleString("en-IN")}`,
+        475,
+        rowY + 1,
+        "/F2",
+        8,
+        0.05,
+        0.6,
+        0.3,
+      );
     } else {
       drawText("DR", 410, rowY + 1, "/F2", 8, 0.8, 0.2, 0.2);
-      drawText(`-${tx.amount.toLocaleString("en-IN")}`, 475, rowY + 1, "/F2", 8, 0.8, 0.2, 0.2);
+      drawText(
+        `-${tx.amount.toLocaleString("en-IN")}`,
+        475,
+        rowY + 1,
+        "/F2",
+        8,
+        0.8,
+        0.2,
+        0.2,
+      );
     }
 
     rowY -= 19;
@@ -287,7 +391,7 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
       8,
       0.5,
       0.5,
-      0.5
+      0.5,
     );
     rowY -= 15;
   }
@@ -302,7 +406,7 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
     7,
     0.3,
     0.35,
-    0.45
+    0.45,
   );
   drawText(
     "This is a digitally generated bank statement certified under RBI Section 65B. For queries, contact priya.sharma@bankmate.io",
@@ -312,19 +416,32 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
     7,
     0.5,
     0.55,
-    0.6
+    0.6,
   );
-  drawText(`Page 1 of 1  |  Generated ${statement.generatedAt.split("T")[0]}`, 430, 38, "/F1", 7, 0.5, 0.55, 0.6);
+  drawText(
+    `Page 1 of 1  |  Generated ${statement.generatedAt.split("T")[0]}`,
+    430,
+    38,
+    "/F1",
+    7,
+    0.5,
+    0.55,
+    0.6,
+  );
 
   const streamContent = lines.join("\n");
   const streamBytes = new TextEncoder().encode(streamContent);
 
   // Object 4: Stream
-  builder.addObject(`<< /Length ${streamBytes.length} >>\nstream\n${streamContent}\nendstream`);
+  builder.addObject(
+    `<< /Length ${streamBytes.length} >>\nstream\n${streamContent}\nendstream`,
+  );
   // Object 5: Standard Helvetica Font
   builder.addObject("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
   // Object 6: Standard Helvetica-Bold Font
-  builder.addObject("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>");
+  builder.addObject(
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
+  );
 
   return builder.build();
 }
@@ -334,7 +451,9 @@ export function generateStatementPdfBytes(statement: StatementData): Uint8Array 
  */
 export function generateStatementPdfBlob(statement: StatementData): Blob {
   const pdfBytes = generateStatementPdfBytes(statement);
-  return new Blob([pdfBytes as unknown as BlobPart], { type: "application/pdf" });
+  return new Blob([pdfBytes as unknown as BlobPart], {
+    type: "application/pdf",
+  });
 }
 
 /**
@@ -467,7 +586,7 @@ export function printStatementHtml(statement: StatementData) {
                   ${tx.type === "credit" ? "+" : "-"}${formatINR(tx.amount)}
                 </td>
               </tr>
-            `
+            `,
               )
               .join("")}
           </tbody>

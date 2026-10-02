@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   BotIcon,
   ChevronRightIcon,
@@ -11,9 +10,10 @@ import {
   SettingsIcon,
   TrashIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { BankProfileModal } from "@/components/profile/bank-profile-modal";
-import type { ChatSession } from "@/lib/chat-history";
 import { useBankStore } from "@/lib/bank-store";
+import type { ChatSession } from "@/lib/chat-history";
 import { ThemeToggle } from "./theme-toggle";
 
 interface LeftSidebarProps {
@@ -24,7 +24,7 @@ interface LeftSidebarProps {
   onDeleteChat: (id: string) => void;
 }
 
-function formatTime(ts: number): string {
+function _formatTime(ts: number): string {
   const d = new Date(ts);
   const now = new Date();
   const diffMs = now.getTime() - d.getTime();
@@ -134,7 +134,9 @@ export function LeftSidebar({
                 ✕
               </button>
             ) : (
-              <span className="ml-auto text-[10px] opacity-50 font-medium">⌘K</span>
+              <span className="ml-auto text-[10px] opacity-50 font-medium">
+                ⌘K
+              </span>
             )}
           </div>
         </div>
@@ -167,7 +169,9 @@ export function LeftSidebar({
               >
                 <MessageSquareIcon className="size-6 mb-2 opacity-40" />
                 <p className="font-medium">No previous chats</p>
-                <p className="text-[11px] mt-0.5 opacity-80">Click New Chat to begin</p>
+                <p className="text-[11px] mt-0.5 opacity-80">
+                  Click New Chat to begin
+                </p>
               </div>
             ) : (
               filteredSessions.map((session) => {
@@ -188,11 +192,14 @@ export function LeftSidebar({
                     }}
                     className="group relative w-full text-left px-2.5 py-1.5 rounded-lg transition-all duration-150 cursor-pointer flex items-center"
                     style={{
-                      backgroundColor: isActive ? "var(--nav-active)" : "transparent",
+                      backgroundColor: isActive
+                        ? "var(--nav-active)"
+                        : "transparent",
                     }}
                     onMouseEnter={(e) => {
                       if (!isActive) {
-                        e.currentTarget.style.backgroundColor = "var(--nav-hover)";
+                        e.currentTarget.style.backgroundColor =
+                          "var(--nav-hover)";
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -205,7 +212,9 @@ export function LeftSidebar({
                       <span
                         className="text-xs font-semibold truncate flex-1 leading-none m-0 p-0 block"
                         style={{
-                          color: isActive ? "var(--nav-active-text)" : "var(--foreground)",
+                          color: isActive
+                            ? "var(--nav-active-text)"
+                            : "var(--foreground)",
                         }}
                       >
                         {session.title}
@@ -238,7 +247,10 @@ export function LeftSidebar({
         </div>
 
         {/* Settings & Help */}
-        <div className="px-3 pt-2 border-t" style={{ borderColor: "var(--panel-border)" }}>
+        <div
+          className="px-3 pt-2 border-t"
+          style={{ borderColor: "var(--panel-border)" }}
+        >
           <div className="space-y-0.5">
             <button
               type="button"
@@ -274,7 +286,9 @@ export function LeftSidebar({
         >
           <div
             className="size-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 shadow-sm transition-transform duration-150 group-hover:scale-105"
-            style={{ background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)" }}
+            style={{
+              background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
+            }}
           >
             DY
           </div>

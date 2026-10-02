@@ -5,9 +5,9 @@ import {
   createColumnHelper,
   createPaginatedRowModel,
   createSortedRowModel,
+  type PaginationState,
   rowPaginationFeature,
   rowSortingFeature,
-  type PaginationState,
   type SortingState,
   sortFn_alphanumeric,
   sortFn_text,
@@ -45,8 +45,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { transactionTableTool } from "@/lib/ai/tools";
-import type { Transaction } from "@/types/transaction";
 import { useBankStore } from "@/lib/bank-store";
+import type { Transaction } from "@/types/transaction";
 
 const features = tableFeatures({
   columnVisibilityFeature,
@@ -161,7 +161,9 @@ const columns = columnHelper.columns([
           ) : (
             <ArrowUpRight className="size-3 text-muted-foreground shrink-0" />
           )}
-          <span className="whitespace-nowrap">{isCredit ? `+${formatted}` : `-${formatted}`}</span>
+          <span className="whitespace-nowrap">
+            {isCredit ? `+${formatted}` : `-${formatted}`}
+          </span>
         </div>
       );
     },
@@ -210,12 +212,17 @@ export function TransactionTable(props: TransactionTableProps) {
       return filtered;
     }
     return output?.transactions ?? [];
-  }, [liveTransactions, output?.transactions, output?.account, output?.category]);
+  }, [
+    liveTransactions,
+    output?.transactions,
+    output?.account,
+    output?.category,
+  ]);
 
   // Reset page when account/category filters change
   React.useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [output?.account, output?.category]);
+  }, []);
 
   const table = useTable({
     features,

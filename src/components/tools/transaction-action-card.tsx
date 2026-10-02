@@ -1,34 +1,34 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import type { UIToolInvocation } from "ai";
 import {
   CheckCircle2Icon,
-  CreditCardIcon,
   EyeIcon,
   EyeOffIcon,
   KeyRoundIcon,
-  LandmarkIcon,
   LockIcon,
-  MailCheckIcon,
+  MicIcon,
   PiggyBankIcon,
   ReceiptIcon,
   SendIcon,
-  ShieldCheckIcon,
   SparklesIcon,
-  TrendingUpIcon,
   UserCheckIcon,
 } from "lucide-react";
-import { BankProfileModal, type TabType } from "@/components/profile/bank-profile-modal";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  BankProfileModal,
+  type TabType,
+} from "@/components/profile/bank-profile-modal";
+import { useVoice } from "@/context/voice-context";
+import type { bookFixedDepositTool, transferFundsTool } from "@/lib/ai/tools";
 import {
   executeCreateFixedDeposit,
   executeTransferFunds,
   formatINR,
-  getLiveProfile,
   useBankStore,
 } from "@/lib/bank-store";
+import { parseSpokenPin } from "@/lib/spoken-pin-parser";
 import { sendTransactionEmail } from "@/lib/transaction-email";
-import type { bookFixedDepositTool, transferFundsTool } from "@/lib/ai/tools";
 
 export interface TransactionActionCardProps {
   actionType: "fixed-deposit" | "transfer";
@@ -43,6 +43,9 @@ export interface TransactionActionCardProps {
   note?: string;
 }
 
+// Registry to ensure only the latest active idle card intercepts spoken PINs
+let latestActiveCardId: string | null = null;
+
 export function TransactionActionCard({
   actionType = "fixed-deposit",
   amount,
@@ -54,10 +57,17 @@ export function TransactionActionCard({
   note = "Personal Transfer",
 }: TransactionActionCardProps) {
   const { profile } = useBankStore();
+  const { speak, voiceMode } = useVoice();
+  const cardIdRef = useRef<string>(
+    `card-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  );
   const [pin, setPin] = useState(["", "", "", "", "", ""]);
   const [showPin, setShowPin] = useState(false);
-  const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "processing" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [spokenPinDetected, setSpokenPinDetected] = useState(false);
   const [resultData, setResultData] = useState<{
     referenceId?: string;
     newBalance?: number;
@@ -68,10 +78,13 @@ export function TransactionActionCard({
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Auto-focus first PIN input box on mount
+  // Register this card as the active idle transaction card on mount or when idle
   useEffect(() => {
     if (status === "idle") {
+      latestActiveCardId = cardIdRef.current;
       inputRefs.current[0]?.focus();
+    } else if (latestActiveCardId === cardIdRef.current) {
+      latestActiveCardId = null;
     }
   }, [status]);
 
@@ -99,7 +112,10 @@ export function TransactionActionCard({
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace" && !pin[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -107,7 +123,10 @@ export function TransactionActionCard({
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
     if (!pasted) return;
 
     const newPin = [...pin];
@@ -125,97 +144,185 @@ export function TransactionActionCard({
   // Calculate estimated maturity for FD
   const maturityAmount =
     actionType === "fixed-deposit"
-      ? Math.round(amount * Math.pow(1 + interestRate / 400, 4 * tenureYears))
+      ? Math.round(amount * (1 + interestRate / 400) ** (4 * tenureYears))
       : 0;
+
+  // Execute authorization with specified 6-digit PIN
+  const executeAuthorizationWithPin = useCallback(
+    (targetPin: string, isSpoken: boolean = false) => {
+      setStatus("processing");
+      setErrorMessage("");
+
+      setTimeout(() => {
+        if (actionType === "fixed-deposit") {
+          const res = executeCreateFixedDeposit({
+            amount,
+            tenureYears,
+            interestRate,
+            payoutType,
+            pin: targetPin,
+          });
+
+          if (res.success) {
+            setStatus("success");
+            setResultData({
+              referenceId: res.fd?.fdNumber,
+              newBalance: res.newBalance,
+              maturityAmount: res.fd?.maturityAmount,
+            });
+
+            // Send confirmation email
+            sendTransactionEmail({
+              type: "fixed-deposit",
+              recipientEmail: profile?.personal?.email,
+              data: {
+                fdNumber: res.fd?.fdNumber || "FD-2026-9904",
+                principalAmount: amount,
+                tenureYears,
+                interestRate,
+                maturityAmount: res.fd?.maturityAmount || maturityAmount,
+                payoutType,
+                sourceAccount: "Savings A/C 4092 •••• 8842",
+                newBalance: res.newBalance || 0,
+              },
+            });
+
+            if (voiceMode || isSpoken || spokenPinDetected) {
+              speak(
+                `Fixed Deposit of ${formatINR(amount)} booked successfully. Reference number is ${res.fd?.fdNumber}. Your new savings balance is ${formatINR(res.newBalance || 0)}.`,
+              );
+            }
+          } else {
+            setStatus("error");
+            setErrorMessage(res.message);
+            setPin(["", "", "", "", "", ""]);
+            setSpokenPinDetected(false);
+            inputRefs.current[0]?.focus();
+            if (voiceMode || isSpoken || spokenPinDetected) {
+              speak(
+                "Incorrect transaction PIN. Please speak your 6 digit PIN again.",
+              );
+            }
+          }
+        } else {
+          const res = executeTransferFunds({
+            recipientName,
+            recipientAccount,
+            amount,
+            note,
+            pin: targetPin,
+          });
+
+          if (res.success) {
+            setStatus("success");
+            setResultData({
+              referenceId: res.referenceId,
+              newBalance: res.newBalance,
+            });
+
+            // Send confirmation email
+            sendTransactionEmail({
+              type: "transfer",
+              recipientEmail: profile?.personal?.email,
+              data: {
+                recipientName,
+                recipientAccount,
+                amount,
+                note,
+                referenceId: res.referenceId || "TX-IMPS",
+                sourceAccount: "Savings A/C 4092 •••• 8842",
+                newBalance: res.newBalance || 0,
+              },
+            });
+
+            if (voiceMode || isSpoken || spokenPinDetected) {
+              speak(
+                `Transfer of ${formatINR(amount)} to ${recipientName} has been authorized and completed successfully. Reference number is ${res.referenceId}. Your new savings balance is ${formatINR(res.newBalance || 0)}.`,
+              );
+            }
+          } else {
+            setStatus("error");
+            setErrorMessage(res.message);
+            setPin(["", "", "", "", "", ""]);
+            setSpokenPinDetected(false);
+            inputRefs.current[0]?.focus();
+            if (voiceMode || isSpoken || spokenPinDetected) {
+              speak(
+                "Incorrect transaction PIN. Please speak your 6 digit PIN again.",
+              );
+            }
+          }
+        }
+      }, 500);
+    },
+    [
+      actionType,
+      amount,
+      interestRate,
+      maturityAmount,
+      note,
+      payoutType,
+      profile?.personal?.email,
+      recipientAccount,
+      recipientName,
+      speak,
+      spokenPinDetected,
+      tenureYears,
+      voiceMode,
+    ],
+  );
 
   const handleAuthorize = () => {
     if (!isPinComplete) {
       setErrorMessage("Please enter all 6 digits of your transaction PIN.");
       return;
     }
+    executeAuthorizationWithPin(pinString, false);
+  };
 
-    setStatus("processing");
-    setErrorMessage("");
+  // Voice PIN Listening: Intercept spoken PIN while this authorization card is idle
+  useEffect(() => {
+    if (status !== "idle") return;
 
-    // Simulate real bank authorization delay
-    setTimeout(() => {
-      if (actionType === "fixed-deposit") {
-        const res = executeCreateFixedDeposit({
-          amount,
-          tenureYears,
-          interestRate,
-          payoutType,
-          pin: pinString,
-        });
+    const handleVoiceAction = (e: Event) => {
+      // Only the latest active idle card responds to spoken PIN
+      if (latestActiveCardId && latestActiveCardId !== cardIdRef.current)
+        return;
 
-        if (res.success) {
-          setStatus("success");
-          setResultData({
-            referenceId: res.fd?.fdNumber,
-            newBalance: res.newBalance,
-            maturityAmount: res.fd?.maturityAmount,
-          });
+      const customEvent = e as CustomEvent<{ text: string }>;
+      const text = (customEvent.detail?.text || "").toLowerCase().trim();
 
-          // Send confirmation email to registered email
-          sendTransactionEmail({
-            type: "fixed-deposit",
-            recipientEmail: profile?.personal?.email,
-            data: {
-              fdNumber: res.fd?.fdNumber || "FD-2026-9904",
-              principalAmount: amount,
-              tenureYears,
-              interestRate,
-              maturityAmount: res.fd?.maturityAmount || maturityAmount,
-              payoutType,
-              sourceAccount: "Savings A/C 4092 •••• 8842",
-              newBalance: res.newBalance || 0,
-            },
-          });
-        } else {
-          setStatus("error");
-          setErrorMessage(res.message);
-          setPin(["", "", "", "", "", ""]);
-          inputRefs.current[0]?.focus();
-        }
-      } else {
-        const res = executeTransferFunds({
-          recipientName,
-          recipientAccount,
-          amount,
-          note,
-          pin: pinString,
-        });
+      // Check if user spoke a 6-digit PIN
+      const spokenPin = parseSpokenPin(text);
 
-        if (res.success) {
-          setStatus("success");
-          setResultData({
-            referenceId: res.referenceId,
-            newBalance: res.newBalance,
-          });
+      if (spokenPin && spokenPin.length === 6) {
+        // Prevent forwarding this PIN as a chat prompt to the AI
+        e.preventDefault();
+        setSpokenPinDetected(true);
+        setPin(spokenPin.split(""));
+        executeAuthorizationWithPin(spokenPin, true);
+        return;
+      }
 
-          // Send confirmation email to registered email
-          sendTransactionEmail({
-            type: "transfer",
-            recipientEmail: profile?.personal?.email,
-            data: {
-              recipientName,
-              recipientAccount,
-              amount,
-              note,
-              referenceId: res.referenceId || "TX-IMPS",
-              sourceAccount: "Savings A/C 4092 •••• 8842",
-              newBalance: res.newBalance || 0,
-            },
-          });
-        } else {
-          setStatus("error");
-          setErrorMessage(res.message);
-          setPin(["", "", "", "", "", ""]);
-          inputRefs.current[0]?.focus();
+      // Check if user spoke confirmation words when PIN is already filled
+      if (
+        text.includes("confirm") ||
+        text.includes("authorize") ||
+        text.includes("proceed") ||
+        text.includes("send it")
+      ) {
+        if (pin.every((d) => d.length === 1)) {
+          e.preventDefault();
+          executeAuthorizationWithPin(pin.join(""), true);
         }
       }
-    }, 600);
-  };
+    };
+
+    window.addEventListener("bankmate-voice-action", handleVoiceAction);
+    return () => {
+      window.removeEventListener("bankmate-voice-action", handleVoiceAction);
+    };
+  }, [status, pin, executeAuthorizationWithPin]);
 
   return (
     <div className="w-full my-3.5 not-typeset">
@@ -240,9 +347,7 @@ export function TransactionActionCard({
           <div className="flex items-center gap-3">
             <div
               className={`size-10 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0 ${
-                status === "success"
-                  ? "bg-emerald-600"
-                  : "bg-primary"
+                status === "success" ? "bg-emerald-600" : "bg-primary"
               }`}
             >
               {status === "success" ? (
@@ -296,20 +401,28 @@ export function TransactionActionCard({
             }}
           >
             <div>
-              <span className="text-[11px] text-muted-foreground block">Debited Account</span>
-              <strong className="text-foreground font-mono">Savings A/C •••• 8842</strong>
+              <span className="text-[11px] text-muted-foreground block">
+                Debited Account
+              </span>
+              <strong className="text-foreground font-mono">
+                Savings A/C •••• 8842
+              </strong>
             </div>
 
             {actionType === "fixed-deposit" ? (
               <>
                 <div>
-                  <span className="text-[11px] text-muted-foreground block">Tenure & Rate</span>
+                  <span className="text-[11px] text-muted-foreground block">
+                    Tenure & Rate
+                  </span>
                   <strong className="text-foreground">
                     {tenureYears} Years @ {interestRate}% p.a.
                   </strong>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <span className="text-[11px] text-muted-foreground block">Est. Maturity Value</span>
+                  <span className="text-[11px] text-muted-foreground block">
+                    Est. Maturity Value
+                  </span>
                   <strong className="text-emerald-600 dark:text-emerald-400 font-mono whitespace-nowrap">
                     {formatINR(resultData?.maturityAmount || maturityAmount)}
                   </strong>
@@ -318,11 +431,15 @@ export function TransactionActionCard({
             ) : (
               <>
                 <div>
-                  <span className="text-[11px] text-muted-foreground block">Beneficiary</span>
+                  <span className="text-[11px] text-muted-foreground block">
+                    Beneficiary
+                  </span>
                   <strong className="text-foreground">{recipientName}</strong>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <span className="text-[11px] text-muted-foreground block">Note</span>
+                  <span className="text-[11px] text-muted-foreground block">
+                    Note
+                  </span>
                   <span className="text-foreground">{note}</span>
                 </div>
               </>
@@ -342,7 +459,9 @@ export function TransactionActionCard({
                   </strong>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-emerald-500/20 text-xs">
-                  <span className="text-muted-foreground">Updated Savings Balance:</span>
+                  <span className="text-muted-foreground">
+                    Updated Savings Balance:
+                  </span>
                   <strong className="font-mono text-foreground font-bold whitespace-nowrap">
                     {formatINR(resultData?.newBalance || 0)}
                   </strong>
@@ -353,35 +472,57 @@ export function TransactionActionCard({
                 className="flex items-center justify-end gap-2 pt-3 border-t"
                 style={{ borderColor: "var(--panel-border)" }}
               >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setModalTab("transactions");
-                      setModalOpen(true);
-                    }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors hover:bg-muted/50 cursor-pointer"
-                    style={{ borderColor: "var(--panel-border)", color: "var(--foreground)" }}
-                  >
-                    <ReceiptIcon className="size-3.5 text-blue-600 dark:text-blue-400" />
-                    <span>Recent Transactions</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setModalTab("accounts");
-                      setModalOpen(true);
-                    }}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
-                  >
-                    <UserCheckIcon className="size-3.5" />
-                    <span>View Bank Profile</span>
-                  </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setModalTab("transactions");
+                    setModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors hover:bg-muted/50 cursor-pointer"
+                  style={{
+                    borderColor: "var(--panel-border)",
+                    color: "var(--foreground)",
+                  }}
+                >
+                  <ReceiptIcon className="size-3.5 text-blue-600 dark:text-blue-400" />
+                  <span>Recent Transactions</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setModalTab("accounts");
+                    setModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
+                >
+                  <UserCheckIcon className="size-3.5" />
+                  <span>View Bank Profile</span>
+                </button>
               </div>
             </div>
           ) : (
             /* PIN Authorization Entry State */
             <div className="space-y-4 pt-1">
               <div>
+                {/* Voice PIN prompt badge */}
+                <div className="flex items-center justify-center mb-2.5">
+                  {status === "processing" ? (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 animate-pulse">
+                      <SparklesIcon className="size-3.5 animate-spin" />
+                      <span>
+                        {spokenPinDetected
+                          ? "Spoken PIN received! Authorizing transaction..."
+                          : "Verifying credentials & authorizing..."}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                      <MicIcon className="size-3 text-blue-600 dark:text-blue-400 animate-pulse" />
+                      <span>Speak your 6-digit PIN aloud or type below</span>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                     <KeyRoundIcon className="size-3.5 text-blue-600 dark:text-blue-400" />
@@ -390,7 +531,7 @@ export function TransactionActionCard({
                   <button
                     type="button"
                     onClick={() => setShowPin(!showPin)}
-                    className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                    className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer"
                   >
                     {showPin ? (
                       <>
@@ -405,7 +546,7 @@ export function TransactionActionCard({
                 </div>
 
                 {/* 6 PIN Input Boxes */}
-                <div className="flex items-center justify-center gap-2.5 sm:gap-3 my-3">
+                <div className="flex items-center justify-center gap-2.5 sm:gap-3 my-2">
                   {pin.map((digit, idx) => (
                     <input
                       key={idx}
@@ -420,7 +561,7 @@ export function TransactionActionCard({
                       onChange={(e) => handlePinChange(idx, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(idx, e)}
                       onPaste={idx === 0 ? handlePaste : undefined}
-                      className="size-11 sm:size-12 text-center text-lg font-bold font-mono rounded-xl border transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      className="size-11 sm:size-12 text-center text-lg font-bold font-mono rounded-xl border transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-2xs"
                       style={{
                         backgroundColor: "var(--toggle-bg)",
                         borderColor:
@@ -436,16 +577,28 @@ export function TransactionActionCard({
                   ))}
                 </div>
 
+                <p className="text-[11px] text-muted-foreground text-center mt-1.5">
+                  PIN:{" "}
+                  <strong className="font-mono text-foreground font-semibold">
+                    123456
+                  </strong>{" "}
+                  (speak &ldquo;1 2 3 4 5 6&rdquo; or &ldquo;one two three four
+                  five six&rdquo;)
+                </p>
+
                 {/* Error message */}
                 {errorMessage && (
-                  <p className="text-xs text-red-500 font-medium text-center animate-shake mt-1">
+                  <p className="text-xs text-red-500 font-medium text-center animate-shake mt-1.5">
                     {errorMessage}
                   </p>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-2.5 pt-2 border-t" style={{ borderColor: "var(--panel-border)" }}>
+              <div
+                className="flex items-center justify-end gap-2.5 pt-2 border-t"
+                style={{ borderColor: "var(--panel-border)" }}
+              >
                 <button
                   type="button"
                   disabled={status === "processing" || !isPinComplete}
@@ -456,7 +609,9 @@ export function TransactionActionCard({
                       : "bg-primary hover:opacity-90 active:scale-[0.98] cursor-pointer"
                   }`}
                 >
-                  {status === "processing" ? "Authorizing with Bank..." : "Confirm & Authorize"}
+                  {status === "processing"
+                    ? "Authorizing with Bank..."
+                    : "Confirm & Authorize"}
                 </button>
               </div>
             </div>
@@ -473,7 +628,9 @@ export function TransactionActionCard({
   );
 }
 
-export type BookFixedDepositCardProps = UIToolInvocation<typeof bookFixedDepositTool>;
+export type BookFixedDepositCardProps = UIToolInvocation<
+  typeof bookFixedDepositTool
+>;
 export type TransferFundsCardProps = UIToolInvocation<typeof transferFundsTool>;
 
 export function BookFixedDepositCard(props: BookFixedDepositCardProps) {
@@ -501,4 +658,3 @@ export function TransferFundsCard(props: TransferFundsCardProps) {
     />
   );
 }
-

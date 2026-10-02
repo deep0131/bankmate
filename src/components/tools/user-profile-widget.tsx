@@ -15,8 +15,8 @@ import {
   BankProfileModal,
   type TabType,
 } from "@/components/profile/bank-profile-modal";
-import { useBankStore, formatINR } from "@/lib/bank-store";
 import type { bankProfileTool } from "@/lib/ai/tools";
+import { formatINR, useBankStore } from "@/lib/bank-store";
 
 export type BankProfileWidgetProps = UIToolInvocation<typeof bankProfileTool>;
 

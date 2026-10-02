@@ -1,6 +1,5 @@
 "use client";
 
-import { SparklesIcon } from "lucide-react";
 import { useState } from "react";
 import { BankProfileModal } from "@/components/profile/bank-profile-modal";
 
@@ -15,8 +14,10 @@ export function FloatingAssistantSphere() {
           onClick={() => setModalOpen(true)}
           className="group relative flex items-center justify-center size-13 rounded-full cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95 shadow-xl hover:shadow-2xl focus:outline-none"
           style={{
-            background: "linear-gradient(135deg, #1D4ED8 0%, #2563EB 45%, #06B6D4 100%)",
-            boxShadow: "0 10px 25px -5px rgba(37, 99, 235, 0.45), 0 8px 10px -6px rgba(6, 182, 212, 0.3)",
+            background:
+              "linear-gradient(135deg, #1D4ED8 0%, #2563EB 45%, #06B6D4 100%)",
+            boxShadow:
+              "0 10px 25px -5px rgba(37, 99, 235, 0.45), 0 8px 10px -6px rgba(6, 182, 212, 0.3)",
           }}
           title="Open Deep Yadav Bank Profile"
           aria-label="Open Bank Profile"
@@ -32,7 +33,10 @@ export function FloatingAssistantSphere() {
         </button>
       </div>
 
-      <BankProfileModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <BankProfileModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </>
   );
 }
